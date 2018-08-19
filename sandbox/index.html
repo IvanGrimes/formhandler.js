@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>FormHandler - Sandbox</title>
+  <link rel="stylesheet" href="/css/formhandler.css">
+</head>
+<body>
+<div class="form-wrapper">
+  <form class="formhandler" action="https://server.test-cors.org/server?id=8438460&enable=true&status=200&credentials=false" method="POST">
+    <div class="formhandler__notices"></div>
+    <input class="formhandler__field" id="firstname" type="text" name="firstname" placeholder="firstname">
+
+    <input class="formhandler__field" id="lastname" type="text" name="lastname" placeholder="lastname">
+
+    <input class="formhandler__field" id="email" type="email" name="email" placeholder="email">
+
+    <input class="formhandler__field" id="age" type="text" name="age" placeholder="age">
+
+    <input class="formhandler__field" id="phone" type="text" name="phone" placeholder="phone">
+
+    <input class="formhandler__field" id="custom" type="text" name="custom" placeholder="custom">
+
+    <input class="formhandler__field" id="zip1" type="text" name="zip1" placeholder="zip1">
+
+    <input class="formhandler__field" id="zip2" type="text" name="zip2" placeholder="zip2">
+    <div class="zip2"></div>
+
+    <input class="formhandler__field formhandler__field--file" id="file" type="file" name="file">
+
+    <textarea class="formhandler__field formhandler__field--message" id="message" name="message" id="" cols="30" rows="10" placeholder="message"></textarea>
+
+    <button class="formhandler__submit" type="submit" name="submit">submit</button>
+  </form>
+</div>
+
+<script type="text/javascript" src="/js/formhandler.js"></script>
+<script type="text/javascript" src="/app.js"></script>
+</body>
+</html>
