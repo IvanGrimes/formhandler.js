@@ -90,6 +90,7 @@ export default class FormHandler {
         form: this.form.node,
         classNames: notice.classNames,
         attachTo: notice.attachTo,
+        message: null || this.opts.fields[name].notice.message,
         nextToField: notice.nextToField,
         parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
       });
@@ -122,7 +123,7 @@ export default class FormHandler {
           newValid = Validator.validate(validation, ev.target, minLength, maxLength);
 
     if (newValid) {
-      this.setFieldState(name, newValid.valid, newValid.message);
+      this.setFieldState(name, newValid.valid, this.notices[name].message || validation.message);
     }
   }
 
@@ -155,7 +156,7 @@ export default class FormHandler {
       field.node.addEventListener('input', field.listener);
       console.log(name, validation)
       if (typeof validation !== 'undefined') {
-        this.setFieldState(name, validation.valid, validation.message);
+        this.setFieldState(name, validation.valid, this.notices[name].message || validation.message);
       }
     });
 

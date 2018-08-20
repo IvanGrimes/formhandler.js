@@ -22,6 +22,7 @@ export default {
   notices: {
     attachTo: '.formhandler__notices',
     nextToField: false,
+    message: false,
   },
   classNames: {
     notices: {

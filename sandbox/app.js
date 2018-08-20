@@ -12,6 +12,9 @@ const form = new FormHandler({
       validation: 'isName',
       minLength: 2,
       maxLength: 20,
+      notice: {
+        message: 'this value is required',
+      },
     },
     lastname: {
       validation: 'isName',

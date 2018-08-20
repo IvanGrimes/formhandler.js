@@ -37,7 +37,7 @@ export default class Validator {
     isName(node, min, max) {
       const pattern = /^[A-Za-z]/;
       let valid = pattern.test(node.value),
-          message = `Should contain any latin character`;
+          message = `Must contain any latin character`;
 
       if (node.value.length === 0) {
         valid = false;
@@ -57,7 +57,7 @@ export default class Validator {
     isEmail(node) {
       const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       let valid = pattern.test(node.value),
-          message = `Should be a valid email address`;
+          message = `Must be a valid email address`;
 
       return {
         valid,
@@ -96,7 +96,7 @@ export default class Validator {
     },
     isNonEmpty(node, min, max) {
       let valid = node.value.length > 0,
-          message = `Should be is non empty`;
+          message = `Must be is non empty`;
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;

@@ -275,7 +275,7 @@
     isName: function isName(node, min, max) {
       var pattern = /^[A-Za-z]/;
       var valid = pattern.test(node.value),
-          message = "Should contain any latin character";
+          message = "Must contain any latin character";
 
       if (node.value.length === 0) {
         valid = false;
@@ -297,7 +297,7 @@
     isEmail: function isEmail(node) {
       var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       var valid = pattern.test(node.value),
-          message = "Should be a valid email address";
+          message = "Must be a valid email address";
       return {
         valid: valid,
         message: message
@@ -336,7 +336,7 @@
     },
     isNonEmpty: function isNonEmpty(node, min, max) {
       var valid = node.value.length > 0,
-          message = "Should be is non empty";
+          message = "Must be is non empty";
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;
@@ -362,7 +362,7 @@
       _classCallCheck(this, Notice);
 
       this.form = opts.form;
-      this.message = null;
+      this.message = opts.message;
       this.classNames = opts.classNames;
       this.attachTo = opts.attachTo;
       this.nextToField = opts.nextToField;
@@ -481,7 +481,8 @@
     },
     notices: {
       attachTo: '.formhandler__notices',
-      nextToField: false
+      nextToField: false,
+      message: false
     },
     classNames: {
       notices: {
@@ -519,7 +520,7 @@
             newValid = Validator.validate(validation, ev.target, minLength, maxLength);
 
         if (newValid) {
-          _this.setFieldState(name, newValid.valid, newValid.message);
+          _this.setFieldState(name, newValid.valid, _this.notices[name].message || validation.message);
         }
       });
 
@@ -563,7 +564,7 @@
           console.log(name, validation);
 
           if (typeof validation !== 'undefined') {
-            _this.setFieldState(name, validation.valid, validation.message);
+            _this.setFieldState(name, validation.valid, _this.notices[name].message || validation.message);
           }
         });
 
@@ -689,6 +690,7 @@
             form: _this4.form.node,
             classNames: notice.classNames,
             attachTo: notice.attachTo,
+            message: _this4.opts.fields[name].notice.message,
             nextToField: notice.nextToField,
             parent: notice.nextToField ? _this4.fields[name].node : document.querySelector(notice.attachTo)
           });
