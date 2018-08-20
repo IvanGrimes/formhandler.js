@@ -31,9 +31,9 @@ const form = new FormHandler({
     phone: {
       validation: 'isPhone',
     },
-    // zip1: {
-    //   validation: 'isZipPromise',
-    // },
+    zip1: {
+      validation: 'isZipPromise',
+    },
     custom: {
       validation: 'isCustom',
     },
@@ -55,27 +55,25 @@ const form = new FormHandler({
         message,
       };
     },
-    // isZipPromise(node) {
-    //   let message = 'zippromise',
-    //       valid = false;
-    //   if (node.value.length === 5) {
-    //     (async function() {
-    //       let response = await fetch('http://api.zippopotam.us/us/' + node.value);
-    //       let json = await response.json();
-    //       valid = !!json.country;
-    //       console.log(json, valid)
-    //
-    //       return {
-    //         valid,
-    //         message,
-    //       };
-    //     })();
-    //   }
-    //   return {
-    //     valid,
-    //     message,
-    //   };
-    // },
+    isZipPromise(node) {
+      let message = 'zippromise',
+          valid = false;
+      if (node.value.length === 5) {
+        let response = fetch('http://api.zippopotam.us/us/' + node.value);
+
+        return {
+          valid: {
+            response,
+            property: 'country',
+          },
+          message,
+        };
+      }
+      return {
+        valid,
+        message,
+      };
+    },
     isFile(node) {
       let valid = node.value.length > 0,
         message = 'should be is non empty'

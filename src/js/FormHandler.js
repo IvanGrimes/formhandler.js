@@ -111,8 +111,19 @@ export default class FormHandler {
     return this;
   }
 
+  setStateFromResponse(response, property, name, message) {
+    response
+      .then(data => data.json())
+      .then(json => this.setFieldAndNoticeStates(name, !!json[property], message));
+  }
+
   setFieldAndNoticeStates(name, valid, message) {
-    this.fields[name].setFieldState(valid);
+    console.log(name, valid);
+    if (typeof valid === 'object') {
+      this.setStateFromResponse(valid.response, valid.property, name, message);
+    } else {
+      this.fields[name].setFieldState(valid);
+    }
     this.notices[name].message = message;
     if (valid) {
       this.notices[name].hide();

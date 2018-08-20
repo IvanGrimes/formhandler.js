@@ -4,6 +4,20 @@
   (global.FormHandler = factory());
 }(this, (function () { 'use strict';
 
+  function _typeof(obj) {
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -850,9 +864,27 @@
         return this;
       }
     }, {
+      key: "setStateFromResponse",
+      value: function setStateFromResponse(response, property, name, message) {
+        var _this4 = this;
+
+        response.then(function (data) {
+          return data.json();
+        }).then(function (json) {
+          return _this4.setFieldAndNoticeStates(name, !!json[property], message);
+        });
+      }
+    }, {
       key: "setFieldAndNoticeStates",
       value: function setFieldAndNoticeStates(name, valid, message) {
-        this.fields[name].setFieldState(valid);
+        console.log(name, valid);
+
+        if (_typeof(valid) === 'object') {
+          this.setStateFromResponse(valid.response, valid.property, name, message);
+        } else {
+          this.fields[name].setFieldState(valid);
+        }
+
         this.notices[name].message = message;
 
         if (valid) {
