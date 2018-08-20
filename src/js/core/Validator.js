@@ -35,21 +35,18 @@ export default class Validator {
 
   static validations = {
     isName(node, min, max) {
-      const pattern = /[a-z]/;
+      const pattern = /^[A-Za-z]/;
       let valid = pattern.test(node.value),
-          message;
+          message = `Should contain any latin character`;
 
+      if (node.value.length === 0) {
+        valid = false;
+      }
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;
-        message = `Must contain at least ${min} characters`
       }
       if (max && node.value.length > max) {
         valid = false;
-        message = `Shouldn't contain more than ${max} characters`
-      }
-      if (node.value.length === 0) {
-        valid = false;
-        message = `Must contain characters between ${min} and ${max}`;
       }
 
       return {
@@ -58,7 +55,7 @@ export default class Validator {
       };
     },
     isEmail(node) {
-      const pattern = /[a-z]/;
+      const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       let valid = pattern.test(node.value),
           message = `Should be a valid email address`;
 
@@ -68,9 +65,19 @@ export default class Validator {
       };
     },
     isAge(node, min, max) {
-      const pattern = /[0-9]/;
+      const pattern = /^[\d]*$/;
       let valid = pattern.test(node.value),
-          message = `Must contain only numbers but contain: "${node.value}"`;
+          message = `Must contain only digits`;
+
+      if (node.value.length === 0 || !valid) {
+        valid = false;
+      }
+      if (min && node.value.length < min && node.value.length !== 0) {
+        valid = false;
+      }
+      if (max && node.value.length > max) {
+        valid = false;
+      }
 
       return {
         valid,
@@ -78,19 +85,9 @@ export default class Validator {
       };
     },
     isPhone(node, min, max) {
-      const pattern = /[0-9]/;
+      const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       let valid = pattern.test(node.value),
-          message = `Must contain only numbers but contain: "${node.value}"`;
-
-      return {
-        valid,
-        message,
-      };
-    },
-    isText(node, min, max) {
-      const pattern = /[a-z]/;
-      let valid = pattern.test(node.value),
-          message = `Must contain text`;
+          message = `Must contain a valid phone number`;
 
       return {
         valid,
@@ -100,6 +97,13 @@ export default class Validator {
     isNonEmpty(node, min, max) {
       let valid = node.value.length > 0,
           message = `Should be is non empty`;
+
+      if (min && node.value.length < min && node.value.length !== 0) {
+        valid = false;
+      }
+      if (max && node.value.length > max && node.value.length !== 0) {
+        valid = false;
+      }
 
       return {
         valid,

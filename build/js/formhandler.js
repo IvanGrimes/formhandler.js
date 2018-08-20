@@ -273,23 +273,20 @@
 
   _defineProperty(Validator, "validations", {
     isName: function isName(node, min, max) {
-      var pattern = /[a-z]/;
+      var pattern = /^[A-Za-z]/;
       var valid = pattern.test(node.value),
-          message;
+          message = "Should contain any latin character";
+
+      if (node.value.length === 0) {
+        valid = false;
+      }
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;
-        message = "Must contain at least ".concat(min, " characters");
       }
 
       if (max && node.value.length > max) {
         valid = false;
-        message = "Shouldn't contain more than ".concat(max, " characters");
-      }
-
-      if (node.value.length === 0) {
-        valid = false;
-        message = "Must contain characters between ".concat(min, " and ").concat(max);
       }
 
       return {
@@ -298,7 +295,7 @@
       };
     },
     isEmail: function isEmail(node) {
-      var pattern = /[a-z]/;
+      var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       var valid = pattern.test(node.value),
           message = "Should be a valid email address";
       return {
@@ -307,27 +304,31 @@
       };
     },
     isAge: function isAge(node, min, max) {
-      var pattern = /[0-9]/;
+      var pattern = /^[\d]*$/;
       var valid = pattern.test(node.value),
-          message = "Must contain only numbers but contain: \"".concat(node.value, "\"");
+          message = "Must contain only digits";
+
+      if (node.value.length === 0 || !valid) {
+        valid = false;
+      }
+
+      if (min && node.value.length < min && node.value.length !== 0) {
+        valid = false;
+      }
+
+      if (max && node.value.length > max) {
+        valid = false;
+      }
+
       return {
         valid: valid,
         message: message
       };
     },
     isPhone: function isPhone(node, min, max) {
-      var pattern = /[0-9]/;
+      var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value),
-          message = "Must contain only numbers but contain: \"".concat(node.value, "\"");
-      return {
-        valid: valid,
-        message: message
-      };
-    },
-    isText: function isText(node, min, max) {
-      var pattern = /[a-z]/;
-      var valid = pattern.test(node.value),
-          message = "Must contain text";
+          message = "Must contain a valid phone number";
       return {
         valid: valid,
         message: message
@@ -336,6 +337,15 @@
     isNonEmpty: function isNonEmpty(node, min, max) {
       var valid = node.value.length > 0,
           message = "Should be is non empty";
+
+      if (min && node.value.length < min && node.value.length !== 0) {
+        valid = false;
+      }
+
+      if (max && node.value.length > max && node.value.length !== 0) {
+        valid = false;
+      }
+
       return {
         valid: valid,
         message: message
