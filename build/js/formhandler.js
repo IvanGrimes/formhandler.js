@@ -104,6 +104,70 @@
     return _setPrototypeOf(o, p);
   }
 
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null) return null;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
+  }
+
   function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -158,10 +222,23 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
-  function FormHandlerError(message) {
-    this.name = "FormHandlerError";
-    this.message = message;
-  }
+  // export default function FormHandlerError(message) {
+  //   this.name = `FormHandlerError`;
+  //   this.message = message;
+  // }
+  var FormHandlerError =
+  /*#__PURE__*/
+  function (_Error) {
+    _inherits(FormHandlerError, _Error);
+
+    function FormHandlerError(props) {
+      _classCallCheck(this, FormHandlerError);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(FormHandlerError).call(this, props));
+    }
+
+    return FormHandlerError;
+  }(_wrapNativeSuper(Error));
 
   var Validator =
   /*#__PURE__*/
