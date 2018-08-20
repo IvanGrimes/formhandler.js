@@ -1,9 +1,16 @@
-import Form from './core/Form';
-import Field from './core/Field';
 import Validator from './core/Validator';
+import Form from './core/Form';
+import Input from './core/Input';
+import Radio from './core/Radio';
+import Select from './core/Select';
 import Notice from './core/Notice';
-import Sender from './core/Sender';
 import defaultConfig from './common/defaultConfig';
+import {
+    RADIO_NODE_LIST,
+    HTML_SELECT_ELEMENT,
+    HTML_INPUT_ELEMENT,
+    HTML_TEXTAREA_ELEMENT
+  } from './common/constants';
 
 export default class FormHandler {
   constructor({ ...args }) {
@@ -16,12 +23,16 @@ export default class FormHandler {
   }
 
   init() {
-    this.complementOptions().makeForm().makeFields().makeNotices();
+    this.complementOptions().makeForm();
+
+    Object.entries(this.opts.fields).forEach(([name, field]) => {
+      this.makeField(name,field).makeNotice(name, field.notice);
+    });
 
     return this;
   }
 
-  complementOptions() { // TODO: Optimize it!
+  complementOptions() {
     // Add lacks classNames and merge.
     this.opts.classNames = this.opts.classNames ? { ...defaultConfig.classNames, ...this.opts.classNames } : defaultConfig.classNames;
     this.opts.classNames.form = { ...defaultConfig.classNames.form, ...this.opts.classNames.form };
@@ -45,81 +56,77 @@ export default class FormHandler {
   }
 
   makeForm() {
-    this.form = new Form({
-      opts: this.opts,
+    const options = {
       fields: this.fields,
-      notice: new Notice({
-        form: document.querySelector(this.opts.form.block),
-        message: this.opts.form.notice.successMsg,
-        classNames: this.opts.form.notice.classNames
-          ? { ...this.opts.classNames.notices, ...this.opts.form.notice.classNames }
-          : this.opts.classNames.notices,
-        attachTo: this.opts.form.notice.attachTo,
-        nextToField: false,
-        parent: document.querySelector(this.opts.form.notice.attachTo),
-      }),
+      classNames: this.opts.classNames.form,
+      node: document.querySelector(this.opts.form.block),
+      submit: document.querySelector(this.opts.form.submit),
       listener: this.submitHandler,
-    });
+    };
+
+    this.form = new Form(options);
+
+    this.makeNotice('form', this.opts.form.notice);
     return this;
   }
 
-  makeFields() {
-    Object.entries(this.opts.fields).forEach(([name,field]) => {
-      this.fields[name] = new Field({
-        name: name,
-        validation: {
-          name: field.validation,
-          minLength: field.minLength,
-          maxLength: field.maxLength,
-          validate: field.validate,
-        },
-        node: this.form.node[name],
-        listener: this.inputHandler,
-        classNames: field.classNames,
-        send: field.send,
-      });
-    });
-    return this;
-  }
+  makeField(name, field) {
+    const node = this.form.node[name],
+          type = node.constructor.name,
+          options = {
+            node: node,
+            validation: field.validation,
+            min: field.min,
+            max: field.max,
+            classNames: field.classNames,
+            listener: this.inputHandler,
+          };
 
-  makeNotices() {
-    Object.entries(this.opts.fields).forEach(([name, field]) => {
-      const notice = field.notice;
-
-      this.notices[name] = new Notice({
-        form: this.form.node,
-        classNames: notice.classNames,
-        attachTo: notice.attachTo,
-        message: null || this.opts.fields[name].notice.message,
-        nextToField: notice.nextToField,
-        parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
-      });
-    });
-
-    return this;
-  }
-
-  setFieldState(name, valid, message) {
-    if (typeof valid !== 'undefined') {
-      this.fields[name].setFieldState(valid);
-
-      this.notices[name].message = message;
-
-      if (valid) {
-        this.notices[name].hide();
-      } else {
-        this.notices[name].show();
-      }
-      this.form.setFormState();
+    if (type === HTML_INPUT_ELEMENT ||
+        type === HTML_TEXTAREA_ELEMENT) {
+      this.fields[name] = new Input(options);
     }
+
+    if (type === RADIO_NODE_LIST) {
+      this.fields[name] = new Radio(options);
+    }
+
+    if (type === HTML_SELECT_ELEMENT) {
+      this.fields[name] = new Select(options);
+    }
+
+    return this;
+  }
+
+  makeNotice(name, notice) {
+    this.notices[name] = new Notice({
+      form: this.form.node,
+      classNames: notice.classNames,
+      attachTo: notice.attachTo,
+      message: null || notice.message,
+      nextToField: notice.nextToField,
+      parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
+    });
+    return this;
+  }
+
+  setFieldState(name, valid) {
+    this.fields[name].setFieldState(valid);
+
+    if (valid) {
+      this.notices[name].hide();
+    } else {
+      this.notices[name].show();
+    }
+    this.form.setFormState();
     return this;
   }
 
   inputHandler = ev => {
     const name = ev.target.name,
-          validation = this.fields[name].validation.name,
-          minLength = this.fields[name].validation.minLength,
-          maxLength = this.fields[name].validation.maxLength,
+          validation = this.fields[name].validation,
+          minLength = this.fields[name].min,
+          maxLength = this.fields[name].max,
           newValid = Validator.validate(validation, ev.target, minLength, maxLength);
 
     if (newValid) {
@@ -127,56 +134,27 @@ export default class FormHandler {
     }
   }
 
-  readystatechangeHandler = (ev) => {
-    const state = ev.target.readyState,
-          status = ev.target.status;
-
-    if (state === 4) {
-      this.form.notice.message = this.form.messages.success;
-      this.form.notice.show();
-      this.form.resetForm();
-      setTimeout(() => {
-        this.form.notice.hide();
-      }, 2000);
-    }
-    if (status !== 200 && state === 4) {
-      console.log(`XMLHttpRequest: Status: ${status}, State: ${state}`);
-      this.form.notice.message = this.form.messages.error;
-      this.form.notice.show();
-      setTimeout(() => {
-        this.form.notice.hide();
-      }, 2000);
-    }
-  }
-
   submitHandler = (ev) => {
     ev.preventDefault();
     Object.entries(this.fields).forEach(([name, field]) => {
-      const validation = Validator.validate(field.validation.name, field.node, field.validation.minLength, field.validation.maxLength);
-      field.node.addEventListener('input', field.listener);
+      const validation = Validator.validate(field.validation, field.node, field.min, field.max);
+      field.on('input', this.inputHandler);
       console.log(name, validation)
       if (typeof validation !== 'undefined') {
-        this.setFieldState(name, validation.valid, this.notices[name].message || validation.message);
+        this.setFieldState(name, validation.valid);
       }
     });
 
-    this.form.notice.hide();
+    this.notices.form.hide();
     this.form.setFormState();
 
     if (this.form.valid) {
-      let sender = new Sender(
-        this.form.action,
-        this.form.method,
-        this.fields,
-        this.readystatechangeHandler
-      );
-      sender.makeRequest();
-      sender.sendRequest();
+      console.log('form is valid');
     } else {
-      this.form.notice.message = this.form.messages.invalid;
-      this.form.notice.show();
+      console.log('form is not valid');
+      this.notices.form.show();
       setTimeout(() => {
-        this.form.notice.hide();
+        this.notices.form.hide();
       }, 2000)
     }
   }

@@ -1,17 +1,26 @@
+import {
+  RADIO_NODE_LIST,
+} from '../common/constants';
+
 export default class Field {
   constructor({...opts}) {
-    this.name = opts.name;
     this.node = opts.node;
-    this.listener = opts.listener;
-    this.validation = {
-      name: opts.validation.name,
-      minLength: opts.validation.minLength,
-      maxLength: opts.validation.maxLength,
-      validate: opts.validation.validate,
-    };
+    this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
+    this.validation = opts.validation;
+    this.min = opts.min;
+    this.max = opts.max;
     this.classNames = opts.classNames;
-    this.send = opts.send;
     this.valid = false;
+    this.listener = opts.listener;
+  }
+
+  get validatorOptions() {
+    return {
+      type: this.validation,
+      node: this.node,
+      min: this.min,
+      max: this.max,
+    };
   }
 
   setFieldState(valid) {
@@ -19,20 +28,19 @@ export default class Field {
     this.toggleClassNames();
   }
 
-  toggleClassNames() {
-    if (this.valid) {
-      this.node.classList.remove(this.classNames.isNotValid);
-      this.node.classList.add(this.classNames.isValid);
+  on(type, listener) {
+    if (this.node.constructor.name === RADIO_NODE_LIST) {
+      this.node.forEach(el => el.addEventListener(type, listener));
     } else {
-      this.node.classList.remove(this.classNames.isValid);
-      this.node.classList.add(this.classNames.isNotValid);
+      this.node.addEventListener(type, listener);
     }
   }
 
-  clear() {
-    this.node.value = "";
-    this.valid = false;
-    this.node.classList.remove(this.classNames.isNotValid);
-    this.node.classList.remove(this.classNames.isValid);
+  off(type, listener) {
+    if (this.node.constructor.name === RADIO_NODE_LIST) {
+      this.node.forEach(el => el.removeEventListener(type, listener));
+    } else {
+      this.node.removeEventListener(type, listener);
+    }
   }
 }

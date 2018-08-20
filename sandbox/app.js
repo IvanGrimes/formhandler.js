@@ -2,31 +2,31 @@ const form = new FormHandler({
   form: {
     block: '.formhandler',
     notice: {
-      successMsg: 'all is fine',
-      errorMsg: 'something went wrong',
-      invalidMsg: 'please, fill the form',
+      message: 'please, fill the form',
     },
   },
   fields: {
+    checkbox: {
+      validation: 'isCheckboxChecked',
+      min: 2,
+      max: 3,
+    },
+    radio: {
+      validation: 'isRadioChecked',
+    },
+    select: {
+      validation: 'isSelected',
+    },
     firstname: {
       validation: 'isName',
-      minLength: 2,
-      maxLength: 20,
+      min: 2,
+      max: 20,
       notice: {
         message: 'this value is required',
       },
     },
-    lastname: {
-      validation: 'isName',
-      minLength: 2,
-      maxLength: 20,
-      send: false,
-    },
     email: {
       validation: 'isEmail',
-    },
-    age: {
-      validation: 'isAge',
     },
     phone: {
       validation: 'isPhone',

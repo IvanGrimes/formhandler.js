@@ -15,9 +15,8 @@ export default {
     },
   },
   fields: {
-    minLength: false,
-    maxLength: false,
-    send: true,
+    min: false,
+    max: false,
   },
   notices: {
     attachTo: '.formhandler__notices',

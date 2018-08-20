@@ -1,18 +1,9 @@
 export default class Form {
   constructor({ ...opts }) {
-    this.opts = opts.opts;
-    this.node = document.querySelector(this.opts.form.block);
-    this.submit = this.node.querySelector(this.opts.form.submit);
-    this.classNames = this.opts.classNames.form;
+    this.node = opts.node;
+    this.submit = opts.submit;
+    this.classNames = opts.classNames;
     this.fields = opts.fields;
-    this.notice = opts.notice;
-    this.method = this.node.method;
-    this.action = this.node.action;
-    this.messages = {
-      success: this.opts.form.notice.successMsg,
-      invalid: this.opts.form.notice.invalidMsg,
-      error: this.opts.form.notice.errorMsg,
-    };
     this.listener = opts.listener;
     this.valid = false;
 
@@ -36,8 +27,6 @@ export default class Form {
       this.node.classList.add(this.classNames.isNotValid);
     }
   }
-
-  setSubmitState() {}
 
   resetForm() {
     Object.entries(this.fields).forEach(([name, field]) => {

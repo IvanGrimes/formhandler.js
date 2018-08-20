@@ -34,6 +34,30 @@ export default class Validator {
   }
 
   static validations = {
+    isCheckboxChecked(node, min, max) {
+      let valid = false,
+          message = 'isCheckboxChecked';
+      return {
+        valid,
+        message,
+      };
+    },
+    isRadioChecked(node, min, max) {
+      let valid = false,
+        message = 'isCheckboxChecked';
+      return {
+        valid,
+        message,
+      };
+    },
+    isSelected(node, min, max) {
+      let valid = false,
+        message = 'isCheckboxChecked';
+      return {
+        valid,
+        message,
+      };
+    },
     isName(node, min, max) {
       const pattern = /^[A-Za-z]/;
       let valid = pattern.test(node.value),
