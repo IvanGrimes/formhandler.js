@@ -21,9 +21,9 @@ const form = new FormHandler({
       validation: 'isName',
       min: 2,
       max: 20,
-      notice: {
-        message: 'this value is required',
-      },
+      // notice: {
+      //   message: 'this value is required',
+      // },
     },
     email: {
       validation: 'isEmail',
@@ -31,12 +31,9 @@ const form = new FormHandler({
     phone: {
       validation: 'isPhone',
     },
-    zip1: {
-      validation: 'isZipPromise',
-    },
-    zip2: {
-      validation: 'isZipXML',
-    },
+    // zip1: {
+    //   validation: 'isZipPromise',
+    // },
     custom: {
       validation: 'isCustom',
     },
@@ -58,26 +55,27 @@ const form = new FormHandler({
         message,
       };
     },
-    isZipPromise(node) {
-      if (node.value.length === 5) {
-        fetch('http://api.zippopotam.us/us/' + node.value)
-          .then(data => form.setFieldState(node.name, data.ok));
-      } else {
-        form.setFieldState(node.name, false, `iszippromise not valid`);
-      }
-    },
-    isZipXML(node) {
-      let xhr = new XMLHttpRequest();
-      if (node.value.length === 5) {
-        xhr.open('GET', 'http://api.zippopotam.us/us/' + node.value);
-        xhr.send();
-        xhr.addEventListener('load', (ev) => {
-          form.setFieldState(node.name, ev.target.status === 200);
-        });
-      } else {
-        form.setFieldState(node.name, false, `iszipxml not valid`);
-      }
-    },
+    // isZipPromise(node) {
+    //   let message = 'zippromise',
+    //       valid = false;
+    //   if (node.value.length === 5) {
+    //     (async function() {
+    //       let response = await fetch('http://api.zippopotam.us/us/' + node.value);
+    //       let json = await response.json();
+    //       valid = !!json.country;
+    //       console.log(json, valid)
+    //
+    //       return {
+    //         valid,
+    //         message,
+    //       };
+    //     })();
+    //   }
+    //   return {
+    //     valid,
+    //     message,
+    //   };
+    // },
     isFile(node) {
       let valid = node.value.length > 0,
         message = 'should be is non empty'
@@ -88,4 +86,3 @@ const form = new FormHandler({
     }
   }
 });
-

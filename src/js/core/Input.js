@@ -5,6 +5,11 @@ export default class Input extends Field {
     super({...opts});
   }
 
+  setFieldState(valid) {
+    this.valid = valid;
+    this.toggleClassNames();
+  }
+
   toggleClassNames() {
     if (this.valid) {
       this.node.classList.remove(this.classNames.isNotValid);

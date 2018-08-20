@@ -5,6 +5,11 @@ export default class Radio extends Field {
     super({...opts});
   }
 
+  setFieldState(valid) {
+    this.valid = valid;
+    this.toggleClassNames();
+  }
+
   toggleClassNames() {
     if (this.valid) {
       this.node.forEach(el => el.classList.remove(this.classNames.isNotValid));
@@ -13,5 +18,12 @@ export default class Radio extends Field {
       this.node.forEach(el => el.classList.remove(this.classNames.isValid));
       this.node.forEach(el => el.classList.add(this.classNames.isNotValid));
     }
+  }
+
+  clear() {
+    this.valid = false;
+    this.node.forEach(el => el.classList.remove(this.classNames.isValid));
+    this.node.forEach(el => el.classList.remove(this.classNames.isNotValid));
+    this.node.forEach(el => el.checked = false);
   }
 }

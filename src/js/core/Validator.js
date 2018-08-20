@@ -11,11 +11,10 @@ export default class Validator {
     Object.entries(this.custom).forEach(([type, obj]) => {
       Validator.validations[type] = obj;
     });
-    console.log(Validator.validations)
     return this;
   };
 
-  static validate(type, node, min, max) {
+  static validate({type, node, min, max}) {
     let validation = Validator.validations[type];
 
     if (!validation) {
@@ -25,34 +24,51 @@ export default class Validator {
     return validation(node, min, max);
   }
 
-  static getMessage(type, min, max) {
-    if (typeof Validator.validations[type].message === 'function') {
-      return Validator.validations[type].message(min, max);
-    } else {
-      return Validator.validations[type].message;
-    }
+  static getMessage({type, node, min, max}) {
+    return Validator.validations[type](node, min, max).message;
   }
 
   static validations = {
     isCheckboxChecked(node, min, max) {
       let valid = false,
-          message = 'isCheckboxChecked';
+          message = 'Check any boxes',
+          checked = 0;
+
+      node.forEach(el => {
+        el.checked ? checked += 1 : null;
+      });
+
+      if (min && max) {
+        valid = !!(min && max && checked >= min && checked <= max);
+      }
+      if (min && !max) {
+        valid = checked >= min;
+      }
+      if (!min && max) {
+        valid = checked <= max;
+      }
+
       return {
         valid,
         message,
       };
     },
-    isRadioChecked(node, min, max) {
-      let valid = false,
-        message = 'isCheckboxChecked';
+    isRadioChecked(node) {
+      let valid = Array.from(node).some(el => el.checked === true),
+          message = 'Please, press any button';
+
+      console.log('radio',valid);
+
       return {
         valid,
         message,
       };
     },
-    isSelected(node, min, max) {
-      let valid = false,
-        message = 'isCheckboxChecked';
+    isSelected(node) {
+      const valid = Array.from(node.options)
+                         .filter(el => el.value.length > 0)
+                         .some(el => el.selected === true),
+        message = 'Please, choose any option';
       return {
         valid,
         message,
@@ -65,12 +81,27 @@ export default class Validator {
 
       if (node.value.length === 0) {
         valid = false;
-      }
-      if (min && node.value.length < min && node.value.length !== 0) {
-        valid = false;
-      }
-      if (max && node.value.length > max) {
-        valid = false;
+        if (min && !max) {
+          message = `Must contain at least ${min} latin character`;
+        }
+        if (!min && max) {
+          message = `Must contain at least one latin character and less than ${max + 1}`;
+        }
+        if (min && max) {
+          message = `Must contain between ${min} and ${max} latin characters`;
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = `Must contain at least ${min} latin characters`;
+        }
+        if (max && node.value.length > max) {
+          valid = false;
+          message = `Must contain less than ${max + 1} latin characters`;
+        }
+        if (min && node.value.length > min) {
+          valid = true;
+        }
       }
 
       return {
@@ -82,26 +113,6 @@ export default class Validator {
       const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       let valid = pattern.test(node.value),
           message = `Must be a valid email address`;
-
-      return {
-        valid,
-        message,
-      };
-    },
-    isAge(node, min, max) {
-      const pattern = /^[\d]*$/;
-      let valid = pattern.test(node.value),
-          message = `Must contain only digits`;
-
-      if (node.value.length === 0 || !valid) {
-        valid = false;
-      }
-      if (min && node.value.length < min && node.value.length !== 0) {
-        valid = false;
-      }
-      if (max && node.value.length > max) {
-        valid = false;
-      }
 
       return {
         valid,
@@ -120,7 +131,7 @@ export default class Validator {
     },
     isNonEmpty(node, min, max) {
       let valid = node.value.length > 0,
-          message = `Must be is non empty`;
+          message = `Must be non empty`;
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;

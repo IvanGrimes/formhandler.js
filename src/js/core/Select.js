@@ -4,6 +4,12 @@ export default class Select extends Field {
   constructor({...opts}) {
     super({...opts})
   }
+
+  setFieldState(valid) {
+    this.valid = valid;
+    this.toggleClassNames();
+  }
+
   toggleClassNames() {
     if (this.valid) {
       this.node.classList.remove(this.classNames.isNotValid);
@@ -12,5 +18,12 @@ export default class Select extends Field {
       this.node.classList.remove(this.classNames.isValid);
       this.node.classList.add(this.classNames.isNotValid);
     }
+  }
+
+  clear() {
+    this.valid = false;
+    this.node.classList.remove(this.classNames.isValid);
+    this.node.classList.remove(this.classNames.isNotValid);
+    Array.from(this.node.options).forEach(el => el.selected = false);
   }
 }

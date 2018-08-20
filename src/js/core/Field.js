@@ -11,7 +11,6 @@ export default class Field {
     this.max = opts.max;
     this.classNames = opts.classNames;
     this.valid = false;
-    this.listener = opts.listener;
   }
 
   get validatorOptions() {
@@ -21,12 +20,7 @@ export default class Field {
       min: this.min,
       max: this.max,
     };
-  }
-
-  setFieldState(valid) {
-    this.valid = valid;
-    this.toggleClassNames();
-  }
+  };
 
   on(type, listener) {
     if (this.node.constructor.name === RADIO_NODE_LIST) {

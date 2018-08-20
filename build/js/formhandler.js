@@ -169,12 +169,15 @@
 
           Validator.validations[type] = obj;
         });
-        console.log(Validator.validations);
         return this;
       }
     }], [{
       key: "validate",
-      value: function validate(type, node, min, max) {
+      value: function validate(_ref3) {
+        var type = _ref3.type,
+            node = _ref3.node,
+            min = _ref3.min,
+            max = _ref3.max;
         var validation = Validator.validations[type];
 
         if (!validation) {
@@ -185,12 +188,12 @@
       }
     }, {
       key: "getMessage",
-      value: function getMessage(type, min, max) {
-        if (typeof Validator.validations[type].message === 'function') {
-          return Validator.validations[type].message(min, max);
-        } else {
-          return Validator.validations[type].message;
-        }
+      value: function getMessage(_ref4) {
+        var type = _ref4.type,
+            node = _ref4.node,
+            min = _ref4.min,
+            max = _ref4.max;
+        return Validator.validations[type](node, min, max).message;
       }
     }]);
 
@@ -200,23 +203,47 @@
   _defineProperty(Validator, "validations", {
     isCheckboxChecked: function isCheckboxChecked(node, min, max) {
       var valid = false,
-          message = 'isCheckboxChecked';
+          message = 'Check any boxes',
+          checked = 0;
+      node.forEach(function (el) {
+        el.checked ? checked += 1 : null;
+      });
+
+      if (min && max) {
+        valid = !!(min && max && checked >= min && checked <= max);
+      }
+
+      if (min && !max) {
+        valid = checked >= min;
+      }
+
+      if (!min && max) {
+        valid = checked <= max;
+      }
+
       return {
         valid: valid,
         message: message
       };
     },
-    isRadioChecked: function isRadioChecked(node, min, max) {
-      var valid = false,
-          message = 'isCheckboxChecked';
+    isRadioChecked: function isRadioChecked(node) {
+      var valid = Array.from(node).some(function (el) {
+        return el.checked === true;
+      }),
+          message = 'Please, press any button';
+      console.log('radio', valid);
       return {
         valid: valid,
         message: message
       };
     },
-    isSelected: function isSelected(node, min, max) {
-      var valid = false,
-          message = 'isCheckboxChecked';
+    isSelected: function isSelected(node) {
+      var valid = Array.from(node.options).filter(function (el) {
+        return el.value.length > 0;
+      }).some(function (el) {
+        return el.selected === true;
+      }),
+          message = 'Please, choose any option';
       return {
         valid: valid,
         message: message
@@ -229,14 +256,32 @@
 
       if (node.value.length === 0) {
         valid = false;
-      }
 
-      if (min && node.value.length < min && node.value.length !== 0) {
-        valid = false;
-      }
+        if (min && !max) {
+          message = "Must contain at least ".concat(min, " latin character");
+        }
 
-      if (max && node.value.length > max) {
-        valid = false;
+        if (!min && max) {
+          message = "Must contain at least one latin character and less than ".concat(max + 1);
+        }
+
+        if (min && max) {
+          message = "Must contain between ".concat(min, " and ").concat(max, " latin characters");
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min, " latin characters");
+        }
+
+        if (max && node.value.length > max) {
+          valid = false;
+          message = "Must contain less than ".concat(max + 1, " latin characters");
+        }
+
+        if (min && node.value.length > min) {
+          valid = true;
+        }
       }
 
       return {
@@ -253,28 +298,6 @@
         message: message
       };
     },
-    isAge: function isAge(node, min, max) {
-      var pattern = /^[\d]*$/;
-      var valid = pattern.test(node.value),
-          message = "Must contain only digits";
-
-      if (node.value.length === 0 || !valid) {
-        valid = false;
-      }
-
-      if (min && node.value.length < min && node.value.length !== 0) {
-        valid = false;
-      }
-
-      if (max && node.value.length > max) {
-        valid = false;
-      }
-
-      return {
-        valid: valid,
-        message: message
-      };
-    },
     isPhone: function isPhone(node, min, max) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value),
@@ -286,7 +309,7 @@
     },
     isNonEmpty: function isNonEmpty(node, min, max) {
       var valid = node.value.length > 0,
-          message = "Must be is non empty";
+          message = "Must be non empty";
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;
@@ -364,6 +387,7 @@
   var HTML_SELECT_ELEMENT = 'HTMLSelectElement';
   var HTML_INPUT_ELEMENT = 'HTMLInputElement';
   var HTML_TEXTAREA_ELEMENT = 'HTMLTextAreaElement';
+  var INPUT = 'input';
 
   var Field =
   /*#__PURE__*/
@@ -380,16 +404,9 @@
       this.max = opts.max;
       this.classNames = opts.classNames;
       this.valid = false;
-      this.listener = opts.listener;
     }
 
     _createClass(Field, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.valid = valid;
-        this.toggleClassNames();
-      }
-    }, {
       key: "on",
       value: function on(type, listener) {
         if (this.node.constructor.name === RADIO_NODE_LIST) {
@@ -440,6 +457,12 @@
     }
 
     _createClass(Input, [{
+      key: "setFieldState",
+      value: function setFieldState(valid) {
+        this.valid = valid;
+        this.toggleClassNames();
+      }
+    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -477,6 +500,12 @@
     }
 
     _createClass(Radio, [{
+      key: "setFieldState",
+      value: function setFieldState(valid) {
+        this.valid = valid;
+        this.toggleClassNames();
+      }
+    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         var _this = this;
@@ -497,6 +526,22 @@
           });
         }
       }
+    }, {
+      key: "clear",
+      value: function clear() {
+        var _this2 = this;
+
+        this.valid = false;
+        this.node.forEach(function (el) {
+          return el.classList.remove(_this2.classNames.isValid);
+        });
+        this.node.forEach(function (el) {
+          return el.classList.remove(_this2.classNames.isNotValid);
+        });
+        this.node.forEach(function (el) {
+          return el.checked = false;
+        });
+      }
     }]);
 
     return Radio;
@@ -516,6 +561,12 @@
     }
 
     _createClass(Select, [{
+      key: "setFieldState",
+      value: function setFieldState(valid) {
+        this.valid = valid;
+        this.toggleClassNames();
+      }
+    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -525,6 +576,16 @@
           this.node.classList.remove(this.classNames.isValid);
           this.node.classList.add(this.classNames.isNotValid);
         }
+      }
+    }, {
+      key: "clear",
+      value: function clear() {
+        this.valid = false;
+        this.node.classList.remove(this.classNames.isValid);
+        this.node.classList.remove(this.classNames.isNotValid);
+        Array.from(this.node.options).forEach(function (el) {
+          return el.selected = false;
+        });
       }
     }]);
 
@@ -560,6 +621,7 @@
           this.parent.appendChild(this.node);
         } else {
           if (this.nextToField === 'before') {
+            // TODO: Change option to a true/false, and it'll be stick notice next to the field
             this.form.insertBefore(this.node, this.parent);
           }
 
@@ -641,14 +703,10 @@
 
       _defineProperty(this, "inputHandler", function (ev) {
         var name = ev.target.name,
-            validation = _this.fields[name].validation,
-            minLength = _this.fields[name].min,
-            maxLength = _this.fields[name].max,
-            newValid = Validator.validate(validation, ev.target, minLength, maxLength);
+            validation = Validator.validate(_this.fields[name].validatorOptions);
+        console.log(name);
 
-        if (newValid) {
-          _this.setFieldState(name, newValid.valid, _this.notices[name].message || validation.message);
-        }
+        _this.setFieldAndNoticeStates(name, validation.valid, validation.message);
       });
 
       _defineProperty(this, "submitHandler", function (ev) {
@@ -658,20 +716,18 @@
               name = _ref3[0],
               field = _ref3[1];
 
-          var validation = Validator.validate(field.validation, field.node, field.min, field.max);
-          field.on('input', _this.inputHandler);
-          console.log(name, validation);
+          var validation = Validator.validate(field.validatorOptions);
 
-          if (typeof validation !== 'undefined') {
-            _this.setFieldState(name, validation.valid);
-          }
+          _this.setFieldAndNoticeStates(name, validation.valid, validation.message);
+
+          field.on(INPUT, _this.inputHandler);
         });
-
-        _this.notices.form.hide();
 
         _this.form.setFormState();
 
         if (_this.form.valid) {
+          _this.notices.form.hide();
+
           console.log('form is valid');
         } else {
           console.log('form is not valid');
@@ -735,7 +791,8 @@
           _this3.opts.fields[name].notice.classNames = Object.assign({}, _this3.opts.classNames.notices, _this3.opts.fields[name].notice.classNames);
         });
         return this;
-      }
+      } // TODO: Need a review
+
     }, {
       key: "makeForm",
       value: function makeForm() {
@@ -781,20 +838,22 @@
     }, {
       key: "makeNotice",
       value: function makeNotice(name, notice) {
+        // TODO: Make beautiful
         this.notices[name] = new Notice({
           form: this.form.node,
           classNames: notice.classNames,
           attachTo: notice.attachTo,
-          message: notice.message,
+          message: notice.message || Validator.getMessage(this.fields[name].validatorOptions),
           nextToField: notice.nextToField,
           parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo)
         });
         return this;
       }
     }, {
-      key: "setFieldState",
-      value: function setFieldState(name, valid) {
+      key: "setFieldAndNoticeStates",
+      value: function setFieldAndNoticeStates(name, valid, message) {
         this.fields[name].setFieldState(valid);
+        this.notices[name].message = message;
 
         if (valid) {
           this.notices[name].hide();

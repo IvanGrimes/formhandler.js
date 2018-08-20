@@ -18,7 +18,7 @@ export default class Notice {
     if (this.attachTo) {
       this.parent.appendChild(this.node);
     } else {
-      if (this.nextToField === 'before') {
+      if (this.nextToField === 'before') { // TODO: Change option to a true/false, and it'll be stick notice next to the field
         this.form.insertBefore(this.node, this.parent);
       }
       if (this.nextToField === 'after') {

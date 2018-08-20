@@ -6,14 +6,15 @@ import Select from './core/Select';
 import Notice from './core/Notice';
 import defaultConfig from './common/defaultConfig';
 import {
-    RADIO_NODE_LIST,
-    HTML_SELECT_ELEMENT,
-    HTML_INPUT_ELEMENT,
-    HTML_TEXTAREA_ELEMENT
-  } from './common/constants';
+  RADIO_NODE_LIST,
+  HTML_SELECT_ELEMENT,
+  HTML_INPUT_ELEMENT,
+  HTML_TEXTAREA_ELEMENT,
+  INPUT,
+} from './common/constants';
 
 export default class FormHandler {
-  constructor({ ...args }) {
+  constructor({...args}) {
     this.opts = args;
     this.fields = {};
     this.notices = {};
@@ -26,7 +27,7 @@ export default class FormHandler {
     this.complementOptions().makeForm();
 
     Object.entries(this.opts.fields).forEach(([name, field]) => {
-      this.makeField(name,field).makeNotice(name, field.notice);
+      this.makeField(name, field).makeNotice(name, field.notice);
     });
 
     return this;
@@ -34,26 +35,26 @@ export default class FormHandler {
 
   complementOptions() {
     // Add lacks classNames and merge.
-    this.opts.classNames = this.opts.classNames ? { ...defaultConfig.classNames, ...this.opts.classNames } : defaultConfig.classNames;
-    this.opts.classNames.form = { ...defaultConfig.classNames.form, ...this.opts.classNames.form };
-    this.opts.classNames.fields = { ...defaultConfig.classNames.fields, ...this.opts.classNames.fields };
-    this.opts.classNames.notices = { ...defaultConfig.classNames.notices, ...this.opts.classNames.notices };
+    this.opts.classNames = this.opts.classNames ? {...defaultConfig.classNames, ...this.opts.classNames} : defaultConfig.classNames;
+    this.opts.classNames.form = {...defaultConfig.classNames.form, ...this.opts.classNames.form};
+    this.opts.classNames.fields = {...defaultConfig.classNames.fields, ...this.opts.classNames.fields};
+    this.opts.classNames.notices = {...defaultConfig.classNames.notices, ...this.opts.classNames.notices};
     // Add lacks form options and merge.
-    this.opts.form = this.opts.form ? { ...defaultConfig.form, ...this.opts.form } : defaultConfig.form;
-    this.opts.form.notice = { ...defaultConfig.form.notice, ...this.opts.form.notice };
-    this.opts.form.notice.classNames = { ...this.opts.classNames.notice, ...this.opts.form.notice.classNames };
+    this.opts.form = this.opts.form ? {...defaultConfig.form, ...this.opts.form} : defaultConfig.form;
+    this.opts.form.notice = {...defaultConfig.form.notice, ...this.opts.form.notice};
+    this.opts.form.notice.classNames = {...this.opts.classNames.notice, ...this.opts.form.notice.classNames};
     // Add lacks notices options and merge
-    this.opts.notices = { ...defaultConfig.notices, ...this.opts.notices };
+    this.opts.notices = {...defaultConfig.notices, ...this.opts.notices};
     // Add lacks fields options and merge
-    Object.entries(this.opts.fields).forEach(([name,obj]) => {
+    Object.entries(this.opts.fields).forEach(([name, obj]) => {
       this.opts.fields[name] = {...defaultConfig.fields, ...this.opts.fields[name]};
-      this.opts.fields[name].classNames = this.opts.fields[name].classNames ? { ...this.opts.classNames.fields, ...this.opts.fields[name].classNames } : this.opts.classNames.fields;
-      this.opts.fields[name].notice = { ...this.opts.notices, ...this.opts.fields[name].notice };
-      this.opts.fields[name].notice.classNames = { ...this.opts.classNames.notices, ...this.opts.fields[name].notice.classNames };
+      this.opts.fields[name].classNames = this.opts.fields[name].classNames ? {...this.opts.classNames.fields, ...this.opts.fields[name].classNames} : this.opts.classNames.fields;
+      this.opts.fields[name].notice = {...this.opts.notices, ...this.opts.fields[name].notice};
+      this.opts.fields[name].notice.classNames = {...this.opts.classNames.notices, ...this.opts.fields[name].notice.classNames};
     });
 
     return this;
-  }
+  } // TODO: Need a review
 
   makeForm() {
     const options = {
@@ -72,18 +73,18 @@ export default class FormHandler {
 
   makeField(name, field) {
     const node = this.form.node[name],
-          type = node.constructor.name,
-          options = {
-            node: node,
-            validation: field.validation,
-            min: field.min,
-            max: field.max,
-            classNames: field.classNames,
-            listener: this.inputHandler,
-          };
+      type = node.constructor.name,
+      options = {
+        node: node,
+        validation: field.validation,
+        min: field.min,
+        max: field.max,
+        classNames: field.classNames,
+        listener: this.inputHandler,
+      };
 
     if (type === HTML_INPUT_ELEMENT ||
-        type === HTML_TEXTAREA_ELEMENT) {
+      type === HTML_TEXTAREA_ELEMENT) {
       this.fields[name] = new Input(options);
     }
 
@@ -98,21 +99,21 @@ export default class FormHandler {
     return this;
   }
 
-  makeNotice(name, notice) {
+  makeNotice(name, notice) { // TODO: Make beautiful
     this.notices[name] = new Notice({
       form: this.form.node,
       classNames: notice.classNames,
       attachTo: notice.attachTo,
-      message: null || notice.message,
+      message: notice.message || Validator.getMessage(this.fields[name].validatorOptions),
       nextToField: notice.nextToField,
       parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
     });
     return this;
   }
 
-  setFieldState(name, valid) {
+  setFieldAndNoticeStates(name, valid, message) {
     this.fields[name].setFieldState(valid);
-
+    this.notices[name].message = message;
     if (valid) {
       this.notices[name].hide();
     } else {
@@ -124,31 +125,25 @@ export default class FormHandler {
 
   inputHandler = ev => {
     const name = ev.target.name,
-          validation = this.fields[name].validation,
-          minLength = this.fields[name].min,
-          maxLength = this.fields[name].max,
-          newValid = Validator.validate(validation, ev.target, minLength, maxLength);
+          validation = Validator.validate(this.fields[name].validatorOptions);
+    console.log(name)
 
-    if (newValid) {
-      this.setFieldState(name, newValid.valid, this.notices[name].message || validation.message);
-    }
+    this.setFieldAndNoticeStates(name, validation.valid, validation.message);
   }
 
   submitHandler = (ev) => {
     ev.preventDefault();
     Object.entries(this.fields).forEach(([name, field]) => {
-      const validation = Validator.validate(field.validation, field.node, field.min, field.max);
-      field.on('input', this.inputHandler);
-      console.log(name, validation)
-      if (typeof validation !== 'undefined') {
-        this.setFieldState(name, validation.valid);
-      }
+      const validation = Validator.validate(field.validatorOptions);
+
+      this.setFieldAndNoticeStates(name, validation.valid, validation.message);
+      field.on(INPUT, this.inputHandler);
     });
 
-    this.notices.form.hide();
     this.form.setFormState();
 
     if (this.form.valid) {
+      this.notices.form.hide();
       console.log('form is valid');
     } else {
       console.log('form is not valid');
