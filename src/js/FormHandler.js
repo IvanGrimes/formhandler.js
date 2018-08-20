@@ -112,9 +112,17 @@ export default class FormHandler {
   }
 
   setStateFromResponse(response, property, name, message) {
-    response
-      .then(data => data.json())
-      .then(json => this.setFieldAndNoticeStates(name, !!json[property], message));
+    console.log(response)
+    if (typeof response.then !== 'undefined') {
+      response
+        .then(data => data.json())
+        .then(json => this.setFieldAndNoticeStates(name, !!json[property], message));
+    } else {
+      response.addEventListener('load', (ev) => {
+        this.setFieldAndNoticeStates(name, !!JSON.parse(ev.target.response)[property], message);
+      });
+    }
+
   }
 
   setFieldAndNoticeStates(name, valid, message) {

@@ -34,6 +34,9 @@ const form = new FormHandler({
     zip1: {
       validation: 'isZipPromise',
     },
+    zip2: {
+      validation: 'isZipXML',
+    },
     custom: {
       validation: 'isCustom',
     },
@@ -64,6 +67,26 @@ const form = new FormHandler({
         return {
           valid: {
             response,
+            property: 'country',
+          },
+          message,
+        };
+      }
+      return {
+        valid,
+        message,
+      };
+    },
+    isZipXML(node) {
+      let message = 'zipxml',
+          valid = false;
+      if (node.value.length === 5) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://api.zippopotam.us/us/' + node.value, true);
+        xhr.send();
+        return {
+          valid: {
+            response: xhr,
             property: 'country',
           },
           message,

@@ -945,11 +945,19 @@
       value: function setStateFromResponse(response, property, name, message) {
         var _this4 = this;
 
-        response.then(function (data) {
-          return data.json();
-        }).then(function (json) {
-          return _this4.setFieldAndNoticeStates(name, !!json[property], message);
-        });
+        console.log(response);
+
+        if (typeof response.then !== 'undefined') {
+          response.then(function (data) {
+            return data.json();
+          }).then(function (json) {
+            return _this4.setFieldAndNoticeStates(name, !!json[property], message);
+          });
+        } else {
+          response.addEventListener('load', function (ev) {
+            _this4.setFieldAndNoticeStates(name, !!JSON.parse(ev.target.response)[property], message);
+          });
+        }
       }
     }, {
       key: "setFieldAndNoticeStates",
