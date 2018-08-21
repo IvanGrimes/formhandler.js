@@ -57,8 +57,6 @@ export default class Validator {
       let valid = Array.from(node).some(el => el.checked === true),
           message = 'Please, press any button';
 
-      console.log('radio',valid);
-
       return {
         valid,
         message,

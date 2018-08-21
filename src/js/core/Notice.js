@@ -1,3 +1,8 @@
+import {
+  DIV,
+} from '../common/constants';
+
+
 export default class Notice {
   constructor({form, message, classNames, attachTo, nextToField, parent}) {
     this.form = form;
@@ -11,7 +16,7 @@ export default class Notice {
   }
 
   mount() {
-    this.node = document.createElement('div');
+    this.node = document.createElement(DIV);
     this.node.classList.add(this.classNames.block);
     this.node.classList.add(this.classNames.hidden);
 

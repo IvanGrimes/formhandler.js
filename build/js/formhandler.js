@@ -322,7 +322,6 @@
         return el.checked === true;
       }),
           message = 'Please, press any button';
-      console.log('radio', valid);
       return {
         valid: valid,
         message: message
@@ -417,6 +416,23 @@
     }
   });
 
+  var RADIO_NODE_LIST = 'RadioNodeList';
+  var HTML_SELECT_ELEMENT = 'HTMLSelectElement';
+  var HTML_INPUT_ELEMENT = 'HTMLInputElement';
+  var HTML_TEXTAREA_ELEMENT = 'HTMLTextAreaElement';
+  var INPUT = 'input';
+  var LOAD = 'load';
+  var UNDEFINED = 'undefined';
+  var SUCCESS = 'success';
+  var ERROR = 'error';
+  var OBJECT = 'object';
+  var FORM = 'form';
+  var CLICK = 'click';
+  var DIV = 'div';
+  var READYSTATECHANGE = 'readystatechange';
+  var XHR = 'xhr';
+  var FETCH = 'fetch';
+
   var Form =
   /*#__PURE__*/
   function () {
@@ -432,7 +448,7 @@
       this.listener = opts.listener;
       this.valid = false;
       this.sended = null;
-      this.submit.addEventListener('click', this.listener);
+      this.submit.addEventListener(CLICK, this.listener);
     }
 
     _createClass(Form, [{
@@ -474,12 +490,6 @@
 
     return Form;
   }();
-
-  var RADIO_NODE_LIST = 'RadioNodeList';
-  var HTML_SELECT_ELEMENT = 'HTMLSelectElement';
-  var HTML_INPUT_ELEMENT = 'HTMLInputElement';
-  var HTML_TEXTAREA_ELEMENT = 'HTMLTextAreaElement';
-  var INPUT = 'input';
 
   var Field =
   /*#__PURE__*/
@@ -716,7 +726,7 @@
     _createClass(Notice, [{
       key: "mount",
       value: function mount() {
-        this.node = document.createElement('div');
+        this.node = document.createElement(DIV);
         this.node.classList.add(this.classNames.block);
         this.node.classList.add(this.classNames.hidden);
 
@@ -808,34 +818,34 @@
       value: function sendRequest(data) {
         var _this = this;
 
-        if (this.type === 'xhr') {
+        if (this.type === XHR) {
           var xhr = new XMLHttpRequest();
           xhr.open(this.method, this.url, true);
-          xhr.addEventListener('readystatechange', function (ev) {
+          xhr.addEventListener(READYSTATECHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (data.status >= 200 & data.status < 400) {
-                _this.callbackOnSend('success');
+                _this.callbackOnSend(SUCCESS);
               } else {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
 
-                _this.callbackOnSend('error');
+                _this.callbackOnSend(ERROR);
               }
             }
           });
           xhr.send(data);
         }
 
-        if (this.type === 'fetch') {
+        if (this.type === FETCH) {
           fetch(this.url, {
             method: this.method,
             body: data
           }).then(function (data) {
             if (data.status >= 200 & data.status < 400) {
-              _this.callbackOnSend('success');
+              _this.callbackOnSend(SUCCESS);
             } else {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
 
-              _this.callbackOnSend('error');
+              _this.callbackOnSend(ERROR);
             }
           });
         }
@@ -953,14 +963,14 @@
       });
 
       _defineProperty(this, "setFormStateFromResponse", function (result) {
-        if (result === 'success') {
+        if (result === SUCCESS) {
           _this.notices.form.message = _this.opts.form.notice.successMessage;
           _this.form.send = true;
 
           _this.form.clear();
         }
 
-        if (result === 'error') {
+        if (result === ERROR) {
           _this.notices.form.message = _this.opts.form.notice.errorMessage;
           _this.form.send = false;
         }
@@ -1033,7 +1043,7 @@
           listener: this.submitHandler
         };
         this.form = new Form(options);
-        this.makeNotice('form', this.opts.form.notice);
+        this.makeNotice(FORM, this.opts.form.notice);
         return this;
       }
     }, {
@@ -1084,16 +1094,14 @@
       value: function setFieldStateFromResponse(response, property, name, message) {
         var _this4 = this;
 
-        console.log(response);
-
-        if (typeof response.then !== 'undefined') {
+        if (_typeof(response.then) !== UNDEFINED) {
           response.then(function (data) {
             return data.json();
           }).then(function (json) {
             return _this4.setFieldState(name, !!json[property], message);
           });
         } else {
-          response.addEventListener('load', function (ev) {
+          response.addEventListener(LOAD, function (ev) {
             _this4.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
           });
         }
@@ -1103,7 +1111,7 @@
       value: function setFieldState(name, valid, message) {
         console.log(name, valid);
 
-        if (_typeof(valid) === 'object') {
+        if (_typeof(valid) === OBJECT) {
           this.setFieldStateFromResponse(valid.response, valid.property, name, message);
         } else {
           this.fields[name].setFieldState(valid);

@@ -1,3 +1,7 @@
+import {
+  CLICK,
+} from '../common/constants';
+
 export default class Form {
   constructor({ ...opts }) {
     this.node = opts.node;
@@ -8,7 +12,7 @@ export default class Form {
     this.valid = false;
     this.sended = null;
 
-    this.submit.addEventListener('click', this.listener);
+    this.submit.addEventListener(CLICK, this.listener);
   }
 
   setFormState() {

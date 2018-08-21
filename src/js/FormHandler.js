@@ -12,6 +12,12 @@ import {
   HTML_INPUT_ELEMENT,
   HTML_TEXTAREA_ELEMENT,
   INPUT,
+  UNDEFINED,
+  ERROR,
+  SUCCESS,
+  OBJECT,
+  LOAD,
+  FORM,
 } from './common/constants';
 
 export default class FormHandler {
@@ -69,7 +75,7 @@ export default class FormHandler {
 
     this.form = new Form(options);
 
-    this.makeNotice('form', this.opts.form.notice);
+    this.makeNotice(FORM, this.opts.form.notice);
     return this;
   }
 
@@ -116,13 +122,12 @@ export default class FormHandler {
   }
 
   setFieldStateFromResponse(response, property, name, message) {
-    console.log(response)
-    if (typeof response.then !== 'undefined') {
+    if (typeof response.then !== UNDEFINED) {
       response
         .then(data => data.json())
         .then(json => this.setFieldState(name, !!json[property], message));
     } else {
-      response.addEventListener('load', (ev) => {
+      response.addEventListener(LOAD, (ev) => {
         this.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
       });
     }
@@ -130,7 +135,7 @@ export default class FormHandler {
 
   setFieldState(name, valid, message) {
     console.log(name, valid);
-    if (typeof valid === 'object') {
+    if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
       this.fields[name].setFieldState(valid);
@@ -191,12 +196,12 @@ export default class FormHandler {
   }
 
   setFormStateFromResponse = (result) => {
-    if (result === 'success') {
+    if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
       this.form.send = true;
       this.form.clear();
     }
-    if (result === 'error') {
+    if (result === ERROR) {
       this.notices.form.message = this.opts.form.notice.errorMessage;
       this.form.send = false;
     }

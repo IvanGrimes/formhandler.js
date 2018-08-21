@@ -3,6 +3,11 @@ import {
   HTML_TEXTAREA_ELEMENT,
   RADIO_NODE_LIST,
   HTML_SELECT_ELEMENT,
+  READYSTATECHANGE,
+  FETCH,
+  XHR,
+  SUCCESS,
+  ERROR,
 } from "../common/constants";
 
 export default class Sender {
@@ -43,32 +48,32 @@ export default class Sender {
   }
 
   sendRequest(data) {
-    if (this.type === 'xhr') {
+    if (this.type === XHR) {
       const xhr = new XMLHttpRequest();
       xhr.open(this.method, this.url, true);
-      xhr.addEventListener('readystatechange', (ev) => {
+      xhr.addEventListener(READYSTATECHANGE, (ev) => {
         if (ev.target.readyState === 4) {
           if (data.status >= 200 & data.status < 400) {
-            this.callbackOnSend('success');
+            this.callbackOnSend(SUCCESS);
           } else {
             console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
-            this.callbackOnSend('error');
+            this.callbackOnSend(ERROR);
           }
         }
       });
       xhr.send(data);
     }
 
-    if (this.type === 'fetch') {
+    if (this.type === FETCH) {
       fetch(this.url, {
         method: this.method,
         body: data,
       }).then(data => {
         if (data.status >= 200 & data.status < 400) {
-          this.callbackOnSend('success');
+          this.callbackOnSend(SUCCESS);
         } else {
           console.log(`Status: ${data.status}, Text: ${data.statusText}`);
-          this.callbackOnSend('error');
+          this.callbackOnSend(ERROR);
         }
       });
     }
