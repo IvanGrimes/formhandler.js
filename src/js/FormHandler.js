@@ -81,6 +81,7 @@ export default class FormHandler {
         validation: field.validation,
         min: field.min,
         max: field.max,
+        send: field.send,
         classNames: field.classNames,
       };
 
@@ -162,21 +163,21 @@ export default class FormHandler {
 
     this.form.setFormState();
 
-    if (this.opts.sender.send) {
-      const options = {
-        type: this.opts.sender.type,
-        url: this.form.node.action,
-        method: this.form.node.method,
-        form: this.form.node,
-        formState: this.setFormStateFromResponse,
-      };
-
-      new Sender(options);
-    }
-
-
     if (this.form.valid) {
       this.notices.form.hide();
+
+      if (this.opts.sender.send) {
+        const options = {
+          type: this.opts.sender.type,
+          url: this.form.node.action,
+          method: this.form.node.method,
+          fields: this.fields,
+          form: this.form.node,
+          formState: this.setFormStateFromResponse,
+        };
+
+        new Sender(options);
+      }
     } else {
       this.notices.form.show();
       setTimeout(() => {

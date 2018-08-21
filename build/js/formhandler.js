@@ -488,6 +488,7 @@
           validation = _ref.validation,
           min = _ref.min,
           max = _ref.max,
+          send = _ref.send,
           classNames = _ref.classNames;
 
       _classCallCheck(this, Field);
@@ -495,6 +496,7 @@
       this.node = node;
       this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
       this.validation = validation;
+      this.send = send;
       this.min = min;
       this.max = max;
       this.classNames = classNames;
@@ -755,6 +757,7 @@
       var type = _ref.type,
           url = _ref.url,
           method = _ref.method,
+          fields = _ref.fields,
           form = _ref.form,
           formState = _ref.formState;
 
@@ -763,17 +766,46 @@
       this.type = type;
       this.url = url;
       this.method = method;
+      this.fields = fields;
       this.form = form;
       this.formState = formState;
-      this.sendRequest();
+      this.sendRequest(this.makeData());
     }
 
     _createClass(Sender, [{
-      key: "sendRequest",
-      value: function sendRequest() {
-        var _this = this;
+      key: "makeData",
+      value: function makeData() {
+        var data = new FormData();
+        Object.entries(this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
 
-        var data = new FormData(this.form);
+          if (!field.send) return;
+          var type = field.node.constructor.name;
+
+          if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {
+            data.append(field.name, field.node.value);
+          }
+
+          if (type === HTML_SELECT_ELEMENT) {
+            data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
+          }
+
+          if (type === RADIO_NODE_LIST) {
+            Array.from(field.node).forEach(function (node) {
+              if (node.checked) {
+                data.append(field.name, node.value);
+              }
+            });
+          }
+        });
+        return data;
+      }
+    }, {
+      key: "sendRequest",
+      value: function sendRequest(data) {
+        var _this = this;
 
         if (this.type === 'xhr') {
           var xhr = new XMLHttpRequest();
@@ -830,7 +862,8 @@
     },
     fields: {
       min: false,
-      max: false
+      max: false,
+      send: true
     },
     notices: {
       attachTo: '.formhandler__notices',
@@ -892,19 +925,20 @@
 
         _this.form.setFormState();
 
-        if (_this.opts.sender.send) {
-          var options = {
-            type: _this.opts.sender.type,
-            url: _this.form.node.action,
-            method: _this.form.node.method,
-            form: _this.form.node,
-            formState: _this.setFormStateFromResponse
-          };
-          new Sender(options);
-        }
-
         if (_this.form.valid) {
           _this.notices.form.hide();
+
+          if (_this.opts.sender.send) {
+            var options = {
+              type: _this.opts.sender.type,
+              url: _this.form.node.action,
+              method: _this.form.node.method,
+              fields: _this.fields,
+              form: _this.form.node,
+              formState: _this.setFormStateFromResponse
+            };
+            new Sender(options);
+          }
         } else {
           _this.notices.form.show();
 
@@ -998,6 +1032,7 @@
           validation: field.validation,
           min: field.min,
           max: field.max,
+          send: field.send,
           classNames: field.classNames
         };
 

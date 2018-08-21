@@ -3,10 +3,11 @@ import {
 } from '../common/constants';
 
 export default class Field {
-  constructor({node, validation, min, max, classNames}) {
+  constructor({node, validation, min, max, send, classNames}) {
     this.node = node;
     this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
     this.validation = validation;
+    this.send = send;
     this.min = min;
     this.max = max;
     this.classNames = classNames;

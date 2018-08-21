@@ -21,6 +21,7 @@ const form = new FormHandler({
     },
     firstname: {
       validation: 'isName',
+      send: false,
       min: 2,
       max: 20,
       // notice: {
