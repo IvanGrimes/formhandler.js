@@ -3,6 +3,8 @@ const form = new FormHandler({
     block: '.formhandler',
     notice: {
       message: 'please, fill the form',
+      successMessage: 'Form is successful sent',
+      errorMessage: 'Something went wrong...',
     },
   },
   fields: {
@@ -104,6 +106,10 @@ const form = new FormHandler({
         valid,
         message,
       };
-    }
-  }
+    },
+  },
+  sender: {
+    send: true,
+    type: 'xhr',
+  },
 });

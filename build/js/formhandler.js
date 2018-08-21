@@ -818,9 +818,9 @@
       submit: '.formhandler__submit',
       notice: {
         attachTo: '.formhandler__notices',
-        successMsg: 'ok',
-        invalidMsg: 'please, fill the form',
-        errorMsg: 'oops',
+        message: 'please, fill the form',
+        successMessage: 'ok',
+        errorMessage: 'oops',
         classNames: {
           block: 'formhandler__notice-form',
           hidden: 'formhandler__notice-form--hidden',
@@ -852,6 +852,10 @@
         isValid: 'formhandler__field--is-valid',
         isNotValid: 'formhandler__field--is-not-valid'
       }
+    },
+    sender: {
+      send: true,
+      type: 'xhr'
     }
   };
 
@@ -888,14 +892,16 @@
 
         _this.form.setFormState();
 
-        var options = {
-          type: 'fetch',
-          url: _this.form.node.action,
-          method: _this.form.node.method,
-          form: _this.form.node,
-          formState: _this.setFormStateFromResponse
-        };
-        new Sender(options);
+        if (_this.opts.sender.send) {
+          var options = {
+            type: _this.opts.sender.type,
+            url: _this.form.node.action,
+            method: _this.form.node.method,
+            form: _this.form.node,
+            formState: _this.setFormStateFromResponse
+          };
+          new Sender(options);
+        }
 
         if (_this.form.valid) {
           _this.notices.form.hide();
@@ -909,7 +915,7 @@
       });
 
       _defineProperty(this, "setFormStateFromResponse", function (result) {
-        _this.notices.form.message = result === 'success' ? 'success' : 'error';
+        _this.notices.form.message = result === 'success' ? _this.opts.form.notice.successMessage : _this.opts.form.notice.errorMessage;
 
         _this.notices.form.show();
       });
@@ -964,6 +970,7 @@
           _this3.opts.fields[name].notice = Object.assign({}, _this3.opts.notices, _this3.opts.fields[name].notice);
           _this3.opts.fields[name].notice.classNames = Object.assign({}, _this3.opts.classNames.notices, _this3.opts.fields[name].notice.classNames);
         });
+        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
       } // TODO: Need a review
 

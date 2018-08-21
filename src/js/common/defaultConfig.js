@@ -4,9 +4,9 @@ export default {
     submit: '.formhandler__submit',
     notice: {
       attachTo: '.formhandler__notices',
-      successMsg: 'ok',
-      invalidMsg: 'please, fill the form',
-      errorMsg: 'oops',
+      message: 'please, fill the form',
+      successMessage: 'ok',
+      errorMessage: 'oops',
       classNames: {
         block: 'formhandler__notice-form',
         hidden: 'formhandler__notice-form--hidden',
@@ -39,4 +39,8 @@ export default {
       isNotValid: 'formhandler__field--is-not-valid',
     },
   },
+  sender: {
+    send: true,
+    type: 'xhr',
+  }
 }

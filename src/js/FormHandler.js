@@ -53,6 +53,7 @@ export default class FormHandler {
       this.opts.fields[name].notice = {...this.opts.notices, ...this.opts.fields[name].notice};
       this.opts.fields[name].notice.classNames = {...this.opts.classNames.notices, ...this.opts.fields[name].notice.classNames};
     });
+    this.opts.sender = this.opts.sender ? {...defaultConfig.sender, ...this.opts.sender} : defaultConfig.sender;
 
     return this;
   } // TODO: Need a review
@@ -161,16 +162,17 @@ export default class FormHandler {
 
     this.form.setFormState();
 
-    const options = {
-      type: 'fetch',
-      url: this.form.node.action,
-      method: this.form.node.method,
-      form: this.form.node,
-      formState: this.setFormStateFromResponse,
-    };
+    if (this.opts.sender.send) {
+      const options = {
+        type: this.opts.sender.type,
+        url: this.form.node.action,
+        method: this.form.node.method,
+        form: this.form.node,
+        formState: this.setFormStateFromResponse,
+      };
 
-    new Sender(options);
-
+      new Sender(options);
+    }
 
 
     if (this.form.valid) {
@@ -184,7 +186,7 @@ export default class FormHandler {
   }
 
   setFormStateFromResponse = (result) => {
-    this.notices.form.message = result === 'success' ? 'success' : 'error';
+    this.notices.form.message = result === 'success' ? this.opts.form.notice.successMessage : this.opts.form.notice.errorMessage;
     this.notices.form.show();
   }
 }

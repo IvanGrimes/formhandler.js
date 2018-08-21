@@ -15,7 +15,6 @@ export default class Sender {
       const xhr = new XMLHttpRequest();
 
       xhr.open(this.method, this.url, true);
-
       xhr.addEventListener('readystatechange', (ev) => {
         if (ev.target.readyState === 4) {
           if (ev.target.status !== 200) {
@@ -26,7 +25,6 @@ export default class Sender {
           }
         }
       });
-
       xhr.send(data);
     }
 
