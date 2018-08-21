@@ -6,13 +6,13 @@ import {
 } from "../common/constants";
 
 export default class Sender {
-  constructor({type, url, method, fields, form, formState}) {
+  constructor({type, url, method, fields, form, callbackOnSend}) {
     this.type = type;
     this.url = url;
     this.method = method;
     this.fields = fields;
     this.form = form;
-    this.formState = formState;
+    this.callbackOnSend = callbackOnSend;
     this.sendRequest(this.makeData());
   }
 
@@ -50,9 +50,9 @@ export default class Sender {
         if (ev.target.readyState === 4) {
           if (ev.target.status !== 200) {
             console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
-            this.formState('error');
+            this.callbackOnSend('error');
           } else {
-            this.formState('success');
+            this.callbackOnSend('success');
           }
         }
       });
@@ -66,9 +66,9 @@ export default class Sender {
       }).then(data => {
         if (data.status !== 200) {
           console.log(`Status: ${data.status}, Text: ${data.statusText}`);
-          this.formState('error');
+          this.callbackOnSend('error');
         } else {
-          this.formState('success');
+          this.callbackOnSend('success');
         }
       });
     }

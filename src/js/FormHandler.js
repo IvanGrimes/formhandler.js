@@ -173,21 +173,33 @@ export default class FormHandler {
           method: this.form.node.method,
           fields: this.fields,
           form: this.form.node,
-          formState: this.setFormStateFromResponse,
+          callbackOnSend: this.setFormStateFromResponse,
         };
 
         new Sender(options);
+
+        setTimeout(() => {
+          this.notices.form.hide();
+        }, 2000);
       }
     } else {
       this.notices.form.show();
       setTimeout(() => {
         this.notices.form.hide();
-      }, 2000)
+      }, 2000);
     }
   }
 
   setFormStateFromResponse = (result) => {
-    this.notices.form.message = result === 'success' ? this.opts.form.notice.successMessage : this.opts.form.notice.errorMessage;
+    if (result === 'success') {
+      this.notices.form.message = this.opts.form.notice.successMessage;
+      this.form.send = true;
+      this.form.clear();
+    }
+    if (result === 'error') {
+      this.notices.form.message = this.opts.form.notice.errorMessage;
+      this.form.send = false;
+    }
     this.notices.form.show();
   }
 }

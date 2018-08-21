@@ -431,6 +431,7 @@
       this.fields = opts.fields;
       this.listener = opts.listener;
       this.valid = false;
+      this.sended = null;
       this.submit.addEventListener('click', this.listener);
     }
 
@@ -456,8 +457,8 @@
         }
       }
     }, {
-      key: "resetForm",
-      value: function resetForm() {
+      key: "clear",
+      value: function clear() {
         Object.entries(this.fields).forEach(function (_ref4) {
           var _ref5 = _slicedToArray(_ref4, 2),
               name = _ref5[0],
@@ -759,7 +760,7 @@
           method = _ref.method,
           fields = _ref.fields,
           form = _ref.form,
-          formState = _ref.formState;
+          callbackOnSend = _ref.callbackOnSend;
 
       _classCallCheck(this, Sender);
 
@@ -768,7 +769,7 @@
       this.method = method;
       this.fields = fields;
       this.form = form;
-      this.formState = formState;
+      this.callbackOnSend = callbackOnSend;
       this.sendRequest(this.makeData());
     }
 
@@ -815,9 +816,9 @@
               if (ev.target.status !== 200) {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
 
-                _this.formState('error');
+                _this.callbackOnSend('error');
               } else {
-                _this.formState('success');
+                _this.callbackOnSend('success');
               }
             }
           });
@@ -832,9 +833,9 @@
             if (data.status !== 200) {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
 
-              _this.formState('error');
+              _this.callbackOnSend('error');
             } else {
-              _this.formState('success');
+              _this.callbackOnSend('success');
             }
           });
         }
@@ -935,9 +936,12 @@
               method: _this.form.node.method,
               fields: _this.fields,
               form: _this.form.node,
-              formState: _this.setFormStateFromResponse
+              callbackOnSend: _this.setFormStateFromResponse
             };
             new Sender(options);
+            setTimeout(function () {
+              _this.notices.form.hide();
+            }, 2000);
           }
         } else {
           _this.notices.form.show();
@@ -949,7 +953,17 @@
       });
 
       _defineProperty(this, "setFormStateFromResponse", function (result) {
-        _this.notices.form.message = result === 'success' ? _this.opts.form.notice.successMessage : _this.opts.form.notice.errorMessage;
+        if (result === 'success') {
+          _this.notices.form.message = _this.opts.form.notice.successMessage;
+          _this.form.send = true;
+
+          _this.form.clear();
+        }
+
+        if (result === 'error') {
+          _this.notices.form.message = _this.opts.form.notice.errorMessage;
+          _this.form.send = false;
+        }
 
         _this.notices.form.show();
       });

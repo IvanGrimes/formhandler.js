@@ -6,6 +6,7 @@ export default class Form {
     this.fields = opts.fields;
     this.listener = opts.listener;
     this.valid = false;
+    this.sended = null;
 
     this.submit.addEventListener('click', this.listener);
   }
@@ -28,7 +29,7 @@ export default class Form {
     }
   }
 
-  resetForm() {
+  clear() {
     Object.entries(this.fields).forEach(([name, field]) => {
       field.clear();
     });

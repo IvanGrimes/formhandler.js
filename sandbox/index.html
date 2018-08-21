@@ -8,9 +8,16 @@
 </head>
 <body>
 <div class="form-wrapper">
-    <form class="formhandler" action="https://server.test-cors.org/server?id=6520671&enable=true&status=200&credentials=false" method="POST">
+  <form class="formhandler"
+        action="https://server.test-cors.org/server?id=6520671&enable=true&status=200&credentials=false"
+        method="POST">
     <div class="formhandler__notices"></div>
 
+    <input type="date" name="date">
+    <input type="datetime-local" name="datetime">
+    <input type="month" name="month">
+    <input type="time" name="time">
+    
     <div>
       checkbox1<input type="checkbox" name="checkbox" value="checkbox1">
       checkbox2<input type="checkbox" name="checkbox" value="checkbox2">
@@ -36,7 +43,8 @@
     </select>
 
 
-    <input class="formhandler__field" id="firstname" type="text" name="firstname" placeholder="firstname">
+    <input class="formhandler__field" id="firstname" type="text" name="firstname"
+           placeholder="firstname">
 
     <input class="formhandler__field" id="email" type="email" name="email" placeholder="email">
 
@@ -46,11 +54,12 @@
 
     <input class="formhandler__field formhandler__field--file" id="file" type="file" name="file">
 
-    <input class="formhandler__field" type="text" name="zip1" placeholder="zip1" >
+    <input class="formhandler__field" type="text" name="zip1" placeholder="zip1">
 
-    <input class="formhandler__field" type="text" name="zip2" placeholder="zip2" >
+    <input class="formhandler__field" type="text" name="zip2" placeholder="zip2">
 
-    <textarea class="formhandler__field formhandler__field--message" id="message" name="message" id="" cols="30" rows="10" placeholder="message"></textarea>
+    <textarea class="formhandler__field formhandler__field--message" id="message" name="message"
+              id="" cols="30" rows="10" placeholder="message"></textarea>
 
     <button class="formhandler__submit" type="submit" name="submit">submit</button>
   </form>

@@ -8,6 +8,18 @@ const form = new FormHandler({
     },
   },
   fields: {
+    date: {
+      validation: 'isNonEmpty',
+    },
+    datetime: {
+      validation: 'isNonEmpty',
+    },
+    month: {
+      validation: 'isNonEmpty',
+    },
+    time: {
+      validation: 'isNonEmpty',
+    },
     checkbox: {
       validation: 'isCheckboxChecked',
       min: 2,
