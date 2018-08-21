@@ -813,12 +813,12 @@
           xhr.open(this.method, this.url, true);
           xhr.addEventListener('readystatechange', function (ev) {
             if (ev.target.readyState === 4) {
-              if (ev.target.status !== 200) {
+              if (data.status >= 200 & data.status < 400) {
+                _this.callbackOnSend('success');
+              } else {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
 
                 _this.callbackOnSend('error');
-              } else {
-                _this.callbackOnSend('success');
               }
             }
           });
@@ -830,12 +830,12 @@
             method: this.method,
             body: data
           }).then(function (data) {
-            if (data.status !== 200) {
+            if (data.status >= 200 & data.status < 400) {
+              _this.callbackOnSend('success');
+            } else {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
 
               _this.callbackOnSend('error');
-            } else {
-              _this.callbackOnSend('success');
             }
           });
         }

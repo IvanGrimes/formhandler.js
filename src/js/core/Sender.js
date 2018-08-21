@@ -48,11 +48,11 @@ export default class Sender {
       xhr.open(this.method, this.url, true);
       xhr.addEventListener('readystatechange', (ev) => {
         if (ev.target.readyState === 4) {
-          if (ev.target.status !== 200) {
+          if (data.status >= 200 & data.status < 400) {
+            this.callbackOnSend('success');
+          } else {
             console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
             this.callbackOnSend('error');
-          } else {
-            this.callbackOnSend('success');
           }
         }
       });
@@ -64,11 +64,11 @@ export default class Sender {
         method: this.method,
         body: data,
       }).then(data => {
-        if (data.status !== 200) {
+        if (data.status >= 200 & data.status < 400) {
+          this.callbackOnSend('success');
+        } else {
           console.log(`Status: ${data.status}, Text: ${data.statusText}`);
           this.callbackOnSend('error');
-        } else {
-          this.callbackOnSend('success');
         }
       });
     }
