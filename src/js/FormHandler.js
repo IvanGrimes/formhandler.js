@@ -4,6 +4,7 @@ import Input from './core/Input';
 import Radio from './core/Radio';
 import Select from './core/Select';
 import Notice from './core/Notice';
+import Sender from './core/Sender';
 import defaultConfig from './common/defaultConfig';
 import {
   RADIO_NODE_LIST,
@@ -80,7 +81,6 @@ export default class FormHandler {
         min: field.min,
         max: field.max,
         classNames: field.classNames,
-        listener: this.inputHandler,
       };
 
     if (type === HTML_INPUT_ELEMENT ||
@@ -100,35 +100,36 @@ export default class FormHandler {
   }
 
   makeNotice(name, notice) { // TODO: Make beautiful
-    this.notices[name] = new Notice({
+    const options = {
       form: this.form.node,
       classNames: notice.classNames,
       attachTo: notice.attachTo,
       message: notice.message || Validator.getMessage(this.fields[name].validatorOptions),
       nextToField: notice.nextToField,
       parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
-    });
+    };
+
+    this.notices[name] = new Notice(options);
     return this;
   }
 
-  setStateFromResponse(response, property, name, message) {
+  setFieldStateFromResponse(response, property, name, message) {
     console.log(response)
     if (typeof response.then !== 'undefined') {
       response
         .then(data => data.json())
-        .then(json => this.setFieldAndNoticeStates(name, !!json[property], message));
+        .then(json => this.setFieldState(name, !!json[property], message));
     } else {
       response.addEventListener('load', (ev) => {
-        this.setFieldAndNoticeStates(name, !!JSON.parse(ev.target.response)[property], message);
+        this.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
       });
     }
-
   }
 
-  setFieldAndNoticeStates(name, valid, message) {
+  setFieldState(name, valid, message) {
     console.log(name, valid);
     if (typeof valid === 'object') {
-      this.setStateFromResponse(valid.response, valid.property, name, message);
+      this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
       this.fields[name].setFieldState(valid);
     }
@@ -145,9 +146,8 @@ export default class FormHandler {
   inputHandler = ev => {
     const name = ev.target.name,
           validation = Validator.validate(this.fields[name].validatorOptions);
-    console.log(name)
 
-    this.setFieldAndNoticeStates(name, validation.valid, validation.message);
+    this.setFieldState(name, validation.valid, validation.message);
   }
 
   submitHandler = (ev) => {
@@ -155,21 +155,36 @@ export default class FormHandler {
     Object.entries(this.fields).forEach(([name, field]) => {
       const validation = Validator.validate(field.validatorOptions);
 
-      this.setFieldAndNoticeStates(name, validation.valid, validation.message);
+      this.setFieldState(name, validation.valid, validation.message);
       field.on(INPUT, this.inputHandler);
     });
 
     this.form.setFormState();
 
+    const options = {
+      type: 'fetch',
+      url: this.form.node.action,
+      method: this.form.node.method,
+      form: this.form.node,
+      formState: this.setFormStateFromResponse,
+    };
+
+    new Sender(options);
+
+
+
     if (this.form.valid) {
       this.notices.form.hide();
-      console.log('form is valid');
     } else {
-      console.log('form is not valid');
       this.notices.form.show();
       setTimeout(() => {
         this.notices.form.hide();
       }, 2000)
     }
+  }
+
+  setFormStateFromResponse = (result) => {
+    this.notices.form.message = result === 'success' ? 'success' : 'error';
+    this.notices.form.show();
   }
 }

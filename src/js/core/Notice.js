@@ -1,11 +1,11 @@
 export default class Notice {
-  constructor({ ...opts }) {
-    this.form = opts.form;
-    this.message = opts.message;
-    this.classNames = opts.classNames;
-    this.attachTo = opts.attachTo;
-    this.nextToField = opts.nextToField;
-    this.parent = opts.parent;
+  constructor({form, message, classNames, attachTo, nextToField, parent}) {
+    this.form = form;
+    this.message = message;
+    this.classNames = classNames;
+    this.attachTo = attachTo;
+    this.nextToField = nextToField;
+    this.parent = parent;
     this.node = null;
     this.mount();
   }

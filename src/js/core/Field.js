@@ -3,13 +3,13 @@ import {
 } from '../common/constants';
 
 export default class Field {
-  constructor({...opts}) {
-    this.node = opts.node;
+  constructor({node, validation, min, max, classNames}) {
+    this.node = node;
     this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
-    this.validation = opts.validation;
-    this.min = opts.min;
-    this.max = opts.max;
-    this.classNames = opts.classNames;
+    this.validation = validation;
+    this.min = min;
+    this.max = max;
+    this.classNames = classNames;
     this.valid = false;
   }
 
