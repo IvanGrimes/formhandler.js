@@ -1,8 +1,8 @@
 import Field from './Field';
 
 export default class Select extends Field {
-  constructor({...opts}) {
-    super({...opts})
+  constructor({ ...opts }) {
+    super({ ...opts });
   }
 
   setFieldState(valid) {

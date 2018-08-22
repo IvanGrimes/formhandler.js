@@ -9,17 +9,18 @@ import {
   SUCCESS,
   ERROR,
   OBJECT,
-} from "../common/constants";
+} from '../common/constants';
 
 export default class Sender {
-  constructor({type, url, method, fields, form, callbacks}) {
+  constructor({
+    type, url, method, fields, form, callbacks,
+  }) {
     this.type = type;
     this.url = url;
     this.method = method;
     this.fields = fields;
     this.form = form;
     this.callbacks = callbacks;
-    this.sendRequest(this.makeData());
   }
 
   makeData() {
@@ -29,15 +30,15 @@ export default class Sender {
       if (!field.send) return;
       const type = field.node.constructor.name;
 
-      if (type === HTML_INPUT_ELEMENT ||
-          type === HTML_TEXTAREA_ELEMENT) {
+      if (type === HTML_INPUT_ELEMENT
+          || type === HTML_TEXTAREA_ELEMENT) {
         data.append(field.name, field.node.value);
       }
       if (type === HTML_SELECT_ELEMENT) {
         data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
       }
       if (type === RADIO_NODE_LIST) {
-        Array.from(field.node).forEach(node => {
+        Array.from(field.node).forEach((node) => {
           if (node.checked) {
             data.append(field.name, node.value);
           }
@@ -71,7 +72,7 @@ export default class Sender {
       fetch(this.url, {
         method: this.method,
         body: data,
-      }).then(data => {
+      }).then((data) => {
         if (data.status >= 200 && data.status < 400) {
           this.callbacks.setFormState(SUCCESS);
           this.callbacks.onSend(SUCCESS);

@@ -6,7 +6,6 @@ import Select from './core/Select';
 import Notice from './core/Notice';
 import Sender from './core/Sender';
 import FormHandlerUtil from './core/FormHandlerUtil';
-import defaultConfig from './common/defaultConfig';
 import {
   RADIO_NODE_LIST,
   HTML_SELECT_ELEMENT,
@@ -21,9 +20,9 @@ import {
   FORM,
 } from './common/constants';
 
-export default class FormHandler extends FormHandlerUtil{
-  constructor({...args}) {
-    super({...args});
+export default class FormHandler extends FormHandlerUtil {
+  constructor({ ...args }) {
+    super({ ...args });
     this.init();
   }
 
@@ -57,20 +56,20 @@ export default class FormHandler extends FormHandlerUtil{
   }
 
   makeField(name, field) {
-    const node = this.form.node[name],
-      type = node.constructor.name,
-      options = {
-        node: node,
-        validation: field.validation,
-        min: field.min,
-        max: field.max,
-        send: field.send,
-        classNames: field.classNames,
-        callback: this.callbacks.onFieldChangeState,
-      };
+    const node = this.form.node[name];
+    const type = node.constructor.name;
+    const options = {
+      node,
+      validation: field.validation,
+      min: field.min,
+      max: field.max,
+      send: field.send,
+      classNames: field.classNames,
+      callback: this.callbacks.onFieldChangeState,
+    };
 
-    if (type === HTML_INPUT_ELEMENT ||
-      type === HTML_TEXTAREA_ELEMENT) {
+    if (type === HTML_INPUT_ELEMENT
+      || type === HTML_TEXTAREA_ELEMENT) {
       this.fields[name] = new Input(options);
     }
 
@@ -89,18 +88,18 @@ export default class FormHandler extends FormHandlerUtil{
   makeNotice(name, notice) {
     const message = this.fields[name]
       ? Validator.getMessage(this.fields[name].validatorOptions)
-      : false,
-      parent = notice.nextToField
-        ? this.fields[name].node
-        : document.querySelector(notice.attachTo),
-      options = {
-        form: this.form.node,
-        classNames: notice.classNames,
-        attachTo: notice.attachTo,
-        message: notice.message || message,
-        nextToField: notice.nextToField,
-        parent: parent,
-      };
+      : false;
+    const parent = notice.nextToField
+      ? this.fields[name].node
+      : document.querySelector(notice.attachTo);
+    const options = {
+      form: this.form.node,
+      classNames: notice.classNames,
+      attachTo: notice.attachTo,
+      message: notice.message || message,
+      nextToField: notice.nextToField,
+      parent,
+    };
 
     this.notices[name] = new Notice(options);
 
@@ -118,9 +117,10 @@ export default class FormHandler extends FormHandlerUtil{
       this.form.send = false;
     }
     this.notices.form.show();
-  }
+  };
 
   setFieldStateFromResponse(response, property, name, message) {
+    // eslint-disable-next-line valid-typeof
     if (typeof response.then !== UNDEFINED) {
       response
         .then(data => data.json())
@@ -133,8 +133,9 @@ export default class FormHandler extends FormHandlerUtil{
   }
 
   setFieldState(name, valid, message = this.notices[name].message) {
-    const submitted = this.fields[name].submitted;
+    const { submitted } = this.fields[name];
 
+    // eslint-disable-next-line valid-typeof
     if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
@@ -152,22 +153,24 @@ export default class FormHandler extends FormHandlerUtil{
     return this;
   }
 
-  inputHandler = ev => {
-    console.log(this.fields[ev.target.name])
-    const name = ev.target.name,
-          validation = Validator.validate(this.fields[name].validatorOptions);
+  inputHandler = (ev) => {
+    const { name } = ev.target;
+
+
+    const validation = Validator.validate(this.fields[name].validatorOptions);
 
     if (this.fields[name].validation) {
       this.setFieldState(name, validation.valid, validation.message);
     }
 
     this.form.setFormState();
-  }
+  };
 
   submitHandler = (ev) => {
     ev.preventDefault();
-    let fieldNodes = [];
+    const fieldNodes = [];
 
+    // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
       fieldNodes.push(field.node);
     });
@@ -191,8 +194,9 @@ export default class FormHandler extends FormHandlerUtil{
             onSend: this.callbacks.onSend,
           },
         };
+        const sender = new Sender(options);
 
-        new Sender(options);
+        sender.sendRequest(this.makeData());
 
         setTimeout(() => {
           this.notices.form.hide();

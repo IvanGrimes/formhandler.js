@@ -222,19 +222,15 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
-  // export default function FormHandlerError(message) {
-  //   this.name = `FormHandlerError`;
-  //   this.message = message;
-  // }
   var FormHandlerError =
   /*#__PURE__*/
   function (_Error) {
     _inherits(FormHandlerError, _Error);
 
-    function FormHandlerError(props) {
+    function FormHandlerError() {
       _classCallCheck(this, FormHandlerError);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(FormHandlerError).call(this, props));
+      return _possibleConstructorReturn(this, _getPrototypeOf(FormHandlerError).apply(this, arguments));
     }
 
     return FormHandlerError;
@@ -294,9 +290,9 @@
 
   _defineProperty(Validator, "validations", {
     isCheckboxChecked: function isCheckboxChecked(node, min, max) {
-      var valid = false,
-          message = 'Check any boxes',
-          checked = 0;
+      var valid = false;
+      var message = 'Check any boxes';
+      var checked = 0;
       node.forEach(function (el) {
         el.checked ? checked += 1 : null;
       });
@@ -321,8 +317,8 @@
     isRadioChecked: function isRadioChecked(node) {
       var valid = Array.from(node).some(function (el) {
         return el.checked === true;
-      }),
-          message = 'Please, press any button';
+      });
+      var message = 'Please, press any button';
       return {
         valid: valid,
         message: message
@@ -333,8 +329,8 @@
         return el.value.length > 0;
       }).some(function (el) {
         return el.selected === true;
-      }),
-          message = 'Please, choose any option';
+      });
+      var message = 'Please, choose any option';
       return {
         valid: valid,
         message: message
@@ -342,8 +338,8 @@
     },
     isName: function isName(node, min, max) {
       var pattern = /^[A-Za-z]/;
-      var valid = pattern.test(node.value),
-          message = "Must contain any latin character";
+      var valid = pattern.test(node.value);
+      var message = 'Must contain any latin character';
 
       if (node.value.length === 0) {
         valid = false;
@@ -382,8 +378,8 @@
     },
     isEmail: function isEmail(node) {
       var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-      var valid = pattern.test(node.value),
-          message = "Must be a valid email address";
+      var valid = pattern.test(node.value);
+      var message = 'Must be a valid email address';
       return {
         valid: valid,
         message: message
@@ -391,16 +387,16 @@
     },
     isPhone: function isPhone(node, min, max) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
-      var valid = pattern.test(node.value),
-          message = "Must contain a valid phone number";
+      var valid = pattern.test(node.value);
+      var message = 'Must contain a valid phone number';
       return {
         valid: valid,
         message: message
       };
     },
     isNonEmpty: function isNonEmpty(node, min, max) {
-      var valid = node.value.length > 0,
-          message = "Must be non empty";
+      var valid = node.value.length > 0;
+      var message = 'Must be non empty';
 
       if (min && node.value.length < min && node.value.length !== 0) {
         valid = false;
@@ -460,18 +456,7 @@
     _createClass(Form, [{
       key: "setFormState",
       value: function setFormState() {
-        var validness = new Set(),
-            validity;
-        Object.entries(this.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              field = _ref3[1];
-
-          if (field.validation) {
-            validness.add(field.valid);
-          }
-        });
-        validity = !validness.has(false);
+        var validity = this.fieldsValidity;
         this.callback(this.node, this.valid, validity);
         this.valid = validity;
 
@@ -493,16 +478,33 @@
     }, {
       key: "clear",
       value: function clear() {
-        Object.entries(this.fields).forEach(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              name = _ref5[0],
-              field = _ref5[1];
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
 
           field.clear();
         });
         this.valid = false;
         this.node.classList.remove(this.classNames.isNotValid);
         this.node.classList.remove(this.classNames.isValid);
+      }
+    }, {
+      key: "fieldsValidity",
+      get: function get() {
+        var validness = new Set(); // eslint-disable-next-line no-unused-vars
+
+        Object.keys(this.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              field = _ref5[1];
+
+          if (field.validation) {
+            validness.add(field.valid);
+          }
+        });
+        return !validness.has(false);
       }
     }]);
 
@@ -536,6 +538,11 @@
     }
 
     _createClass(Field, [{
+      key: "setFieldSubmitted",
+      value: function setFieldSubmitted(value) {
+        this.submitted = value;
+      }
+    }, {
       key: "on",
       value: function on(type, listener) {
         if (this.node.constructor.name === RADIO_NODE_LIST) {
@@ -614,7 +621,7 @@
     }, {
       key: "clear",
       value: function clear() {
-        this.node.value = "";
+        this.node.value = '';
         this.valid = false;
         this.submitted = false;
         this.node.classList.remove(this.classNames.isNotValid);
@@ -825,7 +832,6 @@
       this.fields = fields;
       this.form = form;
       this.callbacks = callbacks;
-      this.sendRequest(this.makeData());
     }
 
     _createClass(Sender, [{
@@ -976,7 +982,6 @@
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
       this.callbacks = this.opts.callbacks;
-      console.log(this.callbacks);
     }
 
     _createClass(FormHandlerUtil, [{
@@ -995,6 +1000,7 @@
         this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
 
         this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
+        // eslint-disable-next-line no-unused-vars
 
         Object.entries(this.opts.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
@@ -1015,23 +1021,25 @@
         // return field name get by NodeList/Selector(.className)
         var type = _typeof(field);
 
-        var name;
+        var name = field.name;
+        var node = this.form.node;
+        var fieldName;
 
         if (type === OBJECT) {
-          name = field.name;
+          fieldName = name;
         }
 
         if (type === STRING) {
           var isSelector = /\./.test(field);
 
           if (isSelector) {
-            name = this.form.node.querySelector(field).name;
+            fieldName = node.querySelector(field).name;
           } else {
-            name = field;
+            fieldName = field;
           }
         }
 
-        return name;
+        return fieldName;
       }
     }, {
       key: "isFieldValid",
@@ -1075,20 +1083,21 @@
       value: function addField(field, _ref4) {
         var opts = _extends({}, _ref4);
 
-        opts.notice = opts.notice ? opts.notice : {};
-        var name = this.getFieldNameBy(field),
-            fieldOptions = {
-          validation: opts.validation,
-          min: opts.min || defaultConfig.fields.min,
-          max: opts.max || defaultConfig.fields.max,
-          send: opts.send || defaultConfig.fields.send,
-          classNames: Object.assign({}, this.opts.classNames.fields, opts.classNames)
-        },
-            noticeOptions = {
-          attachTo: opts.notice.attachTo || defaultConfig.notices.attachTo,
-          nextToField: opts.notice.nextToField || defaultConfig.notices.nextToField,
-          message: opts.notice.message || defaultConfig.notices.message,
-          classNames: Object.assign({}, this.opts.classNames.notices, opts.notice.classNames)
+        var options = opts;
+        options.notice = options.notice ? options.notice : {};
+        var name = this.getFieldNameBy(field);
+        var fieldOptions = {
+          validation: options.validation,
+          min: options.min || defaultConfig.fields.min,
+          max: options.max || defaultConfig.fields.max,
+          send: options.send || defaultConfig.fields.send,
+          classNames: Object.assign({}, this.opts.classNames.fields, options.classNames)
+        };
+        var noticeOptions = {
+          attachTo: options.notice.attachTo || defaultConfig.notices.attachTo,
+          nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
+          message: options.notice.message || defaultConfig.notices.message,
+          classNames: Object.assign({}, this.opts.classNames.notices, options.notice.classNames)
         };
         this.makeField(name, fieldOptions);
         this.makeNotice(name, noticeOptions);
@@ -1127,7 +1136,7 @@
 
           if (field.validation) {
             var validation = Validator.validate(field.validatorOptions);
-            field.submitted = true;
+            field.setFieldSubmitted(true);
 
             _this2.setFieldState(name, validation.valid);
           }
@@ -1202,9 +1211,8 @@
       });
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
-        console.log(_this.fields[ev.target.name]);
-        var name = ev.target.name,
-            validation = Validator.validate(_this.fields[name].validatorOptions);
+        var name = ev.target.name;
+        var validation = Validator.validate(_this.fields[name].validatorOptions);
 
         if (_this.fields[name].validation) {
           _this.setFieldState(name, validation.valid, validation.message);
@@ -1215,7 +1223,8 @@
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
         ev.preventDefault();
-        var fieldNodes = [];
+        var fieldNodes = []; // eslint-disable-next-line no-unused-vars
+
         Object.entries(_this.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
@@ -1243,7 +1252,8 @@
                 onSend: _this.callbacks.onSend
               }
             };
-            new Sender(options);
+            var sender = new Sender(options);
+            sender.sendRequest(_this.makeData());
             setTimeout(function () {
               _this.notices.form.hide();
             }, 2000);
@@ -1299,9 +1309,9 @@
     }, {
       key: "makeField",
       value: function makeField(name, field) {
-        var node = this.form.node[name],
-            type = node.constructor.name,
-            options = {
+        var node = this.form.node[name];
+        var type = node.constructor.name;
+        var options = {
           node: node,
           validation: field.validation,
           min: field.min,
@@ -1329,9 +1339,9 @@
     }, {
       key: "makeNotice",
       value: function makeNotice(name, notice) {
-        var message = this.fields[name] ? Validator.getMessage(this.fields[name].validatorOptions) : false,
-            parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
-            options = {
+        var message = this.fields[name] ? Validator.getMessage(this.fields[name].validatorOptions) : false;
+        var parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo);
+        var options = {
           form: this.form.node,
           classNames: notice.classNames,
           attachTo: notice.attachTo,
@@ -1347,6 +1357,7 @@
       value: function setFieldStateFromResponse(response, property, name, message) {
         var _this3 = this;
 
+        // eslint-disable-next-line valid-typeof
         if (_typeof(response.then) !== UNDEFINED) {
           response.then(function (data) {
             return data.json();
@@ -1363,7 +1374,7 @@
       key: "setFieldState",
       value: function setFieldState(name, valid) {
         var message = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.notices[name].message;
-        var submitted = this.fields[name].submitted;
+        var submitted = this.fields[name].submitted; // eslint-disable-next-line valid-typeof
 
         if (_typeof(valid) === OBJECT) {
           this.setFieldStateFromResponse(valid.response, valid.property, name, message);

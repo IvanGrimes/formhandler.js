@@ -17,17 +17,21 @@ export default class Form {
     this.submit.addEventListener(CLICK, this.listener);
   }
 
-  setFormState() {
-    let validness = new Set(),
-        validity;
+  get fieldsValidity() {
+    const validness = new Set();
 
-    Object.entries(this.fields).forEach(([name, field]) => {
+    // eslint-disable-next-line no-unused-vars
+    Object.keys(this.fields).forEach(([name, field]) => {
       if (field.validation) {
         validness.add(field.valid);
       }
     });
 
-    validity = !validness.has(false);
+    return !validness.has(false);
+  }
+
+  setFormState() {
+    const validity = this.fieldsValidity;
 
     this.callback(this.node, this.valid, validity);
 
@@ -49,6 +53,7 @@ export default class Form {
   }
 
   clear() {
+    // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
       field.clear();
     });
