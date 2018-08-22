@@ -929,7 +929,7 @@
 
           var validation = Validator.validate(field.validatorOptions);
 
-          _this.setFieldState(name, validation.valid, validation.message);
+          _this.setFieldState(name, validation.valid);
 
           field.on(INPUT, _this.inputHandler);
         });
@@ -1078,6 +1078,7 @@
       key: "makeNotice",
       value: function makeNotice(name, notice) {
         // TODO: Make beautiful
+        console.log(notice.message);
         var options = {
           form: this.form.node,
           classNames: notice.classNames,
@@ -1108,7 +1109,8 @@
       }
     }, {
       key: "setFieldState",
-      value: function setFieldState(name, valid, message) {
+      value: function setFieldState(name, valid) {
+        var message = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.notices[name].message;
         console.log(name, valid);
 
         if (_typeof(valid) === OBJECT) {
@@ -1116,8 +1118,6 @@
         } else {
           this.fields[name].setFieldState(valid);
         }
-
-        this.notices[name].message = message;
 
         if (valid) {
           this.notices[name].hide();

@@ -108,6 +108,7 @@ export default class FormHandler {
   }
 
   makeNotice(name, notice) { // TODO: Make beautiful
+    console.log(notice.message)
     const options = {
       form: this.form.node,
       classNames: notice.classNames,
@@ -133,14 +134,13 @@ export default class FormHandler {
     }
   }
 
-  setFieldState(name, valid, message) {
+  setFieldState(name, valid, message = this.notices[name].message) {
     console.log(name, valid);
     if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
       this.fields[name].setFieldState(valid);
     }
-    this.notices[name].message = message;
     if (valid) {
       this.notices[name].hide();
     } else {
@@ -162,7 +162,7 @@ export default class FormHandler {
     Object.entries(this.fields).forEach(([name, field]) => {
       const validation = Validator.validate(field.validatorOptions);
 
-      this.setFieldState(name, validation.valid, validation.message);
+      this.setFieldState(name, validation.valid);
       field.on(INPUT, this.inputHandler);
     });
 

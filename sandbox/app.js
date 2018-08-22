@@ -36,9 +36,9 @@ const form = new FormHandler({
       send: false,
       min: 2,
       max: 20,
-      // notice: {
-      //   message: 'this value is required',
-      // },
+      notice: {
+        message: 'this value is required',
+      },
     },
     email: {
       validation: 'isEmail',
