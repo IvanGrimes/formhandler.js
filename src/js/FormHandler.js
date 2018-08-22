@@ -133,6 +133,31 @@ export default class FormHandler {
     return this.form.node;
   }
 
+  getFieldsAndValues() {
+    const data = {};
+
+    Object.entries(this.fields).forEach(([name, field]) => {
+      const type = field.node.constructor.name;
+      if (type === HTML_INPUT_ELEMENT ||
+        type === HTML_TEXTAREA_ELEMENT) {
+        data[name] = field.node.value;
+      }
+      if (type === HTML_SELECT_ELEMENT) {
+        data[name] = field.node.options[field.node.options.selectedIndex].value;
+      }
+      if (type === RADIO_NODE_LIST) {
+        data[name] = [];
+        Array.from(field.node).forEach(node => {
+          if (node.checked) {
+            data[name].push(node.value);
+          }
+        });
+      }
+    });
+
+    return data;
+  }
+
   // *** PUBLIC *** //
 
   init() {

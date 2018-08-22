@@ -1132,6 +1132,36 @@
         this.form.submitted = true;
         this.form.setFormState();
         return this.form.node;
+      }
+    }, {
+      key: "getFieldsAndValues",
+      value: function getFieldsAndValues() {
+        var data = {};
+        Object.entries(this.fields).forEach(function (_ref5) {
+          var _ref6 = _slicedToArray(_ref5, 2),
+              name = _ref6[0],
+              field = _ref6[1];
+
+          var type = field.node.constructor.name;
+
+          if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {
+            data[name] = field.node.value;
+          }
+
+          if (type === HTML_SELECT_ELEMENT) {
+            data[name] = field.node.options[field.node.options.selectedIndex].value;
+          }
+
+          if (type === RADIO_NODE_LIST) {
+            data[name] = [];
+            Array.from(field.node).forEach(function (node) {
+              if (node.checked) {
+                data[name].push(node.value);
+              }
+            });
+          }
+        });
+        return data;
       } // *** PUBLIC *** //
 
     }, {
@@ -1140,10 +1170,10 @@
         var _this3 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              name = _ref6[0],
-              field = _ref6[1];
+        Object.entries(this.opts.fields).forEach(function (_ref7) {
+          var _ref8 = _slicedToArray(_ref7, 2),
+              name = _ref8[0],
+              field = _ref8[1];
 
           _this3.makeField(name, field).makeNotice(name, field.notice);
         });
@@ -1166,10 +1196,10 @@
 
         this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
 
-        Object.entries(this.opts.fields).forEach(function (_ref7) {
-          var _ref8 = _slicedToArray(_ref7, 2),
-              name = _ref8[0],
-              obj = _ref8[1];
+        Object.entries(this.opts.fields).forEach(function (_ref9) {
+          var _ref10 = _slicedToArray(_ref9, 2),
+              name = _ref10[0],
+              obj = _ref10[1];
 
           _this4.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this4.opts.fields[name]);
           _this4.opts.fields[name].classNames = _this4.opts.fields[name].classNames ? Object.assign({}, _this4.opts.classNames.fields, _this4.opts.fields[name].classNames) : _this4.opts.classNames.fields;
