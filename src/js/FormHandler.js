@@ -79,6 +79,14 @@ export default class FormHandler {
   getField(field) { // Returns a field node
     return this.fields[this.getFieldNameBy(field)].node;
   }
+
+  addField(field, {...opts}) {
+    const name = this.getFieldNameBy(field),
+      options = {};
+
+
+    console.log(name, options);
+  }
   // *** PUBLIC *** //
 
   init() {

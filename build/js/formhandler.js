@@ -1073,6 +1073,15 @@
       value: function getField(field) {
         // Returns a field node
         return this.fields[this.getFieldNameBy(field)].node;
+      }
+    }, {
+      key: "addField",
+      value: function addField(field, _ref4) {
+        var opts = _extends({}, _ref4);
+
+        var name = this.getFieldNameBy(field),
+            options = {};
+        console.log(name, options);
       } // *** PUBLIC *** //
 
     }, {
@@ -1081,10 +1090,10 @@
         var _this2 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              name = _ref5[0],
-              field = _ref5[1];
+        Object.entries(this.opts.fields).forEach(function (_ref5) {
+          var _ref6 = _slicedToArray(_ref5, 2),
+              name = _ref6[0],
+              field = _ref6[1];
 
           _this2.makeField(name, field).makeNotice(name, field.notice);
         });
@@ -1107,10 +1116,10 @@
 
         this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
 
-        Object.entries(this.opts.fields).forEach(function (_ref6) {
-          var _ref7 = _slicedToArray(_ref6, 2),
-              name = _ref7[0],
-              obj = _ref7[1];
+        Object.entries(this.opts.fields).forEach(function (_ref7) {
+          var _ref8 = _slicedToArray(_ref7, 2),
+              name = _ref8[0],
+              obj = _ref8[1];
 
           _this3.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this3.opts.fields[name]);
           _this3.opts.fields[name].classNames = _this3.opts.fields[name].classNames ? Object.assign({}, _this3.opts.classNames.fields, _this3.opts.fields[name].classNames) : _this3.opts.classNames.fields;
