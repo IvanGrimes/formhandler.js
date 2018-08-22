@@ -4,5 +4,8 @@ module.exports = {
     "browser": true,
     "jest": true,
   },
+  "rules": {
+    "no-param-reassign": 0,
+  },
   "extends": "airbnb-base"
 };

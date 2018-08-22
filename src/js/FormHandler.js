@@ -155,8 +155,6 @@ export default class FormHandler extends FormHandlerUtil {
 
   inputHandler = (ev) => {
     const { name } = ev.target;
-
-
     const validation = Validator.validate(this.fields[name].validatorOptions);
 
     if (this.fields[name].validation) {
@@ -167,11 +165,13 @@ export default class FormHandler extends FormHandlerUtil {
   };
 
   submitHandler = (ev) => {
+    alert('submit')
     ev.preventDefault();
     const fieldNodes = [];
 
     // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
+      field.setFieldSubmitted(true);
       fieldNodes.push(field.node);
     });
 
@@ -196,7 +196,7 @@ export default class FormHandler extends FormHandlerUtil {
         };
         const sender = new Sender(options);
 
-        sender.sendRequest(this.makeData());
+        sender.sendRequest(sender.makeData());
 
         setTimeout(() => {
           this.notices.form.hide();

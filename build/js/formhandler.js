@@ -495,7 +495,7 @@
       get: function get() {
         var validness = new Set(); // eslint-disable-next-line no-unused-vars
 
-        Object.keys(this.fields).forEach(function (_ref4) {
+        Object.entries(this.fields).forEach(function (_ref4) {
           var _ref5 = _slicedToArray(_ref4, 2),
               name = _ref5[0],
               field = _ref5[1];
@@ -690,7 +690,8 @@
           return el.classList.remove(_this2.classNames.isNotValid);
         });
         this.node.forEach(function (el) {
-          return el.checked = false;
+          // eslint-disable-next-line no-param-reassign
+          el.checked = false;
         });
       }
     }]);
@@ -1129,6 +1130,7 @@
       value: function validateForm() {
         var _this2 = this;
 
+        // also turns on toggleClassNames
         Object.entries(this.fields).forEach(function (_ref5) {
           var _ref6 = _slicedToArray(_ref5, 2),
               name = _ref6[0],
@@ -1222,6 +1224,7 @@
       });
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
+        alert('submit');
         ev.preventDefault();
         var fieldNodes = []; // eslint-disable-next-line no-unused-vars
 
@@ -1230,6 +1233,7 @@
               name = _ref3[0],
               field = _ref3[1];
 
+          field.setFieldSubmitted(true);
           fieldNodes.push(field.node);
         });
 
@@ -1253,7 +1257,7 @@
               }
             };
             var sender = new Sender(options);
-            sender.sendRequest(_this.makeData());
+            sender.sendRequest(sender.makeData());
             setTimeout(function () {
               _this.notices.form.hide();
             }, 2000);

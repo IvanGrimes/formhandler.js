@@ -21,7 +21,7 @@ export default class Form {
     const validness = new Set();
 
     // eslint-disable-next-line no-unused-vars
-    Object.keys(this.fields).forEach(([name, field]) => {
+    Object.entries(this.fields).forEach(([name, field]) => {
       if (field.validation) {
         validness.add(field.valid);
       }

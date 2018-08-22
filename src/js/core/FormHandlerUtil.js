@@ -169,7 +169,7 @@ export default class FormHandlerUtil {
     return this.fields[name].node;
   }
 
-  validateForm() {
+  validateForm() { // also turns on toggleClassNames
     Object.entries(this.fields).forEach(([name, field]) => {
       if (field.validation) {
         const validation = Validator.validate(field.validatorOptions);
