@@ -165,7 +165,6 @@ export default class FormHandler extends FormHandlerUtil {
   };
 
   submitHandler = (ev) => {
-    alert('submit')
     ev.preventDefault();
     const fieldNodes = [];
 

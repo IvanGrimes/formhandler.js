@@ -222,6 +222,7 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
+  /* eslint-disable no-useless-constructor */
   var FormHandlerError =
   /*#__PURE__*/
   function (_Error) {
@@ -282,11 +283,11 @@
 
   _defineProperty(Validator, "validations", {
     isCheckboxChecked: function isCheckboxChecked(node, min, max) {
-      var valid = false;
       var message = 'Check any boxes';
+      var valid = false;
       var checked = 0;
       node.forEach(function (el) {
-        el.checked ? checked += 1 : null;
+        if (el.checked) checked += 1;
       });
 
       if (min && max) {
@@ -377,7 +378,7 @@
         message: message
       };
     },
-    isPhone: function isPhone(node, min, max) {
+    isPhone: function isPhone(node) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value);
       var message = 'Must contain a valid phone number';
@@ -873,11 +874,11 @@
 
                 _this.callbacks.onSend(SUCCESS);
               } else {
-                console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
-
                 _this.callbacks.setFormState(ERROR);
 
                 _this.callbacks.onSend(ERROR);
+
+                throw new FormHandlerError("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
               }
             }
           });
@@ -894,11 +895,11 @@
 
               _this.callbacks.onSend(SUCCESS);
             } else {
-              console.log("Status: ".concat(response.status, ", Text: ").concat(response.statusText));
-
               _this.callbacks.setFormState(ERROR);
 
               _this.callbacks.onSend(ERROR);
+
+              throw new FormHandlerError("Status: ".concat(response.status, ", Text: ").concat(response.statusText));
             }
           });
         }
@@ -1217,7 +1218,6 @@
       });
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
-        alert('submit');
         ev.preventDefault();
         var fieldNodes = []; // eslint-disable-next-line no-unused-vars
 

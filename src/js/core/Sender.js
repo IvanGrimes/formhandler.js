@@ -1,3 +1,4 @@
+import FormHandlerError from '../common/FormHandlerError';
 import {
   HTML_INPUT_ELEMENT,
   HTML_TEXTAREA_ELEMENT,
@@ -59,9 +60,9 @@ export default class Sender {
             this.callbacks.setFormState(SUCCESS);
             this.callbacks.onSend(SUCCESS);
           } else {
-            console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
             this.callbacks.setFormState(ERROR);
             this.callbacks.onSend(ERROR);
+            throw new FormHandlerError(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
           }
         }
       });
@@ -77,9 +78,9 @@ export default class Sender {
           this.callbacks.setFormState(SUCCESS);
           this.callbacks.onSend(SUCCESS);
         } else {
-          console.log(`Status: ${response.status}, Text: ${response.statusText}`);
           this.callbacks.setFormState(ERROR);
           this.callbacks.onSend(ERROR);
+          throw new FormHandlerError(`Status: ${response.status}, Text: ${response.statusText}`);
         }
       });
     }

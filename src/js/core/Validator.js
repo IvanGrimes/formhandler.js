@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import FormHandlerError from '../common/FormHandlerError';
 
 export default class Validator {
@@ -30,16 +31,12 @@ export default class Validator {
 
   static validations = {
     isCheckboxChecked(node, min, max) {
-      let valid = false;
-
-
       const message = 'Check any boxes';
-
-
+      let valid = false;
       let checked = 0;
 
       node.forEach((el) => {
-        el.checked ? checked += 1 : null;
+        if (el.checked) checked += 1;
       });
 
       if (min && max) {
@@ -129,11 +126,9 @@ export default class Validator {
         message,
       };
     },
-    isPhone(node, min, max) {
+    isPhone(node) {
       const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       const valid = pattern.test(node.value);
-
-
       const message = 'Must contain a valid phone number';
 
       return {
