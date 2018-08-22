@@ -19,7 +19,6 @@ import {
   OBJECT,
   LOAD,
   FORM,
-  STRING,
 } from './common/constants';
 
 export default class FormHandler extends FormHandlerUtil{

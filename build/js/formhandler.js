@@ -936,13 +936,13 @@
     }
   };
 
-  var Utils =
+  var FormHandlerUtil =
   /*#__PURE__*/
   function () {
-    function Utils(_ref) {
+    function FormHandlerUtil(_ref) {
       var args = _extends({}, _ref);
 
-      _classCallCheck(this, Utils);
+      _classCallCheck(this, FormHandlerUtil);
 
       this.opts = args;
       this.fields = {};
@@ -951,7 +951,7 @@
       this.validator = new Validator(this.opts.customValidations);
     }
 
-    _createClass(Utils, [{
+    _createClass(FormHandlerUtil, [{
       key: "complementOptions",
       value: function complementOptions() {
         var _this = this;
@@ -1134,13 +1134,13 @@
       }
     }]);
 
-    return Utils;
+    return FormHandlerUtil;
   }();
 
   var FormHandler =
   /*#__PURE__*/
-  function (_Utils) {
-    _inherits(FormHandler, _Utils);
+  function (_FormHandlerUtil) {
+    _inherits(FormHandler, _FormHandlerUtil);
 
     function FormHandler(_ref) {
       var _this;
@@ -1329,7 +1329,7 @@
     }]);
 
     return FormHandler;
-  }(Utils);
+  }(FormHandlerUtil);
 
   return FormHandler;
 
