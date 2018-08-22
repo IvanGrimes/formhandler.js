@@ -936,82 +936,52 @@
     }
   };
 
-  var FormHandler =
+  var Utils =
   /*#__PURE__*/
   function () {
-    function FormHandler(_ref) {
-      var _this = this;
-
+    function Utils(_ref) {
       var args = _extends({}, _ref);
 
-      _classCallCheck(this, FormHandler);
-
-      _defineProperty(this, "inputHandler", function (ev) {
-        console.log(_this.fields[ev.target.name]);
-        var name = ev.target.name,
-            validation = Validator.validate(_this.fields[name].validatorOptions);
-
-        _this.setFieldState(name, validation.valid, validation.message);
-
-        _this.form.setFormState();
-      });
-
-      _defineProperty(this, "submitHandler", function (ev) {
-        ev.preventDefault();
-
-        _this.validateForm();
-
-        if (_this.form.valid) {
-          _this.notices.form.hide();
-
-          if (_this.opts.sender.send) {
-            var options = {
-              type: _this.opts.sender.type,
-              url: _this.form.node.action,
-              method: _this.form.node.method,
-              fields: _this.fields,
-              form: _this.form.node,
-              callbackOnSend: _this.setFormStateFromResponse
-            };
-            new Sender(options);
-            setTimeout(function () {
-              _this.notices.form.hide();
-            }, 2000);
-          }
-        } else {
-          _this.notices.form.show();
-
-          setTimeout(function () {
-            _this.notices.form.hide();
-          }, 2000);
-        }
-      });
-
-      _defineProperty(this, "setFormStateFromResponse", function (result) {
-        if (result === SUCCESS) {
-          _this.notices.form.message = _this.opts.form.notice.successMessage;
-          _this.form.send = true;
-
-          _this.form.clear();
-        }
-
-        if (result === ERROR) {
-          _this.notices.form.message = _this.opts.form.notice.errorMessage;
-          _this.form.send = false;
-        }
-
-        _this.notices.form.show();
-      });
+      _classCallCheck(this, Utils);
 
       this.opts = args;
       this.fields = {};
       this.notices = {};
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
-      this.init();
     }
 
-    _createClass(FormHandler, [{
+    _createClass(Utils, [{
+      key: "complementOptions",
+      value: function complementOptions() {
+        var _this = this;
+
+        // Add lacks classNames and merge.
+        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
+        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
+        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
+        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
+
+        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
+        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
+        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
+
+        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
+
+        Object.entries(this.opts.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              obj = _ref3[1];
+
+          _this.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this.opts.fields[name]);
+          _this.opts.fields[name].classNames = _this.opts.fields[name].classNames ? Object.assign({}, _this.opts.classNames.fields, _this.opts.fields[name].classNames) : _this.opts.classNames.fields;
+          _this.opts.fields[name].notice = Object.assign({}, _this.opts.notices, _this.opts.fields[name].notice);
+          _this.opts.fields[name].notice.classNames = Object.assign({}, _this.opts.classNames.notices, _this.opts.fields[name].notice.classNames);
+        });
+        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
+        return this;
+      }
+    }, {
       key: "getFieldNameBy",
       value: function getFieldNameBy(field) {
         // return field name get by NodeList/Selector(.className)
@@ -1034,8 +1004,7 @@
         }
 
         return name;
-      } // *** PUBLIC *** //
-
+      }
     }, {
       key: "isFieldValid",
       value: function isFieldValid(field) {
@@ -1052,8 +1021,8 @@
         return this.form.submitted;
       }
     }, {
-      key: "isFormSended",
-      value: function isFormSended() {
+      key: "isFormSent",
+      value: function isFormSent() {
         return this.form.sended;
       }
     }, {
@@ -1075,8 +1044,8 @@
       }
     }, {
       key: "addField",
-      value: function addField(field, _ref2) {
-        var opts = _extends({}, _ref2);
+      value: function addField(field, _ref4) {
+        var opts = _extends({}, _ref4);
 
         opts.notice = opts.notice ? opts.notice : {};
         var name = this.getFieldNameBy(field),
@@ -1119,10 +1088,10 @@
       value: function validateForm() {
         var _this2 = this;
 
-        Object.entries(this.fields).forEach(function (_ref3) {
-          var _ref4 = _slicedToArray(_ref3, 2),
-              name = _ref4[0],
-              field = _ref4[1];
+        Object.entries(this.fields).forEach(function (_ref5) {
+          var _ref6 = _slicedToArray(_ref5, 2),
+              name = _ref6[0],
+              field = _ref6[1];
 
           var validation = Validator.validate(field.validatorOptions);
           field.submitted = true;
@@ -1137,10 +1106,10 @@
       key: "getFieldsAndValues",
       value: function getFieldsAndValues() {
         var data = {};
-        Object.entries(this.fields).forEach(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              name = _ref6[0],
-              field = _ref6[1];
+        Object.entries(this.fields).forEach(function (_ref7) {
+          var _ref8 = _slicedToArray(_ref7, 2),
+              name = _ref8[0],
+              field = _ref8[1];
 
           var type = field.node.constructor.name;
 
@@ -1162,51 +1131,101 @@
           }
         });
         return data;
-      } // *** PUBLIC *** //
+      }
+    }]);
 
-    }, {
+    return Utils;
+  }();
+
+  var FormHandler =
+  /*#__PURE__*/
+  function (_Utils) {
+    _inherits(FormHandler, _Utils);
+
+    function FormHandler(_ref) {
+      var _this;
+
+      var args = _extends({}, _ref);
+
+      _classCallCheck(this, FormHandler);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(FormHandler).call(this, Object.assign({}, args)));
+
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
+        console.log(_this.fields[ev.target.name]);
+        var name = ev.target.name,
+            validation = Validator.validate(_this.fields[name].validatorOptions);
+
+        _this.setFieldState(name, validation.valid, validation.message);
+
+        _this.form.setFormState();
+      });
+
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
+        ev.preventDefault();
+
+        _this.validateForm();
+
+        if (_this.form.valid) {
+          _this.notices.form.hide();
+
+          if (_this.opts.sender.send) {
+            var options = {
+              type: _this.opts.sender.type,
+              url: _this.form.node.action,
+              method: _this.form.node.method,
+              fields: _this.fields,
+              form: _this.form.node,
+              callbackOnSend: _this.setFormStateFromResponse
+            };
+            new Sender(options);
+            setTimeout(function () {
+              _this.notices.form.hide();
+            }, 2000);
+          }
+        } else {
+          _this.notices.form.show();
+
+          setTimeout(function () {
+            _this.notices.form.hide();
+          }, 2000);
+        }
+      });
+
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setFormStateFromResponse", function (result) {
+        if (result === SUCCESS) {
+          _this.notices.form.message = _this.opts.form.notice.successMessage;
+          _this.form.send = true;
+
+          _this.form.clear();
+        }
+
+        if (result === ERROR) {
+          _this.notices.form.message = _this.opts.form.notice.errorMessage;
+          _this.form.send = false;
+        }
+
+        _this.notices.form.show();
+      });
+
+      _this.init();
+
+      return _this;
+    }
+
+    _createClass(FormHandler, [{
       key: "init",
       value: function init() {
-        var _this3 = this;
+        var _this2 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref7) {
-          var _ref8 = _slicedToArray(_ref7, 2),
-              name = _ref8[0],
-              field = _ref8[1];
+        Object.entries(this.opts.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
 
-          _this3.makeField(name, field).makeNotice(name, field.notice);
+          _this2.makeField(name, field).makeNotice(name, field.notice);
         });
-        return this;
-      }
-    }, {
-      key: "complementOptions",
-      value: function complementOptions() {
-        var _this4 = this;
-
-        // Add lacks classNames and merge.
-        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
-        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
-        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
-        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
-
-        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
-        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
-        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
-
-        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
-
-        Object.entries(this.opts.fields).forEach(function (_ref9) {
-          var _ref10 = _slicedToArray(_ref9, 2),
-              name = _ref10[0],
-              obj = _ref10[1];
-
-          _this4.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this4.opts.fields[name]);
-          _this4.opts.fields[name].classNames = _this4.opts.fields[name].classNames ? Object.assign({}, _this4.opts.classNames.fields, _this4.opts.fields[name].classNames) : _this4.opts.classNames.fields;
-          _this4.opts.fields[name].notice = Object.assign({}, _this4.opts.notices, _this4.opts.fields[name].notice);
-          _this4.opts.fields[name].notice.classNames = Object.assign({}, _this4.opts.classNames.notices, _this4.opts.fields[name].notice.classNames);
-        });
-        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
       }
     }, {
@@ -1272,17 +1291,17 @@
     }, {
       key: "setFieldStateFromResponse",
       value: function setFieldStateFromResponse(response, property, name, message) {
-        var _this5 = this;
+        var _this3 = this;
 
         if (_typeof(response.then) !== UNDEFINED) {
           response.then(function (data) {
             return data.json();
           }).then(function (json) {
-            return _this5.setFieldState(name, !!json[property], message);
+            return _this3.setFieldState(name, !!json[property], message);
           });
         } else {
           response.addEventListener(LOAD, function (ev) {
-            _this5.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
+            _this3.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
           });
         }
       }
@@ -1310,7 +1329,7 @@
     }]);
 
     return FormHandler;
-  }();
+  }(Utils);
 
   return FormHandler;
 
