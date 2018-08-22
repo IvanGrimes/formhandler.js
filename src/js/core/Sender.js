@@ -12,13 +12,13 @@ import {
 } from "../common/constants";
 
 export default class Sender {
-  constructor({type, url, method, fields, form, callbackOnSend}) {
+  constructor({type, url, method, fields, form, callbacks}) {
     this.type = type;
     this.url = url;
     this.method = method;
     this.fields = fields;
     this.form = form;
-    this.callbackOnSend = callbackOnSend;
+    this.callbacks = callbacks;
     this.sendRequest(this.makeData());
   }
 
@@ -55,10 +55,12 @@ export default class Sender {
       xhr.addEventListener(READYSTATECHANGE, (ev) => {
         if (ev.target.readyState === 4) {
           if (ev.target.status >= 200 && ev.target.status < 400) {
-            this.callbackOnSend(SUCCESS);
+            this.callbacks.setFormState(SUCCESS);
+            this.callbacks.onSend(SUCCESS);
           } else {
             console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
-            this.callbackOnSend(ERROR);
+            this.callbacks.setFormState(ERROR);
+            this.callbacks.onSend(ERROR);
           }
         }
       });
@@ -71,10 +73,12 @@ export default class Sender {
         body: data,
       }).then(data => {
         if (data.status >= 200 && data.status < 400) {
-          this.callbackOnSend(SUCCESS);
+          this.callbacks.setFormState(SUCCESS);
+          this.callbacks.onSend(SUCCESS);
         } else {
           console.log(`Status: ${data.status}, Text: ${data.statusText}`);
-          this.callbackOnSend(ERROR);
+          this.callbacks.setFormState(ERROR);
+          this.callbacks.onSend(ERROR);
         }
       });
     }

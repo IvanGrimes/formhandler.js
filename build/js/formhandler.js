@@ -815,7 +815,7 @@
           method = _ref.method,
           fields = _ref.fields,
           form = _ref.form,
-          callbackOnSend = _ref.callbackOnSend;
+          callbacks = _ref.callbacks;
 
       _classCallCheck(this, Sender);
 
@@ -824,7 +824,7 @@
       this.method = method;
       this.fields = fields;
       this.form = form;
-      this.callbackOnSend = callbackOnSend;
+      this.callbacks = callbacks;
       this.sendRequest(this.makeData());
     }
 
@@ -869,11 +869,15 @@
           xhr.addEventListener(READYSTATECHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
-                _this.callbackOnSend(SUCCESS);
+                _this.callbacks.setFormState(SUCCESS);
+
+                _this.callbacks.onSend(SUCCESS);
               } else {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
 
-                _this.callbackOnSend(ERROR);
+                _this.callbacks.setFormState(ERROR);
+
+                _this.callbacks.onSend(ERROR);
               }
             }
           });
@@ -886,11 +890,15 @@
             body: data
           }).then(function (data) {
             if (data.status >= 200 && data.status < 400) {
-              _this.callbackOnSend(SUCCESS);
+              _this.callbacks.setFormState(SUCCESS);
+
+              _this.callbacks.onSend(SUCCESS);
             } else {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
 
-              _this.callbackOnSend(ERROR);
+              _this.callbacks.setFormState(ERROR);
+
+              _this.callbacks.onSend(ERROR);
             }
           });
         }
@@ -949,7 +957,8 @@
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
       onFormChangeState: function onFormChangeState() {},
-      onSubmit: function onSubmit() {}
+      onSubmit: function onSubmit() {},
+      onSend: function onSend() {}
     }
   };
 
@@ -1176,6 +1185,22 @@
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(FormHandler).call(this, Object.assign({}, args)));
 
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setFormStateFromResponse", function (result) {
+        if (result === SUCCESS) {
+          _this.notices.form.message = _this.opts.form.notice.successMessage;
+          _this.form.send = true;
+
+          _this.form.clear();
+        }
+
+        if (result === ERROR) {
+          _this.notices.form.message = _this.opts.form.notice.errorMessage;
+          _this.form.send = false;
+        }
+
+        _this.notices.form.show();
+      });
+
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
         console.log(_this.fields[ev.target.name]);
         var name = ev.target.name,
@@ -1213,7 +1238,10 @@
               method: _this.form.node.method,
               fields: _this.fields,
               form: _this.form.node,
-              callbackOnSend: _this.setFormStateFromResponse
+              callbacks: {
+                setFormState: _this.setFormStateFromResponse,
+                onSend: _this.callbacks.onSend
+              }
             };
             new Sender(options);
             setTimeout(function () {
@@ -1227,22 +1255,6 @@
             _this.notices.form.hide();
           }, 2000);
         }
-      });
-
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setFormStateFromResponse", function (result) {
-        if (result === SUCCESS) {
-          _this.notices.form.message = _this.opts.form.notice.successMessage;
-          _this.form.send = true;
-
-          _this.form.clear();
-        }
-
-        if (result === ERROR) {
-          _this.notices.form.message = _this.opts.form.notice.errorMessage;
-          _this.form.send = false;
-        }
-
-        _this.notices.form.show();
       });
 
       _this.init();

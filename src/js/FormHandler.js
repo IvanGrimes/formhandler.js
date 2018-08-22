@@ -107,6 +107,19 @@ export default class FormHandler extends FormHandlerUtil{
     return this;
   }
 
+  setFormStateFromResponse = (result) => {
+    if (result === SUCCESS) {
+      this.notices.form.message = this.opts.form.notice.successMessage;
+      this.form.send = true;
+      this.form.clear();
+    }
+    if (result === ERROR) {
+      this.notices.form.message = this.opts.form.notice.errorMessage;
+      this.form.send = false;
+    }
+    this.notices.form.show();
+  }
+
   setFieldStateFromResponse(response, property, name, message) {
     if (typeof response.then !== UNDEFINED) {
       response
@@ -173,7 +186,10 @@ export default class FormHandler extends FormHandlerUtil{
           method: this.form.node.method,
           fields: this.fields,
           form: this.form.node,
-          callbackOnSend: this.setFormStateFromResponse,
+          callbacks: {
+            setFormState: this.setFormStateFromResponse,
+            onSend: this.callbacks.onSend,
+          },
         };
 
         new Sender(options);
@@ -188,18 +204,5 @@ export default class FormHandler extends FormHandlerUtil{
         this.notices.form.hide();
       }, 2000);
     }
-  }
-
-  setFormStateFromResponse = (result) => {
-    if (result === SUCCESS) {
-      this.notices.form.message = this.opts.form.notice.successMessage;
-      this.form.send = true;
-      this.form.clear();
-    }
-    if (result === ERROR) {
-      this.notices.form.message = this.opts.form.notice.errorMessage;
-      this.form.send = false;
-    }
-    this.notices.form.show();
   }
 }

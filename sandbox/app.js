@@ -134,7 +134,10 @@ const form = new FormHandler({
     },
     onSubmit(form, fields) {
       console.log('onSubmit', form, fields);
-    }
+    },
+    onSend(result) {
+      console.log('onsend', result);
+    },
   },
 });
 

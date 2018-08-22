@@ -48,5 +48,6 @@ export default {
     onFieldChangeState() {},
     onFormChangeState() {},
     onSubmit() {},
+    onSend() {},
   },
 }
