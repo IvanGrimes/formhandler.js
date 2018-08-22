@@ -1038,6 +1038,21 @@
         }
 
         return valid;
+      }
+    }, {
+      key: "isFormValid",
+      value: function isFormValid() {
+        return this.form.valid;
+      }
+    }, {
+      key: "isFormSubmitted",
+      value: function isFormSubmitted() {
+        return this.form.submitted;
+      }
+    }, {
+      key: "isFormSended",
+      value: function isFormSended() {
+        return this.form.sended;
       } // *** PUBLIC *** //
 
     }, {

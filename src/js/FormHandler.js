@@ -51,6 +51,18 @@ export default class FormHandler {
 
     return valid;
   }
+
+  isFormValid() {
+    return this.form.valid;
+  }
+
+  isFormSubmitted() {
+    return this.form.submitted;
+  }
+
+  isFormSended() {
+    return this.form.sended;
+  }
   // *** PUBLIC *** //
 
   init() {
