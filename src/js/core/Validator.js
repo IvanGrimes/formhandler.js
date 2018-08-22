@@ -24,13 +24,8 @@ export default class Validator {
       throw new FormHandlerError(`No handler to validate type ${type}`);
     }
 
+    // eslint-disable-next-line consistent-return
     return validation(node, min, max);
-  }
-
-  static getMessage({
-    type, node, min, max,
-  }) {
-    return Validator.validations[type](node, min, max).message;
   }
 
   static validations = {

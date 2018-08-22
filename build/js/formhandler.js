@@ -227,10 +227,10 @@
   function (_Error) {
     _inherits(FormHandlerError, _Error);
 
-    function FormHandlerError() {
+    function FormHandlerError(props) {
       _classCallCheck(this, FormHandlerError);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(FormHandlerError).apply(this, arguments));
+      return _possibleConstructorReturn(this, _getPrototypeOf(FormHandlerError).call(this, props));
     }
 
     return FormHandlerError;
@@ -270,18 +270,10 @@
 
         if (!validation) {
           throw new FormHandlerError("No handler to validate type ".concat(type));
-        }
+        } // eslint-disable-next-line consistent-return
+
 
         return validation(node, min, max);
-      }
-    }, {
-      key: "getMessage",
-      value: function getMessage(_ref4) {
-        var type = _ref4.type,
-            node = _ref4.node,
-            min = _ref4.min,
-            max = _ref4.max;
-        return Validator.validations[type](node, min, max).message;
       }
     }]);
 
@@ -741,7 +733,7 @@
         this.node.classList.remove(this.classNames.isValid);
         this.node.classList.remove(this.classNames.isNotValid);
         Array.from(this.node.options).forEach(function (el) {
-          return el.selected = false;
+          el.selected = false;
         });
       }
     }]);
@@ -838,7 +830,8 @@
     _createClass(Sender, [{
       key: "makeData",
       value: function makeData() {
-        var data = new FormData();
+        var data = new FormData(); // eslint-disable-next-line no-unused-vars
+
         Object.entries(this.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
@@ -895,13 +888,13 @@
           fetch(this.url, {
             method: this.method,
             body: data
-          }).then(function (data) {
-            if (data.status >= 200 && data.status < 400) {
+          }).then(function (response) {
+            if (response.status >= 200 && response.status < 400) {
               _this.callbacks.setFormState(SUCCESS);
 
               _this.callbacks.onSend(SUCCESS);
             } else {
-              console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
+              console.log("Status: ".concat(response.status, ", Text: ").concat(response.statusText));
 
               _this.callbacks.setFormState(ERROR);
 
@@ -1343,7 +1336,7 @@
     }, {
       key: "makeNotice",
       value: function makeNotice(name, notice) {
-        var message = this.fields[name] ? Validator.getMessage(this.fields[name].validatorOptions) : false;
+        var message = this.fields[name] ? Validator.validate(this.fields[name].validatorOptions).message : false;
         var parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo);
         var options = {
           form: this.form.node,

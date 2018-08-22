@@ -8,7 +8,6 @@ import {
   XHR,
   SUCCESS,
   ERROR,
-  OBJECT,
 } from '../common/constants';
 
 export default class Sender {
@@ -26,6 +25,7 @@ export default class Sender {
   makeData() {
     const data = new FormData();
 
+    // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
       if (!field.send) return;
       const type = field.node.constructor.name;
@@ -72,12 +72,12 @@ export default class Sender {
       fetch(this.url, {
         method: this.method,
         body: data,
-      }).then((data) => {
-        if (data.status >= 200 && data.status < 400) {
+      }).then((response) => {
+        if (response.status >= 200 && response.status < 400) {
           this.callbacks.setFormState(SUCCESS);
           this.callbacks.onSend(SUCCESS);
         } else {
-          console.log(`Status: ${data.status}, Text: ${data.statusText}`);
+          console.log(`Status: ${response.status}, Text: ${response.statusText}`);
           this.callbacks.setFormState(ERROR);
           this.callbacks.onSend(ERROR);
         }

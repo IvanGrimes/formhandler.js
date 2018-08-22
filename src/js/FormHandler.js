@@ -87,7 +87,7 @@ export default class FormHandler extends FormHandlerUtil {
 
   makeNotice(name, notice) {
     const message = this.fields[name]
-      ? Validator.getMessage(this.fields[name].validatorOptions)
+      ? Validator.validate(this.fields[name].validatorOptions).message
       : false;
     const parent = notice.nextToField
       ? this.fields[name].node
