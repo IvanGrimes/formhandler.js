@@ -126,3 +126,5 @@ const form = new FormHandler({
     type: 'xhr',
   },
 });
+
+form.addField('lastname', {validation: 'isName'});

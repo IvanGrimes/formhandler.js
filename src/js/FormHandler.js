@@ -97,12 +97,17 @@ export default class FormHandler {
         classNames: { ...this.opts.classNames.notices, ...opts.notice.classNames },
       };
 
-    console.log(name, fieldOptions, noticeOptions);
     this.makeField(name, fieldOptions);
     this.makeNotice(name, noticeOptions);
 
     return this.fields[name].node;
   }
+
+  removeField(name) {
+    this.fields[name].remove();
+    this.notices[name].remove();
+  }
+
   // *** PUBLIC *** //
 
   init() {

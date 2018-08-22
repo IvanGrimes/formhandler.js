@@ -549,6 +549,11 @@
         }
       }
     }, {
+      key: "remove",
+      value: function remove() {
+        this.node.remove();
+      }
+    }, {
       key: "validatorOptions",
       get: function get() {
         return {
@@ -778,6 +783,11 @@
       value: function hide() {
         this.node.classList.remove(this.classNames.visible);
         this.node.classList.add(this.classNames.hidden);
+      }
+    }, {
+      key: "remove",
+      value: function remove() {
+        this.node.remove();
       }
     }]);
 
@@ -1094,10 +1104,15 @@
           message: opts.notice.message || defaultConfig.notices.message,
           classNames: Object.assign({}, this.opts.classNames.notices, opts.notice.classNames)
         };
-        console.log(name, fieldOptions, noticeOptions);
         this.makeField(name, fieldOptions);
         this.makeNotice(name, noticeOptions);
         return this.fields[name].node;
+      }
+    }, {
+      key: "removeField",
+      value: function removeField(name) {
+        this.fields[name].remove();
+        this.notices[name].remove();
       } // *** PUBLIC *** //
 
     }, {
