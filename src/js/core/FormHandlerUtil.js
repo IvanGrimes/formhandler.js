@@ -121,18 +121,23 @@ export default class FormHandlerUtil {
   validateField(field) { // also turns on toggleClassNames
     const name = this.getFieldNameBy(field);
 
-    const validation = Validator.validate(this.fields[name].validatorOptions);
-    this.fields[name].submitted = true;
-    this.setFieldState(name, validation.valid);
+    if (field.validation) {
+      const validation = Validator.validate(this.fields[name].validatorOptions);
+      this.fields[name].submitted = true;
+      this.setFieldState(name, validation.valid);
+    }
 
     return this.fields[name].node;
   }
 
   validateForm() {
     Object.entries(this.fields).forEach(([name, field]) => {
-      const validation = Validator.validate(field.validatorOptions);
-      field.submitted = true;
-      this.setFieldState(name, validation.valid);
+      if (field.validation) {
+        const validation = Validator.validate(field.validatorOptions);
+        field.submitted = true;
+        this.setFieldState(name, validation.valid);
+      }
+
     });
 
     this.form.submitted = true;

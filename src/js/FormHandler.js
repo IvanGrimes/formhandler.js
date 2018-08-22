@@ -19,7 +19,6 @@ import {
   OBJECT,
   LOAD,
   FORM,
-  STRING,
 } from './common/constants';
 
 export default class FormHandler extends FormHandlerUtil{
@@ -32,7 +31,10 @@ export default class FormHandler extends FormHandlerUtil{
     this.complementOptions().makeForm();
 
     Object.entries(this.opts.fields).forEach(([name, field]) => {
-      this.makeField(name, field).makeNotice(name, field.notice);
+      this.makeField(name, field);
+      if (field.validation) {
+        this.makeNotice(name, field.notice);
+      }
     });
 
     return this;
@@ -83,7 +85,6 @@ export default class FormHandler extends FormHandlerUtil{
   }
 
   makeNotice(name, notice) {
-    console.log(notice.message)
     const message = this.fields[name]
       ? Validator.getMessage(this.fields[name].validatorOptions)
       : false,
@@ -141,7 +142,10 @@ export default class FormHandler extends FormHandlerUtil{
     const name = ev.target.name,
           validation = Validator.validate(this.fields[name].validatorOptions);
 
-    this.setFieldState(name, validation.valid, validation.message);
+    if (this.fields[name].validation) {
+      this.setFieldState(name, validation.valid, validation.message);
+    }
+
     this.form.setFormState();
   }
 

@@ -15,6 +15,7 @@ export default class Validator {
   };
 
   static validate({type, node, min, max}) {
+    if (!type) return;
     let validation = Validator.validations[type];
 
     if (!validation) {
