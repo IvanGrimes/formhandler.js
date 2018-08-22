@@ -1064,7 +1064,10 @@
       }
     }, {
       key: "clearField",
-      value: function clearField() {} // *** PUBLIC *** //
+      value: function clearField(field) {
+        // Also clears classNames and field of instance like valid, submitted
+        this.fields[this.getFieldNameBy(field)].clear();
+      } // *** PUBLIC *** //
 
     }, {
       key: "init",

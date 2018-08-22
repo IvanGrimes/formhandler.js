@@ -72,8 +72,8 @@ export default class FormHandler {
     this.form.clear();
   }
 
-  clearField() {
-
+  clearField(field) { // Also clears classNames and field of instance like valid, submitted
+    this.fields[this.getFieldNameBy(field)].clear();
   }
   // *** PUBLIC *** //
 
