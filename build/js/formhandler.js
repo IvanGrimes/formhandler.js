@@ -1067,6 +1067,12 @@
       value: function clearField(field) {
         // Also clears classNames and field of instance like valid, submitted
         this.fields[this.getFieldNameBy(field)].clear();
+      }
+    }, {
+      key: "getField",
+      value: function getField(field) {
+        // Returns a field node
+        return this.fields[this.getFieldNameBy(field)].node;
       } // *** PUBLIC *** //
 
     }, {
