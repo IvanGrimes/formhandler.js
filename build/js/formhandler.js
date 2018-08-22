@@ -1010,34 +1010,37 @@
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
       this.init();
-    } // *** PUBLIC *** //
-
+    }
 
     _createClass(FormHandler, [{
-      key: "isFieldValid",
-      value: function isFieldValid(field) {
+      key: "getFieldNameBy",
+      value: function getFieldNameBy(field) {
+        // return field name get by NodeList/Selector(.className)
         var type = _typeof(field);
 
-        var valid;
+        var name;
 
         if (type === OBJECT) {
-          // NodeList
-          valid = this.fields[field.name].valid;
+          name = field.name;
         }
 
         if (type === STRING) {
-          var isSelector = /./.test(field);
+          var isSelector = /\./.test(field);
 
           if (isSelector) {
-            // is selector: .className
-            valid = this.fields[this.form.node.querySelector(field).name].valid;
+            name = this.form.node.querySelector(field).name;
           } else {
-            // is field name
-            valid = this.fields[field].valid;
+            name = field;
           }
         }
 
-        return valid;
+        return name;
+      } // *** PUBLIC *** //
+
+    }, {
+      key: "isFieldValid",
+      value: function isFieldValid(field) {
+        return this.fields[this.getFieldNameBy(field)].valid;
       }
     }, {
       key: "isFormValid",
@@ -1058,7 +1061,10 @@
       key: "clearForm",
       value: function clearForm() {
         this.form.clear();
-      } // *** PUBLIC *** //
+      }
+    }, {
+      key: "clearField",
+      value: function clearField() {} // *** PUBLIC *** //
 
     }, {
       key: "init",

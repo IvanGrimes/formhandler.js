@@ -31,25 +31,29 @@ export default class FormHandler {
     this.init();
   }
 
-  // *** PUBLIC *** //
-  isFieldValid(field) {
+  getFieldNameBy(field) { // return field name get by NodeList/Selector(.className)
     const type = typeof field;
-    let valid;
+    let name;
 
-    if (type === OBJECT) { // NodeList
-      valid = this.fields[field.name].valid;
+    if (type === OBJECT) {
+      name = field.name;
     }
     if (type === STRING) {
-      const isSelector = /./.test(field);
+      const isSelector = /\./.test(field);
 
-      if (isSelector) { // is selector: .className
-        valid = this.fields[this.form.node.querySelector(field).name].valid;
-      } else { // is field name
-        valid = this.fields[field].valid;
+      if (isSelector) {
+        name = this.form.node.querySelector(field).name;
+      } else {
+        name = field;
       }
     }
 
-    return valid;
+    return name;
+  }
+
+  // *** PUBLIC *** //
+  isFieldValid(field) {
+    return this.fields[this.getFieldNameBy(field)].valid;
   }
 
   isFormValid() {
@@ -66,6 +70,10 @@ export default class FormHandler {
 
   clearForm() {
     this.form.clear();
+  }
+
+  clearField() {
+
   }
   // *** PUBLIC *** //
 
