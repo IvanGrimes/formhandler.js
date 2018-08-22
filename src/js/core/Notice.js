@@ -44,4 +44,8 @@ export default class Notice {
     this.node.classList.remove(this.classNames.visible);
     this.node.classList.add(this.classNames.hidden);
   }
+
+  remove() {
+    this.node.remove();
+  }
 }

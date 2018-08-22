@@ -8,6 +8,7 @@ import {
   XHR,
   SUCCESS,
   ERROR,
+  OBJECT,
 } from "../common/constants";
 
 export default class Sender {

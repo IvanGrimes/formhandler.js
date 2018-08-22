@@ -39,4 +39,8 @@ export default class Field {
       this.node.removeEventListener(type, listener);
     }
   }
+
+  remove() {
+    this.node.remove();
+  }
 }
