@@ -1079,9 +1079,25 @@
       value: function addField(field, _ref4) {
         var opts = _extends({}, _ref4);
 
+        opts.notice = opts.notice ? opts.notice : {};
         var name = this.getFieldNameBy(field),
-            options = {};
-        console.log(name, options);
+            fieldOptions = {
+          validation: opts.validation,
+          min: opts.min || defaultConfig.fields.min,
+          max: opts.max || defaultConfig.fields.max,
+          send: opts.send || defaultConfig.fields.send,
+          classNames: Object.assign({}, this.opts.classNames.fields, opts.classNames)
+        },
+            noticeOptions = {
+          attachTo: opts.notice.attachTo || defaultConfig.notices.attachTo,
+          nextToField: opts.notice.nextToField || defaultConfig.notices.nextToField,
+          message: opts.notice.message || defaultConfig.notices.message,
+          classNames: Object.assign({}, this.opts.classNames.notices, opts.notice.classNames)
+        };
+        console.log(name, fieldOptions, noticeOptions);
+        this.makeField(name, fieldOptions);
+        this.makeNotice(name, noticeOptions);
+        return this.fields[name].node;
       } // *** PUBLIC *** //
 
     }, {

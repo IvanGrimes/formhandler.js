@@ -81,11 +81,27 @@ export default class FormHandler {
   }
 
   addField(field, {...opts}) {
+    opts.notice = opts.notice ? opts.notice : {};
     const name = this.getFieldNameBy(field),
-      options = {};
+      fieldOptions = {
+        validation: opts.validation,
+        min: opts.min || defaultConfig.fields.min,
+        max: opts.max || defaultConfig.fields.max,
+        send: opts.send || defaultConfig.fields.send,
+        classNames: { ...this.opts.classNames.fields, ...opts.classNames },
+      },
+      noticeOptions = {
+        attachTo: opts.notice.attachTo || defaultConfig.notices.attachTo,
+        nextToField: opts.notice.nextToField || defaultConfig.notices.nextToField,
+        message: opts.notice.message || defaultConfig.notices.message,
+        classNames: { ...this.opts.classNames.notices, ...opts.notice.classNames },
+      };
 
+    console.log(name, fieldOptions, noticeOptions);
+    this.makeField(name, fieldOptions);
+    this.makeNotice(name, noticeOptions);
 
-    console.log(name, options);
+    return this.fields[name].node;
   }
   // *** PUBLIC *** //
 
