@@ -1053,6 +1053,11 @@
       key: "isFormSended",
       value: function isFormSended() {
         return this.form.sended;
+      }
+    }, {
+      key: "clearForm",
+      value: function clearForm() {
+        this.form.clear();
       } // *** PUBLIC *** //
 
     }, {

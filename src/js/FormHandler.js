@@ -63,6 +63,10 @@ export default class FormHandler {
   isFormSended() {
     return this.form.sended;
   }
+
+  clearForm() {
+    this.form.clear();
+  }
   // *** PUBLIC *** //
 
   init() {
