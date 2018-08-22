@@ -47,6 +47,7 @@ export default class FormHandler extends FormHandlerUtil{
       node: document.querySelector(this.opts.form.block),
       submit: document.querySelector(this.opts.form.submit),
       listener: this.submitHandler,
+      callback: this.callbacks.onFormChangeState,
     };
 
     this.form = new Form(options);

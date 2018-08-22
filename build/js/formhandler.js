@@ -453,13 +453,15 @@
       this.valid = false;
       this.submitted = false;
       this.sended = null;
+      this.callback = opts.callback;
       this.submit.addEventListener(CLICK, this.listener);
     }
 
     _createClass(Form, [{
       key: "setFormState",
       value: function setFormState() {
-        var validness = new Set();
+        var validness = new Set(),
+            validity;
         Object.entries(this.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
@@ -469,7 +471,9 @@
             validness.add(field.valid);
           }
         });
-        this.valid = !validness.has(false);
+        validity = !validness.has(false);
+        this.callback(this.node, this.valid, validity);
+        this.valid = validity;
 
         if (this.submitted) {
           this.toggleClassNames();
@@ -943,7 +947,8 @@
       type: 'xhr'
     },
     callbacks: {
-      onFieldChangeState: function onFieldChangeState() {}
+      onFieldChangeState: function onFieldChangeState() {},
+      onFormChangeState: function onFormChangeState() {}
     }
   };
 
@@ -1261,7 +1266,8 @@
           classNames: this.opts.classNames.form,
           node: document.querySelector(this.opts.form.block),
           submit: document.querySelector(this.opts.form.submit),
-          listener: this.submitHandler
+          listener: this.submitHandler,
+          callback: this.callbacks.onFormChangeState
         };
         this.form = new Form(options);
         this.makeNotice(FORM, this.opts.form.notice);

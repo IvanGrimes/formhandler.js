@@ -12,12 +12,14 @@ export default class Form {
     this.valid = false;
     this.submitted = false;
     this.sended = null;
+    this.callback = opts.callback;
 
     this.submit.addEventListener(CLICK, this.listener);
   }
 
   setFormState() {
-    let validness = new Set();
+    let validness = new Set(),
+        validity;
 
     Object.entries(this.fields).forEach(([name, field]) => {
       if (field.validation) {
@@ -25,7 +27,11 @@ export default class Form {
       }
     });
 
-    this.valid = !validness.has(false);
+    validity = !validness.has(false);
+
+    this.callback(this.node, this.valid, validity);
+
+    this.valid = validity;
 
     if (this.submitted) {
       this.toggleClassNames();

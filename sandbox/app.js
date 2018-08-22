@@ -127,7 +127,10 @@ const form = new FormHandler({
   },
   callbacks: {
     onFieldChangeState(name, el, pastValidity, newValidity) {
-      console.log(name, el, pastValidity, newValidity);
+      console.log('onFieldChangeState', name, el, pastValidity, newValidity);
+    },
+    onFormChangeState(el, pastValidity, newValidity) {
+      console.log('onFormChangeState', el, pastValidity, newValidity);
     },
   },
 });
