@@ -65,6 +65,7 @@ export default class FormHandler extends FormHandlerUtil{
         max: field.max,
         send: field.send,
         classNames: field.classNames,
+        callback: this.callbacks.onFieldChangeState,
       };
 
     if (type === HTML_INPUT_ELEMENT ||

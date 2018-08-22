@@ -6,7 +6,10 @@ export default class Input extends Field {
   }
 
   setFieldState(valid) {
+    this.callback(this.name, this.node, this.valid, valid);
+
     this.valid = valid;
+
     if (this.submitted) {
       this.toggleClassNames();
     }

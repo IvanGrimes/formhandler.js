@@ -514,7 +514,8 @@
           min = _ref.min,
           max = _ref.max,
           send = _ref.send,
-          classNames = _ref.classNames;
+          classNames = _ref.classNames,
+          callback = _ref.callback;
 
       _classCallCheck(this, Field);
 
@@ -527,6 +528,7 @@
       this.classNames = classNames;
       this.valid = false;
       this.submitted = false;
+      this.callback = callback;
     }
 
     _createClass(Field, [{
@@ -587,6 +589,7 @@
     _createClass(Input, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -634,6 +637,7 @@
     _createClass(Radio, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -699,6 +703,7 @@
     _createClass(Select, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -936,6 +941,9 @@
     sender: {
       send: true,
       type: 'xhr'
+    },
+    callbacks: {
+      onFieldChangeState: function onFieldChangeState() {}
     }
   };
 
@@ -952,6 +960,8 @@
       this.notices = {};
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
+      this.callbacks = this.opts.callbacks;
+      console.log(this.callbacks);
     }
 
     _createClass(FormHandlerUtil, [{
@@ -1268,7 +1278,8 @@
           min: field.min,
           max: field.max,
           send: field.send,
-          classNames: field.classNames
+          classNames: field.classNames,
+          callback: this.callbacks.onFieldChangeState
         };
 
         if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {

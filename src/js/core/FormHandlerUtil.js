@@ -14,6 +14,8 @@ export default class FormHandlerUtil {
     this.notices = {};
     this.form = null;
     this.validator = new Validator(this.opts.customValidations);
+    this.callbacks = this.opts.callbacks;
+    console.log(this.callbacks);
   }
 
   complementOptions() {
