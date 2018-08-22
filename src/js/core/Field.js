@@ -3,7 +3,7 @@ import {
 } from '../common/constants';
 
 export default class Field {
-  constructor({node, validation, min, max, send, classNames}) {
+  constructor({node, validation, min, max, send, classNames, callback}) {
     this.node = node;
     this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
     this.validation = validation;
@@ -13,6 +13,7 @@ export default class Field {
     this.classNames = classNames;
     this.valid = false;
     this.submitted = false;
+    this.callback = callback;
   }
 
   get validatorOptions() {

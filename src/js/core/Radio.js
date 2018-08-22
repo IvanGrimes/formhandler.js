@@ -6,6 +6,8 @@ export default class Radio extends Field {
   }
 
   setFieldState(valid) {
+    this.callback(this.name, this.node, this.valid, valid);
+
     this.valid = valid;
 
     if (this.submitted) {

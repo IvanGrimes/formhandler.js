@@ -453,13 +453,15 @@
       this.valid = false;
       this.submitted = false;
       this.sended = null;
+      this.callback = opts.callback;
       this.submit.addEventListener(CLICK, this.listener);
     }
 
     _createClass(Form, [{
       key: "setFormState",
       value: function setFormState() {
-        var validness = new Set();
+        var validness = new Set(),
+            validity;
         Object.entries(this.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
@@ -469,7 +471,9 @@
             validness.add(field.valid);
           }
         });
-        this.valid = !validness.has(false);
+        validity = !validness.has(false);
+        this.callback(this.node, this.valid, validity);
+        this.valid = validity;
 
         if (this.submitted) {
           this.toggleClassNames();
@@ -514,7 +518,8 @@
           min = _ref.min,
           max = _ref.max,
           send = _ref.send,
-          classNames = _ref.classNames;
+          classNames = _ref.classNames,
+          callback = _ref.callback;
 
       _classCallCheck(this, Field);
 
@@ -527,6 +532,7 @@
       this.classNames = classNames;
       this.valid = false;
       this.submitted = false;
+      this.callback = callback;
     }
 
     _createClass(Field, [{
@@ -587,6 +593,7 @@
     _createClass(Input, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -634,6 +641,7 @@
     _createClass(Radio, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -699,6 +707,7 @@
     _createClass(Select, [{
       key: "setFieldState",
       value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -806,7 +815,7 @@
           method = _ref.method,
           fields = _ref.fields,
           form = _ref.form,
-          callbackOnSend = _ref.callbackOnSend;
+          callbacks = _ref.callbacks;
 
       _classCallCheck(this, Sender);
 
@@ -815,7 +824,7 @@
       this.method = method;
       this.fields = fields;
       this.form = form;
-      this.callbackOnSend = callbackOnSend;
+      this.callbacks = callbacks;
       this.sendRequest(this.makeData());
     }
 
@@ -860,11 +869,15 @@
           xhr.addEventListener(READYSTATECHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
-                _this.callbackOnSend(SUCCESS);
+                _this.callbacks.setFormState(SUCCESS);
+
+                _this.callbacks.onSend(SUCCESS);
               } else {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
 
-                _this.callbackOnSend(ERROR);
+                _this.callbacks.setFormState(ERROR);
+
+                _this.callbacks.onSend(ERROR);
               }
             }
           });
@@ -877,11 +890,15 @@
             body: data
           }).then(function (data) {
             if (data.status >= 200 && data.status < 400) {
-              _this.callbackOnSend(SUCCESS);
+              _this.callbacks.setFormState(SUCCESS);
+
+              _this.callbacks.onSend(SUCCESS);
             } else {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
 
-              _this.callbackOnSend(ERROR);
+              _this.callbacks.setFormState(ERROR);
+
+              _this.callbacks.onSend(ERROR);
             }
           });
         }
@@ -936,6 +953,12 @@
     sender: {
       send: true,
       type: 'xhr'
+    },
+    callbacks: {
+      onFieldChangeState: function onFieldChangeState() {},
+      onFormChangeState: function onFormChangeState() {},
+      onSubmit: function onSubmit() {},
+      onSend: function onSend() {}
     }
   };
 
@@ -952,6 +975,8 @@
       this.notices = {};
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
+      this.callbacks = this.opts.callbacks;
+      console.log(this.callbacks);
     }
 
     _createClass(FormHandlerUtil, [{
@@ -1160,49 +1185,6 @@
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(FormHandler).call(this, Object.assign({}, args)));
 
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
-        console.log(_this.fields[ev.target.name]);
-        var name = ev.target.name,
-            validation = Validator.validate(_this.fields[name].validatorOptions);
-
-        if (_this.fields[name].validation) {
-          _this.setFieldState(name, validation.valid, validation.message);
-        }
-
-        _this.form.setFormState();
-      });
-
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
-        ev.preventDefault();
-
-        _this.validateForm();
-
-        if (_this.form.valid) {
-          _this.notices.form.hide();
-
-          if (_this.opts.sender.send) {
-            var options = {
-              type: _this.opts.sender.type,
-              url: _this.form.node.action,
-              method: _this.form.node.method,
-              fields: _this.fields,
-              form: _this.form.node,
-              callbackOnSend: _this.setFormStateFromResponse
-            };
-            new Sender(options);
-            setTimeout(function () {
-              _this.notices.form.hide();
-            }, 2000);
-          }
-        } else {
-          _this.notices.form.show();
-
-          setTimeout(function () {
-            _this.notices.form.hide();
-          }, 2000);
-        }
-      });
-
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setFormStateFromResponse", function (result) {
         if (result === SUCCESS) {
           _this.notices.form.message = _this.opts.form.notice.successMessage;
@@ -1219,6 +1201,62 @@
         _this.notices.form.show();
       });
 
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
+        console.log(_this.fields[ev.target.name]);
+        var name = ev.target.name,
+            validation = Validator.validate(_this.fields[name].validatorOptions);
+
+        if (_this.fields[name].validation) {
+          _this.setFieldState(name, validation.valid, validation.message);
+        }
+
+        _this.form.setFormState();
+      });
+
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
+        ev.preventDefault();
+        var fieldNodes = [];
+        Object.entries(_this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
+
+          fieldNodes.push(field.node);
+        });
+
+        _this.callbacks.onSubmit(_this.form.node, fieldNodes);
+
+        _this.validateForm();
+
+        if (_this.form.valid) {
+          _this.notices.form.hide();
+
+          if (_this.opts.sender.send) {
+            var options = {
+              type: _this.opts.sender.type,
+              url: _this.form.node.action,
+              method: _this.form.node.method,
+              fields: _this.fields,
+              form: _this.form.node,
+              callbacks: {
+                setFormState: _this.setFormStateFromResponse,
+                onSend: _this.callbacks.onSend
+              }
+            };
+            new Sender(options);
+            setTimeout(function () {
+              _this.notices.form.hide();
+            }, 2000);
+          }
+        } else {
+          _this.notices.form.show();
+
+          setTimeout(function () {
+            _this.notices.form.hide();
+          }, 2000);
+        }
+      });
+
       _this.init();
 
       return _this;
@@ -1230,10 +1268,10 @@
         var _this2 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              field = _ref3[1];
+        Object.entries(this.opts.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              field = _ref5[1];
 
           _this2.makeField(name, field);
 
@@ -1251,7 +1289,8 @@
           classNames: this.opts.classNames.form,
           node: document.querySelector(this.opts.form.block),
           submit: document.querySelector(this.opts.form.submit),
-          listener: this.submitHandler
+          listener: this.submitHandler,
+          callback: this.callbacks.onFormChangeState
         };
         this.form = new Form(options);
         this.makeNotice(FORM, this.opts.form.notice);
@@ -1268,7 +1307,8 @@
           min: field.min,
           max: field.max,
           send: field.send,
-          classNames: field.classNames
+          classNames: field.classNames,
+          callback: this.callbacks.onFieldChangeState
         };
 
         if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {

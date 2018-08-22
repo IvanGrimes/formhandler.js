@@ -125,6 +125,20 @@ const form = new FormHandler({
     send: true,
     type: 'xhr',
   },
+  callbacks: {
+    onFieldChangeState(name, el, pastValidity, newValidity) {
+      console.log('onFieldChangeState', name, el, pastValidity, newValidity);
+    },
+    onFormChangeState(el, pastValidity, newValidity) {
+      console.log('onFormChangeState', el, pastValidity, newValidity);
+    },
+    onSubmit(form, fields) {
+      console.log('onSubmit', form, fields);
+    },
+    onSend(result) {
+      console.log('onsend', result);
+    },
+  },
 });
 
 form.addField('lastname', {validation: 'isName'});

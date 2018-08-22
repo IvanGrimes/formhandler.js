@@ -47,6 +47,7 @@ export default class FormHandler extends FormHandlerUtil{
       node: document.querySelector(this.opts.form.block),
       submit: document.querySelector(this.opts.form.submit),
       listener: this.submitHandler,
+      callback: this.callbacks.onFormChangeState,
     };
 
     this.form = new Form(options);
@@ -65,6 +66,7 @@ export default class FormHandler extends FormHandlerUtil{
         max: field.max,
         send: field.send,
         classNames: field.classNames,
+        callback: this.callbacks.onFieldChangeState,
       };
 
     if (type === HTML_INPUT_ELEMENT ||
@@ -103,6 +105,19 @@ export default class FormHandler extends FormHandlerUtil{
     this.notices[name] = new Notice(options);
 
     return this;
+  }
+
+  setFormStateFromResponse = (result) => {
+    if (result === SUCCESS) {
+      this.notices.form.message = this.opts.form.notice.successMessage;
+      this.form.send = true;
+      this.form.clear();
+    }
+    if (result === ERROR) {
+      this.notices.form.message = this.opts.form.notice.errorMessage;
+      this.form.send = false;
+    }
+    this.notices.form.show();
   }
 
   setFieldStateFromResponse(response, property, name, message) {
@@ -151,6 +166,14 @@ export default class FormHandler extends FormHandlerUtil{
 
   submitHandler = (ev) => {
     ev.preventDefault();
+    let fieldNodes = [];
+
+    Object.entries(this.fields).forEach(([name, field]) => {
+      fieldNodes.push(field.node);
+    });
+
+    this.callbacks.onSubmit(this.form.node, fieldNodes);
+
     this.validateForm();
 
     if (this.form.valid) {
@@ -163,7 +186,10 @@ export default class FormHandler extends FormHandlerUtil{
           method: this.form.node.method,
           fields: this.fields,
           form: this.form.node,
-          callbackOnSend: this.setFormStateFromResponse,
+          callbacks: {
+            setFormState: this.setFormStateFromResponse,
+            onSend: this.callbacks.onSend,
+          },
         };
 
         new Sender(options);
@@ -178,18 +204,5 @@ export default class FormHandler extends FormHandlerUtil{
         this.notices.form.hide();
       }, 2000);
     }
-  }
-
-  setFormStateFromResponse = (result) => {
-    if (result === SUCCESS) {
-      this.notices.form.message = this.opts.form.notice.successMessage;
-      this.form.send = true;
-      this.form.clear();
-    }
-    if (result === ERROR) {
-      this.notices.form.message = this.opts.form.notice.errorMessage;
-      this.form.send = false;
-    }
-    this.notices.form.show();
   }
 }

@@ -43,5 +43,11 @@ export default {
   sender: {
     send: true,
     type: 'xhr',
-  }
+  },
+  callbacks: {
+    onFieldChangeState() {},
+    onFormChangeState() {},
+    onSubmit() {},
+    onSend() {},
+  },
 }
