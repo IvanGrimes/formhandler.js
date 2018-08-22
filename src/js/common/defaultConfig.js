@@ -47,5 +47,6 @@ export default {
   callbacks: {
     onFieldChangeState() {},
     onFormChangeState() {},
+    onSubmit() {},
   },
 }

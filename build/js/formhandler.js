@@ -948,7 +948,8 @@
     },
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
-      onFormChangeState: function onFormChangeState() {}
+      onFormChangeState: function onFormChangeState() {},
+      onSubmit: function onSubmit() {}
     }
   };
 
@@ -1189,6 +1190,16 @@
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
         ev.preventDefault();
+        var fieldNodes = [];
+        Object.entries(_this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
+
+          fieldNodes.push(field.node);
+        });
+
+        _this.callbacks.onSubmit(_this.form.node, fieldNodes);
 
         _this.validateForm();
 
@@ -1245,10 +1256,10 @@
         var _this2 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              field = _ref3[1];
+        Object.entries(this.opts.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              field = _ref5[1];
 
           _this2.makeField(name, field);
 

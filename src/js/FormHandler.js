@@ -153,6 +153,14 @@ export default class FormHandler extends FormHandlerUtil{
 
   submitHandler = (ev) => {
     ev.preventDefault();
+    let fieldNodes = [];
+
+    Object.entries(this.fields).forEach(([name, field]) => {
+      fieldNodes.push(field.node);
+    });
+
+    this.callbacks.onSubmit(this.form.node, fieldNodes);
+
     this.validateForm();
 
     if (this.form.valid) {

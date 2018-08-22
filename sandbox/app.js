@@ -132,6 +132,9 @@ const form = new FormHandler({
     onFormChangeState(el, pastValidity, newValidity) {
       console.log('onFormChangeState', el, pastValidity, newValidity);
     },
+    onSubmit(form, fields) {
+      console.log('onSubmit', form, fields);
+    }
   },
 });
 
