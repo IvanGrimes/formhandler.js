@@ -845,7 +845,7 @@
           xhr.open(this.method, this.url, true);
           xhr.addEventListener(READYSTATECHANGE, function (ev) {
             if (ev.target.readyState === 4) {
-              if (data.status >= 200 & data.status < 400) {
+              if (ev.target.status >= 200 && ev.target.status < 400) {
                 _this.callbackOnSend(SUCCESS);
               } else {
                 console.log("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
@@ -862,7 +862,7 @@
             method: this.method,
             body: data
           }).then(function (data) {
-            if (data.status >= 200 & data.status < 400) {
+            if (data.status >= 200 && data.status < 400) {
               _this.callbackOnSend(SUCCESS);
             } else {
               console.log("Status: ".concat(data.status, ", Text: ").concat(data.statusText));
