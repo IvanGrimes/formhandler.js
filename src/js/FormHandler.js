@@ -62,7 +62,7 @@ export default class FormHandler {
     this.opts.sender = this.opts.sender ? {...defaultConfig.sender, ...this.opts.sender} : defaultConfig.sender;
 
     return this;
-  } // TODO: Need a review
+  }
 
   makeForm() {
     const options = {
@@ -74,8 +74,8 @@ export default class FormHandler {
     };
 
     this.form = new Form(options);
-
     this.makeNotice(FORM, this.opts.form.notice);
+
     return this;
   }
 
@@ -104,21 +104,29 @@ export default class FormHandler {
       this.fields[name] = new Select(options);
     }
 
+    this.fields[name].on(INPUT, this.inputHandler);
     return this;
   }
 
-  makeNotice(name, notice) { // TODO: Make beautiful
+  makeNotice(name, notice) {
     console.log(notice.message)
-    const options = {
-      form: this.form.node,
-      classNames: notice.classNames,
-      attachTo: notice.attachTo,
-      message: notice.message || Validator.getMessage(this.fields[name].validatorOptions),
-      nextToField: notice.nextToField,
-      parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
-    };
+    const message = this.fields[name]
+      ? Validator.getMessage(this.fields[name].validatorOptions)
+      : false,
+      parent = notice.nextToField
+        ? this.fields[name].node
+        : document.querySelector(notice.attachTo),
+      options = {
+        form: this.form.node,
+        classNames: notice.classNames,
+        attachTo: notice.attachTo,
+        message: notice.message || message,
+        nextToField: notice.nextToField,
+        parent: parent,
+      };
 
     this.notices[name] = new Notice(options);
+
     return this;
   }
 
@@ -135,26 +143,32 @@ export default class FormHandler {
   }
 
   setFieldState(name, valid, message = this.notices[name].message) {
-    console.log(name, valid);
+    const submitted = this.fields[name].submitted;
+
     if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
       this.fields[name].setFieldState(valid);
     }
-    if (valid) {
-      this.notices[name].hide();
-    } else {
+
+    if (!valid && submitted) {
       this.notices[name].show();
+    } else {
+      this.notices[name].hide();
     }
+
     this.form.setFormState();
+
     return this;
   }
 
   inputHandler = ev => {
+    console.log(this.fields[ev.target.name])
     const name = ev.target.name,
           validation = Validator.validate(this.fields[name].validatorOptions);
 
     this.setFieldState(name, validation.valid, validation.message);
+    this.form.setFormState();
   }
 
   submitHandler = (ev) => {
@@ -162,10 +176,11 @@ export default class FormHandler {
     Object.entries(this.fields).forEach(([name, field]) => {
       const validation = Validator.validate(field.validatorOptions);
 
+      field.submitted = true;
       this.setFieldState(name, validation.valid);
-      field.on(INPUT, this.inputHandler);
     });
 
+    this.form.submitted = true;
     this.form.setFormState();
 
     if (this.form.valid) {

@@ -1,5 +1,7 @@
 import {
   DIV,
+  BEFORE,
+  AFTER,
 } from '../common/constants';
 
 
@@ -23,10 +25,10 @@ export default class Notice {
     if (this.attachTo) {
       this.parent.appendChild(this.node);
     } else {
-      if (this.nextToField === 'before') { // TODO: Change option to a true/false, and it'll be stick notice next to the field
+      if (this.nextToField === BEFORE) {
         this.form.insertBefore(this.node, this.parent);
       }
-      if (this.nextToField === 'after') {
+      if (this.nextToField === AFTER) {
         this.form.insertBefore(this.node, this.parent.nextElementSibling);
       }
     }

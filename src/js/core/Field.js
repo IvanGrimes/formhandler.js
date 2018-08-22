@@ -12,6 +12,7 @@ export default class Field {
     this.max = max;
     this.classNames = classNames;
     this.valid = false;
+    this.submitted = false;
   }
 
   get validatorOptions() {

@@ -7,7 +7,10 @@ export default class Radio extends Field {
 
   setFieldState(valid) {
     this.valid = valid;
-    this.toggleClassNames();
+
+    if (this.submitted) {
+      this.toggleClassNames();
+    }
   }
 
   toggleClassNames() {
@@ -22,6 +25,7 @@ export default class Radio extends Field {
 
   clear() {
     this.valid = false;
+    this.submitted = false;
     this.node.forEach(el => el.classList.remove(this.classNames.isValid));
     this.node.forEach(el => el.classList.remove(this.classNames.isNotValid));
     this.node.forEach(el => el.checked = false);

@@ -7,7 +7,10 @@ export default class Select extends Field {
 
   setFieldState(valid) {
     this.valid = valid;
-    this.toggleClassNames();
+
+    if (this.submitted) {
+      this.toggleClassNames();
+    }
   }
 
   toggleClassNames() {
@@ -22,6 +25,7 @@ export default class Select extends Field {
 
   clear() {
     this.valid = false;
+    this.submitted = false;
     this.node.classList.remove(this.classNames.isValid);
     this.node.classList.remove(this.classNames.isNotValid);
     Array.from(this.node.options).forEach(el => el.selected = false);

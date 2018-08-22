@@ -7,7 +7,9 @@ export default class Input extends Field {
 
   setFieldState(valid) {
     this.valid = valid;
-    this.toggleClassNames();
+    if (this.submitted) {
+      this.toggleClassNames();
+    }
   }
 
   toggleClassNames() {
@@ -23,6 +25,7 @@ export default class Input extends Field {
   clear() {
     this.node.value = "";
     this.valid = false;
+    this.submitted = false;
     this.node.classList.remove(this.classNames.isNotValid);
     this.node.classList.remove(this.classNames.isValid);
   }

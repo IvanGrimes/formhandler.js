@@ -432,6 +432,8 @@
   var READYSTATECHANGE = 'readystatechange';
   var XHR = 'xhr';
   var FETCH = 'fetch';
+  var AFTER = 'after';
+  var BEFORE = 'before';
 
   var Form =
   /*#__PURE__*/
@@ -447,6 +449,7 @@
       this.fields = opts.fields;
       this.listener = opts.listener;
       this.valid = false;
+      this.submitted = false;
       this.sended = null;
       this.submit.addEventListener(CLICK, this.listener);
     }
@@ -464,6 +467,13 @@
         });
         this.valid = !validness.has(false);
 
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
+      }
+    }, {
+      key: "toggleClassNames",
+      value: function toggleClassNames() {
         if (this.valid) {
           this.node.classList.remove(this.classNames.isNotValid);
           this.node.classList.add(this.classNames.isValid);
@@ -512,6 +522,7 @@
       this.max = max;
       this.classNames = classNames;
       this.valid = false;
+      this.submitted = false;
     }
 
     _createClass(Field, [{
@@ -568,7 +579,10 @@
       key: "setFieldState",
       value: function setFieldState(valid) {
         this.valid = valid;
-        this.toggleClassNames();
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
       }
     }, {
       key: "toggleClassNames",
@@ -586,6 +600,7 @@
       value: function clear() {
         this.node.value = "";
         this.valid = false;
+        this.submitted = false;
         this.node.classList.remove(this.classNames.isNotValid);
         this.node.classList.remove(this.classNames.isValid);
       }
@@ -611,7 +626,10 @@
       key: "setFieldState",
       value: function setFieldState(valid) {
         this.valid = valid;
-        this.toggleClassNames();
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
       }
     }, {
       key: "toggleClassNames",
@@ -640,6 +658,7 @@
         var _this2 = this;
 
         this.valid = false;
+        this.submitted = false;
         this.node.forEach(function (el) {
           return el.classList.remove(_this2.classNames.isValid);
         });
@@ -672,7 +691,10 @@
       key: "setFieldState",
       value: function setFieldState(valid) {
         this.valid = valid;
-        this.toggleClassNames();
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
       }
     }, {
       key: "toggleClassNames",
@@ -689,6 +711,7 @@
       key: "clear",
       value: function clear() {
         this.valid = false;
+        this.submitted = false;
         this.node.classList.remove(this.classNames.isValid);
         this.node.classList.remove(this.classNames.isNotValid);
         Array.from(this.node.options).forEach(function (el) {
@@ -733,12 +756,11 @@
         if (this.attachTo) {
           this.parent.appendChild(this.node);
         } else {
-          if (this.nextToField === 'before') {
-            // TODO: Change option to a true/false, and it'll be stick notice next to the field
+          if (this.nextToField === BEFORE) {
             this.form.insertBefore(this.node, this.parent);
           }
 
-          if (this.nextToField === 'after') {
+          if (this.nextToField === AFTER) {
             this.form.insertBefore(this.node, this.parent.nextElementSibling);
           }
         }
@@ -914,10 +936,13 @@
       _classCallCheck(this, FormHandler);
 
       _defineProperty(this, "inputHandler", function (ev) {
+        console.log(_this.fields[ev.target.name]);
         var name = ev.target.name,
             validation = Validator.validate(_this.fields[name].validatorOptions);
 
         _this.setFieldState(name, validation.valid, validation.message);
+
+        _this.form.setFormState();
       });
 
       _defineProperty(this, "submitHandler", function (ev) {
@@ -928,11 +953,11 @@
               field = _ref3[1];
 
           var validation = Validator.validate(field.validatorOptions);
+          field.submitted = true;
 
           _this.setFieldState(name, validation.valid);
-
-          field.on(INPUT, _this.inputHandler);
         });
+        _this.form.submitted = true;
 
         _this.form.setFormState();
 
@@ -1030,8 +1055,7 @@
         });
         this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
-      } // TODO: Need a review
-
+      }
     }, {
       key: "makeForm",
       value: function makeForm() {
@@ -1072,20 +1096,22 @@
           this.fields[name] = new Select(options);
         }
 
+        this.fields[name].on(INPUT, this.inputHandler);
         return this;
       }
     }, {
       key: "makeNotice",
       value: function makeNotice(name, notice) {
-        // TODO: Make beautiful
         console.log(notice.message);
-        var options = {
+        var message = this.fields[name] ? Validator.getMessage(this.fields[name].validatorOptions) : false,
+            parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
+            options = {
           form: this.form.node,
           classNames: notice.classNames,
           attachTo: notice.attachTo,
-          message: notice.message || Validator.getMessage(this.fields[name].validatorOptions),
+          message: notice.message || message,
           nextToField: notice.nextToField,
-          parent: notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo)
+          parent: parent
         };
         this.notices[name] = new Notice(options);
         return this;
@@ -1111,7 +1137,7 @@
       key: "setFieldState",
       value: function setFieldState(name, valid) {
         var message = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.notices[name].message;
-        console.log(name, valid);
+        var submitted = this.fields[name].submitted;
 
         if (_typeof(valid) === OBJECT) {
           this.setFieldStateFromResponse(valid.response, valid.property, name, message);
@@ -1119,10 +1145,10 @@
           this.fields[name].setFieldState(valid);
         }
 
-        if (valid) {
-          this.notices[name].hide();
-        } else {
+        if (!valid && submitted) {
           this.notices[name].show();
+        } else {
+          this.notices[name].hide();
         }
 
         this.form.setFormState();

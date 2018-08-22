@@ -10,6 +10,7 @@ export default class Form {
     this.fields = opts.fields;
     this.listener = opts.listener;
     this.valid = false;
+    this.submitted = false;
     this.sended = null;
 
     this.submit.addEventListener(CLICK, this.listener);
@@ -24,6 +25,12 @@ export default class Form {
 
     this.valid = !validness.has(false);
 
+    if (this.submitted) {
+      this.toggleClassNames();
+    }
+  }
+
+  toggleClassNames() {
     if (this.valid) {
       this.node.classList.remove(this.classNames.isNotValid);
       this.node.classList.add(this.classNames.isValid);

@@ -14,3 +14,5 @@ export const DIV = 'div';
 export const READYSTATECHANGE = 'readystatechange';
 export const XHR = 'xhr';
 export const FETCH = 'fetch';
+export const AFTER = 'after';
+export const BEFORE = 'before';
