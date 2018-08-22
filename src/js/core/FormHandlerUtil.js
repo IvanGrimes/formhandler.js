@@ -3,8 +3,10 @@ import defaultConfig from '../common/defaultConfig';
 import {
   HTML_INPUT_ELEMENT,
   HTML_SELECT_ELEMENT,
-  HTML_TEXTAREA_ELEMENT, OBJECT,
-  RADIO_NODE_LIST, STRING,
+  HTML_TEXTAREA_ELEMENT,
+  OBJECT,
+  RADIO_NODE_LIST,
+  STRING,
 } from '../common/constants';
 
 export default class FormHandlerUtil {
