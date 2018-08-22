@@ -1,8 +1,8 @@
 import Field from './Field';
 
 export default class Input extends Field {
-  constructor({...opts}) {
-    super({...opts});
+  constructor({ ...opts }) {
+    super({ ...opts });
   }
 
   setFieldState(valid) {
@@ -26,7 +26,7 @@ export default class Input extends Field {
   }
 
   clear() {
-    this.node.value = "";
+    this.node.value = '';
     this.valid = false;
     this.submitted = false;
     this.node.classList.remove(this.classNames.isNotValid);

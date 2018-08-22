@@ -1,8 +1,8 @@
 import Field from './Field';
 
 export default class Radio extends Field {
-  constructor({...opts}) {
-    super({...opts});
+  constructor({ ...opts }) {
+    super({ ...opts });
   }
 
   setFieldState(valid) {
@@ -30,6 +30,9 @@ export default class Radio extends Field {
     this.submitted = false;
     this.node.forEach(el => el.classList.remove(this.classNames.isValid));
     this.node.forEach(el => el.classList.remove(this.classNames.isNotValid));
-    this.node.forEach(el => el.checked = false);
+    this.node.forEach((el) => {
+      // eslint-disable-next-line no-param-reassign
+      el.checked = false;
+    });
   }
 }

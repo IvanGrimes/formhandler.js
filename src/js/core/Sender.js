@@ -1,3 +1,4 @@
+import FormHandlerError from '../common/FormHandlerError';
 import {
   HTML_INPUT_ELEMENT,
   HTML_TEXTAREA_ELEMENT,
@@ -8,36 +9,37 @@ import {
   XHR,
   SUCCESS,
   ERROR,
-  OBJECT,
-} from "../common/constants";
+} from '../common/constants';
 
 export default class Sender {
-  constructor({type, url, method, fields, form, callbacks}) {
+  constructor({
+    type, url, method, fields, form, callbacks,
+  }) {
     this.type = type;
     this.url = url;
     this.method = method;
     this.fields = fields;
     this.form = form;
     this.callbacks = callbacks;
-    this.sendRequest(this.makeData());
   }
 
   makeData() {
     const data = new FormData();
 
+    // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
       if (!field.send) return;
       const type = field.node.constructor.name;
 
-      if (type === HTML_INPUT_ELEMENT ||
-          type === HTML_TEXTAREA_ELEMENT) {
+      if (type === HTML_INPUT_ELEMENT
+          || type === HTML_TEXTAREA_ELEMENT) {
         data.append(field.name, field.node.value);
       }
       if (type === HTML_SELECT_ELEMENT) {
         data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
       }
       if (type === RADIO_NODE_LIST) {
-        Array.from(field.node).forEach(node => {
+        Array.from(field.node).forEach((node) => {
           if (node.checked) {
             data.append(field.name, node.value);
           }
@@ -58,9 +60,9 @@ export default class Sender {
             this.callbacks.setFormState(SUCCESS);
             this.callbacks.onSend(SUCCESS);
           } else {
-            console.log(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
             this.callbacks.setFormState(ERROR);
             this.callbacks.onSend(ERROR);
+            throw new FormHandlerError(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
           }
         }
       });
@@ -71,14 +73,14 @@ export default class Sender {
       fetch(this.url, {
         method: this.method,
         body: data,
-      }).then(data => {
-        if (data.status >= 200 && data.status < 400) {
+      }).then((response) => {
+        if (response.status >= 200 && response.status < 400) {
           this.callbacks.setFormState(SUCCESS);
           this.callbacks.onSend(SUCCESS);
         } else {
-          console.log(`Status: ${data.status}, Text: ${data.statusText}`);
           this.callbacks.setFormState(ERROR);
           this.callbacks.onSend(ERROR);
+          throw new FormHandlerError(`Status: ${response.status}, Text: ${response.statusText}`);
         }
       });
     }

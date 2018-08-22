@@ -4,9 +4,10 @@ import {
   AFTER,
 } from '../common/constants';
 
-
 export default class Notice {
-  constructor({form, message, classNames, attachTo, nextToField, parent}) {
+  constructor({
+    form, message, classNames, attachTo, nextToField, parent,
+  }) {
     this.form = form;
     this.message = message;
     this.classNames = classNames;
@@ -32,13 +33,13 @@ export default class Notice {
         this.form.insertBefore(this.node, this.parent.nextElementSibling);
       }
     }
-  };
+  }
 
   show() {
     this.node.classList.remove(this.classNames.hidden);
     this.node.classList.add(this.classNames.visible);
     this.node.innerText = this.message;
-  };
+  }
 
   hide() {
     this.node.classList.remove(this.classNames.visible);

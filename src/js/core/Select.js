@@ -1,8 +1,8 @@
 import Field from './Field';
 
 export default class Select extends Field {
-  constructor({...opts}) {
-    super({...opts})
+  constructor({ ...opts }) {
+    super({ ...opts });
   }
 
   setFieldState(valid) {
@@ -30,6 +30,8 @@ export default class Select extends Field {
     this.submitted = false;
     this.node.classList.remove(this.classNames.isValid);
     this.node.classList.remove(this.classNames.isNotValid);
-    Array.from(this.node.options).forEach(el => el.selected = false);
+    Array.from(this.node.options).forEach((el) => {
+      el.selected = false;
+    });
   }
 }

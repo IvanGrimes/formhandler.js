@@ -3,7 +3,9 @@ import {
 } from '../common/constants';
 
 export default class Field {
-  constructor({node, validation, min, max, send, classNames, callback}) {
+  constructor({
+    node, validation, min, max, send, classNames, callback,
+  }) {
     this.node = node;
     this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
     this.validation = validation;
@@ -23,7 +25,11 @@ export default class Field {
       min: this.min,
       max: this.max,
     };
-  };
+  }
+
+  setFieldSubmitted(value) {
+    this.submitted = value;
+  }
 
   on(type, listener) {
     if (this.node.constructor.name === RADIO_NODE_LIST) {

@@ -1,8 +1,4 @@
-// export default function FormHandlerError(message) {
-//   this.name = `FormHandlerError`;
-//   this.message = message;
-// }
-
+/* eslint-disable no-useless-constructor */
 export default class FormHandlerError extends Error {
   constructor(props) {
     super(props);
