@@ -32,7 +32,7 @@ const form = new FormHandler({
       validation: 'isSelected',
     },
     firstname: {
-      validation: 'isName',
+      validation: false,
       send: false,
       min: 2,
       max: 20,

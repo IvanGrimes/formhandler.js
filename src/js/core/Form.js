@@ -20,7 +20,9 @@ export default class Form {
     let validness = new Set();
 
     Object.entries(this.fields).forEach(([name, field]) => {
-      validness.add(field.valid);
+      if (field.validation) {
+        validness.add(field.valid);
+      }
     });
 
     this.valid = !validness.has(false);

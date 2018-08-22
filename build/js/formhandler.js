@@ -269,6 +269,7 @@
             node = _ref3.node,
             min = _ref3.min,
             max = _ref3.max;
+        if (!type) return;
         var validation = Validator.validations[type];
 
         if (!validation) {
@@ -464,7 +465,9 @@
               name = _ref3[0],
               field = _ref3[1];
 
-          validness.add(field.valid);
+          if (field.validation) {
+            validness.add(field.valid);
+          }
         });
         this.valid = !validness.has(false);
 
@@ -1078,9 +1081,13 @@
       value: function validateField(field) {
         // also turns on toggleClassNames
         var name = this.getFieldNameBy(field);
-        var validation = Validator.validate(this.fields[name].validatorOptions);
-        this.fields[name].submitted = true;
-        this.setFieldState(name, validation.valid);
+
+        if (field.validation) {
+          var validation = Validator.validate(this.fields[name].validatorOptions);
+          this.fields[name].submitted = true;
+          this.setFieldState(name, validation.valid);
+        }
+
         return this.fields[name].node;
       }
     }, {
@@ -1093,10 +1100,12 @@
               name = _ref6[0],
               field = _ref6[1];
 
-          var validation = Validator.validate(field.validatorOptions);
-          field.submitted = true;
+          if (field.validation) {
+            var validation = Validator.validate(field.validatorOptions);
+            field.submitted = true;
 
-          _this2.setFieldState(name, validation.valid);
+            _this2.setFieldState(name, validation.valid);
+          }
         });
         this.form.submitted = true;
         this.form.setFormState();
@@ -1156,7 +1165,9 @@
         var name = ev.target.name,
             validation = Validator.validate(_this.fields[name].validatorOptions);
 
-        _this.setFieldState(name, validation.valid, validation.message);
+        if (_this.fields[name].validation) {
+          _this.setFieldState(name, validation.valid, validation.message);
+        }
 
         _this.form.setFormState();
       });
@@ -1224,7 +1235,11 @@
               name = _ref3[0],
               field = _ref3[1];
 
-          _this2.makeField(name, field).makeNotice(name, field.notice);
+          _this2.makeField(name, field);
+
+          if (field.validation) {
+            _this2.makeNotice(name, field.notice);
+          }
         });
         return this;
       }
@@ -1274,7 +1289,6 @@
     }, {
       key: "makeNotice",
       value: function makeNotice(name, notice) {
-        console.log(notice.message);
         var message = this.fields[name] ? Validator.getMessage(this.fields[name].validatorOptions) : false,
             parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo),
             options = {
