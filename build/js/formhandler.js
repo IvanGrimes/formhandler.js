@@ -434,6 +434,7 @@
   var FETCH = 'fetch';
   var AFTER = 'after';
   var BEFORE = 'before';
+  var STRING = 'string';
 
   var Form =
   /*#__PURE__*/
@@ -1009,9 +1010,37 @@
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
       this.init();
-    }
+    } // *** PUBLIC *** //
+
 
     _createClass(FormHandler, [{
+      key: "isFieldValid",
+      value: function isFieldValid(field) {
+        var type = _typeof(field);
+
+        var valid;
+
+        if (type === OBJECT) {
+          // NodeList
+          valid = this.fields[field.name].valid;
+        }
+
+        if (type === STRING) {
+          var isSelector = /./.test(field);
+
+          if (isSelector) {
+            // is selector: .className
+            valid = this.fields[this.form.node.querySelector(field).name].valid;
+          } else {
+            // is field name
+            valid = this.fields[field].valid;
+          }
+        }
+
+        return valid;
+      } // *** PUBLIC *** //
+
+    }, {
       key: "init",
       value: function init() {
         var _this2 = this;

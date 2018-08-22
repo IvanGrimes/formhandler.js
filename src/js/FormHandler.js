@@ -18,6 +18,7 @@ import {
   OBJECT,
   LOAD,
   FORM,
+  STRING,
 } from './common/constants';
 
 export default class FormHandler {
@@ -29,6 +30,28 @@ export default class FormHandler {
     this.validator = new Validator(this.opts.customValidations);
     this.init();
   }
+
+  // *** PUBLIC *** //
+  isFieldValid(field) {
+    const type = typeof field;
+    let valid;
+
+    if (type === OBJECT) { // NodeList
+      valid = this.fields[field.name].valid;
+    }
+    if (type === STRING) {
+      const isSelector = /./.test(field);
+
+      if (isSelector) { // is selector: .className
+        valid = this.fields[this.form.node.querySelector(field).name].valid;
+      } else { // is field name
+        valid = this.fields[field].valid;
+      }
+    }
+
+    return valid;
+  }
+  // *** PUBLIC *** //
 
   init() {
     this.complementOptions().makeForm();
