@@ -7,10 +7,6 @@ import Notice from './core/Notice';
 import Sender from './core/Sender';
 import FormHandlerUtil from './core/FormHandlerUtil';
 import {
-  RADIO_NODE_LIST,
-  HTML_SELECT_ELEMENT,
-  HTML_INPUT_ELEMENT,
-  HTML_TEXTAREA_ELEMENT,
   INPUT,
   UNDEFINED,
   ERROR,
@@ -18,6 +14,9 @@ import {
   OBJECT,
   LOAD,
   FORM,
+  CHECKBOX,
+  RADIO,
+  SELECT,
 } from './common/constants';
 
 export default class FormHandler extends FormHandlerUtil {
@@ -56,8 +55,8 @@ export default class FormHandler extends FormHandlerUtil {
   }
 
   makeField(name, field) {
-    const node = this.form.node.querySelector(`[name=${name}]`);
-    const type = node.constructor.name;
+    let node = this.form.node.querySelector(`[name=${name}]`);
+    const { type } = node;
     const options = {
       node,
       validation: field.validation,
@@ -68,17 +67,14 @@ export default class FormHandler extends FormHandlerUtil {
       callback: this.callbacks.onFieldChangeState,
     };
 
-    if (type === HTML_INPUT_ELEMENT
-      || type === HTML_TEXTAREA_ELEMENT) {
-      this.fields[name] = new Input(options);
-    }
-
-    if (type === RADIO_NODE_LIST) {
+    if (type === RADIO || type === CHECKBOX) {
+      node = this.form.node.querySelectorAll(`[name=${name}]`);
+      options.node = node;
       this.fields[name] = new Radio(options);
-    }
-
-    if (type === HTML_SELECT_ELEMENT) {
+    } else if (type === SELECT) {
       this.fields[name] = new Select(options);
+    } else {
+      this.fields[name] = new Input(options);
     }
 
     this.fields[name].on(INPUT, this.inputHandler);
