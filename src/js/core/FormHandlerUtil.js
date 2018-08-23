@@ -1,10 +1,10 @@
 import Validator from './Validator';
 import defaultConfig from '../common/defaultConfig';
 import {
-  HTML_INPUT_ELEMENT,
   HTML_SELECT_ELEMENT,
-  HTML_TEXTAREA_ELEMENT, OBJECT,
-  RADIO_NODE_LIST, STRING,
+  OBJECT,
+  STRING,
+  NODE_LIST,
 } from '../common/constants';
 
 export default class FormHandlerUtil {
@@ -189,20 +189,18 @@ export default class FormHandlerUtil {
 
     Object.entries(this.fields).forEach(([name, field]) => {
       const type = field.node.constructor.name;
-      if (type === HTML_INPUT_ELEMENT
-        || type === HTML_TEXTAREA_ELEMENT) {
-        data[name] = field.node.value;
-      }
-      if (type === HTML_SELECT_ELEMENT) {
-        data[name] = field.node.options[field.node.options.selectedIndex].value;
-      }
-      if (type === RADIO_NODE_LIST) {
+
+      if (type === NODE_LIST) { // Radio/Checkbox
         data[name] = [];
         Array.from(field.node).forEach((node) => {
           if (node.checked) {
             data[name].push(node.value);
           }
         });
+      } else if (type === HTML_SELECT_ELEMENT) { // Select
+        data[name] = field.node.options[field.node.options.selectedIndex].value;
+      } else { // Others
+        data[name] = field.node.value;
       }
     });
 

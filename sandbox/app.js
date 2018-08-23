@@ -8,6 +8,24 @@ const form = new FormHandler({
     },
   },
   fields: {
+    week: {
+      validation: 'isNonEmpty',
+    },
+    color: {
+      validation: 'isNonEmpty',
+    },
+    number: {
+      validation: 'isNonEmpty',
+    },
+    password: {
+      validation: 'isNonEmpty',
+    },
+    range: {
+      validation: 'isNonEmpty',
+    },
+    url: {
+      validation: 'isNonEmpty',
+    },
     date: {
       validation: 'isNonEmpty',
     },

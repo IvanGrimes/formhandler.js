@@ -406,10 +406,7 @@
     }
   });
 
-  var RADIO_NODE_LIST = 'RadioNodeList';
   var HTML_SELECT_ELEMENT = 'HTMLSelectElement';
-  var HTML_INPUT_ELEMENT = 'HTMLInputElement';
-  var HTML_TEXTAREA_ELEMENT = 'HTMLTextAreaElement';
   var INPUT = 'input';
   var LOAD = 'load';
   var UNDEFINED = 'undefined';
@@ -419,12 +416,16 @@
   var FORM = 'form';
   var CLICK = 'click';
   var DIV = 'div';
-  var READYSTATECHANGE = 'readystatechange';
+  var READY_STATE_CHANGE = 'readystatechange';
   var XHR = 'xhr';
   var FETCH = 'fetch';
   var AFTER = 'after';
   var BEFORE = 'before';
   var STRING = 'string';
+  var CHECKBOX = 'checkbox';
+  var RADIO = 'radio';
+  var SELECT = 'select-one';
+  var NODE_LIST = 'NodeList';
 
   var Form =
   /*#__PURE__*/
@@ -519,7 +520,8 @@
       _classCallCheck(this, Field);
 
       this.node = node;
-      this.name = this.node.constructor.name === RADIO_NODE_LIST ? this.node[0].name : this.node.name;
+      this.type = this.node.constructor.name;
+      this.name = this.type === NODE_LIST ? this.node[0].name : this.node.name;
       this.validation = validation;
       this.send = send;
       this.min = min;
@@ -538,7 +540,7 @@
     }, {
       key: "on",
       value: function on(type, listener) {
-        if (this.node.constructor.name === RADIO_NODE_LIST) {
+        if (this.type === NODE_LIST) {
           this.node.forEach(function (el) {
             return el.addEventListener(type, listener);
           });
@@ -549,7 +551,7 @@
     }, {
       key: "off",
       value: function off(type, listener) {
-        if (this.node.constructor.name === RADIO_NODE_LIST) {
+        if (this.type === NODE_LIST) {
           this.node.forEach(function (el) {
             return el.removeEventListener(type, listener);
           });
@@ -841,20 +843,18 @@
           if (!field.send) return;
           var type = field.node.constructor.name;
 
-          if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {
-            data.append(field.name, field.node.value);
-          }
-
-          if (type === HTML_SELECT_ELEMENT) {
-            data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
-          }
-
-          if (type === RADIO_NODE_LIST) {
+          if (type === NODE_LIST) {
+            // Radio/Checkbox
             Array.from(field.node).forEach(function (node) {
               if (node.checked) {
                 data.append(field.name, node.value);
               }
             });
+          } else if (type === HTML_SELECT_ELEMENT) {
+            data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
+          } else {
+            // Others
+            data.append(field.name, field.node.value);
           }
         });
         return data;
@@ -867,7 +867,7 @@
         if (this.type === XHR) {
           var xhr = new XMLHttpRequest();
           xhr.open(this.method, this.url, true);
-          xhr.addEventListener(READYSTATECHANGE, function (ev) {
+          xhr.addEventListener(READY_STATE_CHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
                 _this.callbacks.setFormState(SUCCESS);
@@ -1152,21 +1152,20 @@
 
           var type = field.node.constructor.name;
 
-          if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {
-            data[name] = field.node.value;
-          }
-
-          if (type === HTML_SELECT_ELEMENT) {
-            data[name] = field.node.options[field.node.options.selectedIndex].value;
-          }
-
-          if (type === RADIO_NODE_LIST) {
+          if (type === NODE_LIST) {
+            // Radio/Checkbox
             data[name] = [];
             Array.from(field.node).forEach(function (node) {
               if (node.checked) {
                 data[name].push(node.value);
               }
             });
+          } else if (type === HTML_SELECT_ELEMENT) {
+            // Select
+            data[name] = field.node.options[field.node.options.selectedIndex].value;
+          } else {
+            // Others
+            data[name] = field.node.value;
           }
         });
         return data;
@@ -1306,8 +1305,9 @@
     }, {
       key: "makeField",
       value: function makeField(name, field) {
-        var node = this.form.node[name];
-        var type = node.constructor.name;
+        var node = this.form.node.querySelector("[name=".concat(name, "]"));
+        var _node = node,
+            type = _node.type;
         var options = {
           node: node,
           validation: field.validation,
@@ -1318,16 +1318,14 @@
           callback: this.callbacks.onFieldChangeState
         };
 
-        if (type === HTML_INPUT_ELEMENT || type === HTML_TEXTAREA_ELEMENT) {
-          this.fields[name] = new Input(options);
-        }
-
-        if (type === RADIO_NODE_LIST) {
+        if (type === RADIO || type === CHECKBOX) {
+          node = this.form.node.querySelectorAll("[name=".concat(name, "]"));
+          options.node = node;
           this.fields[name] = new Radio(options);
-        }
-
-        if (type === HTML_SELECT_ELEMENT) {
+        } else if (type === SELECT) {
           this.fields[name] = new Select(options);
+        } else {
+          this.fields[name] = new Input(options);
         }
 
         this.fields[name].on(INPUT, this.inputHandler);

@@ -13,6 +13,12 @@
         method="POST">
     <div class="formhandler__notices"></div>
 
+    <input type="week" name="week">
+    <input type="color" name="color">
+    <input type="number" name="number">
+    <input type="password" name="password">
+    <input type="range" name="range">
+    <input type="url" name="url">
     <input type="date" name="date">
     <input type="datetime-local" name="datetime">
     <input type="month" name="month">
@@ -33,11 +39,11 @@
       radio4<input type="radio" name="radio" value="radio4">
     </div>
 
-    <select name="select" id="select">
+    <select name="select">
       <option value="">choose...</option>
       <option value="option1">option1</option>
       <option value="option2">option2</option>
-      <option value="option3">option3</option>
+      <option value="option3" selected>option3</option>
       <option value="option4">option4</option>
       <option value="option5">option5</option>
     </select>
@@ -51,7 +57,7 @@
 
     <input class="formhandler__field" id="email" type="email" name="email" placeholder="email">
 
-    <input class="formhandler__field" id="phone" type="text" name="phone" placeholder="phone">
+    <input class="formhandler__field" id="phone" type="tel" name="phone" placeholder="phone">
 
     <input class="formhandler__field" id="custom" type="text" name="custom" placeholder="custom">
 
