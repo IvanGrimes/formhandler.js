@@ -56,7 +56,7 @@ export default class FormHandler extends FormHandlerUtil {
   }
 
   makeField(name, field) {
-    const node = this.form.node[name];
+    const node = this.form.node.querySelector(`[name=${name}]`);
     const type = node.constructor.name;
     const options = {
       node,
