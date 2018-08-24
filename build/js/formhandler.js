@@ -1069,6 +1069,11 @@
         return this.fields[this.getFieldNameBy(field)].valid;
       }
     }, {
+      key: "getFieldValue",
+      value: function getFieldValue(field) {
+        return this.fields[this.getFieldNameBy(field)].node.value;
+      }
+    }, {
       key: "isFormValid",
       value: function isFormValid() {
         return this.form.valid;

@@ -98,6 +98,10 @@ export default class FormHandlerUtil {
     return this.fields[this.getFieldNameBy(field)].valid;
   }
 
+  getFieldValue(field) {
+    return this.fields[this.getFieldNameBy(field)].node.value;
+  }
+
   isFormValid() {
     return this.form.valid;
   }
