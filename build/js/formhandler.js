@@ -222,6 +222,61 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
+  var defaultConfig = {
+    form: {
+      block: '.formhandler',
+      submit: '.formhandler__submit',
+      notice: {
+        attachTo: '.formhandler__notices',
+        message: 'please, fill the form',
+        successMessage: 'ok',
+        errorMessage: 'oops',
+        classNames: {
+          block: 'formhandler__notice-form',
+          hidden: 'formhandler__notice-form--hidden',
+          visible: 'formhandler__notice-form--visible'
+        }
+      }
+    },
+    fields: {
+      min: false,
+      max: false,
+      send: true
+    },
+    notices: {
+      attachTo: '.formhandler__notices',
+      nextToField: false,
+      message: false
+    },
+    classNames: {
+      notices: {
+        block: 'formhandler__notice',
+        hidden: 'formhandler__notice--hidden',
+        visible: 'formhandler__notice--visible'
+      },
+      form: {
+        isValid: 'formhandler--is-valid',
+        isNotValid: 'formhandler--is-not-valid',
+        disabledSubmitButton: 'formhandler__submit--disabled'
+      },
+      fields: {
+        isValid: 'formhandler__field--is-valid',
+        isNotValid: 'formhandler__field--is-not-valid'
+      }
+    },
+    sender: {
+      send: true,
+      type: 'xhr',
+      clearOnSuccess: true
+    },
+    callbacks: {
+      onFieldChangeState: function onFieldChangeState() {},
+      onFormChangeState: function onFormChangeState() {},
+      onSubmit: function onSubmit() {},
+      onSend: function onSend() {}
+    }
+  };
+
   /* eslint-disable no-useless-constructor */
   var FormHandlerError =
   /*#__PURE__*/
@@ -924,306 +979,17 @@
     return Sender;
   }();
 
-  var defaultConfig = {
-    form: {
-      block: '.formhandler',
-      submit: '.formhandler__submit',
-      notice: {
-        attachTo: '.formhandler__notices',
-        message: 'please, fill the form',
-        successMessage: 'ok',
-        errorMessage: 'oops',
-        classNames: {
-          block: 'formhandler__notice-form',
-          hidden: 'formhandler__notice-form--hidden',
-          visible: 'formhandler__notice-form--visible'
-        }
-      }
-    },
-    fields: {
-      min: false,
-      max: false,
-      send: true
-    },
-    notices: {
-      attachTo: '.formhandler__notices',
-      nextToField: false,
-      message: false
-    },
-    classNames: {
-      notices: {
-        block: 'formhandler__notice',
-        hidden: 'formhandler__notice--hidden',
-        visible: 'formhandler__notice--visible'
-      },
-      form: {
-        isValid: 'formhandler--is-valid',
-        isNotValid: 'formhandler--is-not-valid',
-        disabledSubmitButton: 'formhandler__submit--disabled'
-      },
-      fields: {
-        isValid: 'formhandler__field--is-valid',
-        isNotValid: 'formhandler__field--is-not-valid'
-      }
-    },
-    sender: {
-      send: true,
-      type: 'xhr',
-      clearOnSuccess: true
-    },
-    callbacks: {
-      onFieldChangeState: function onFieldChangeState() {},
-      onFormChangeState: function onFormChangeState() {},
-      onSubmit: function onSubmit() {},
-      onSend: function onSend() {}
-    }
-  };
-
-  var FormHandlerUtil =
-  /*#__PURE__*/
-  function () {
-    function FormHandlerUtil(_ref) {
-      var _this = this;
-
-      var args = _extends({}, _ref);
-
-      _classCallCheck(this, FormHandlerUtil);
-
-      _defineProperty(this, "getFieldsAndValues", function () {
-        var data = {};
-        Object.entries(_this.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              field = _ref3[1];
-
-          var type = field.node.constructor.name;
-
-          if (type === NODE_LIST) {
-            // Radio/Checkbox
-            var inputType = field.node[0].type;
-
-            if (inputType === CHECKBOX) {
-              data[name] = [];
-              Array.from(field.node).forEach(function (node) {
-                if (node.checked) {
-                  data[name].push(node.value);
-                }
-              });
-            }
-
-            if (inputType === RADIO) {
-              data[name] = '';
-              Array.from(field.node).forEach(function (node) {
-                if (node.checked) {
-                  data[name] = node.value;
-                }
-              });
-            }
-          } else if (type === HTML_SELECT_ELEMENT) {
-            // Select
-            data[name] = field.node.options[field.node.options.selectedIndex].value;
-          } else {
-            // Others
-            data[name] = field.node.value;
-          }
-        });
-        return data;
-      });
-
-      this.opts = args;
-      this.fields = {};
-      this.notices = {};
-      this.form = null;
-      this.validator = new Validator(this.opts.customValidations);
-      this.callbacks = this.opts.callbacks;
-    }
-
-    _createClass(FormHandlerUtil, [{
-      key: "complementOptions",
-      value: function complementOptions() {
-        var _this2 = this;
-
-        // Add lacks classNames and merge.
-        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
-        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
-        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
-        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
-
-        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
-        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
-        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
-
-        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
-        // eslint-disable-next-line no-unused-vars
-
-        Object.entries(this.opts.fields).forEach(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              name = _ref5[0],
-              obj = _ref5[1];
-
-          _this2.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this2.opts.fields[name]);
-          _this2.opts.fields[name].classNames = _this2.opts.fields[name].classNames ? Object.assign({}, _this2.opts.classNames.fields, _this2.opts.fields[name].classNames) : _this2.opts.classNames.fields;
-          _this2.opts.fields[name].notice = Object.assign({}, _this2.opts.notices, _this2.opts.fields[name].notice);
-          _this2.opts.fields[name].notice.classNames = Object.assign({}, _this2.opts.classNames.notices, _this2.opts.fields[name].notice.classNames);
-        });
-        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
-        return this;
-      }
-    }, {
-      key: "getFieldNameBy",
-      value: function getFieldNameBy(field) {
-        // return field name get by NodeList/Selector(.className)
-        var type = _typeof(field);
-
-        var name = field.name;
-        var node = this.form.node;
-        var fieldName;
-
-        if (type === OBJECT) {
-          fieldName = name;
-        }
-
-        if (type === STRING) {
-          var isSelector = /\./.test(field);
-
-          if (isSelector) {
-            fieldName = node.querySelector(field).name;
-          } else {
-            fieldName = field;
-          }
-        }
-
-        return fieldName;
-      }
-    }, {
-      key: "isFieldValid",
-      value: function isFieldValid(field) {
-        return this.fields[this.getFieldNameBy(field)].valid;
-      }
-    }, {
-      key: "getFieldValue",
-      value: function getFieldValue(field) {
-        return this.fields[this.getFieldNameBy(field)].node.value;
-      }
-    }, {
-      key: "isFormValid",
-      value: function isFormValid() {
-        return this.form.valid;
-      }
-    }, {
-      key: "isFormSubmitted",
-      value: function isFormSubmitted() {
-        return this.form.submitted;
-      }
-    }, {
-      key: "isFormSent",
-      value: function isFormSent() {
-        return this.form.sended;
-      }
-    }, {
-      key: "clearForm",
-      value: function clearForm() {
-        this.form.clear();
-      }
-    }, {
-      key: "clearField",
-      value: function clearField(field) {
-        // Also clears classNames and field of instance like valid, submitted
-        this.fields[this.getFieldNameBy(field)].clear();
-      }
-    }, {
-      key: "getField",
-      value: function getField(field) {
-        // Returns a field node
-        return this.fields[this.getFieldNameBy(field)].node;
-      }
-    }, {
-      key: "addField",
-      value: function addField(field, _ref6) {
-        var opts = _extends({}, _ref6);
-
-        var options = opts;
-        options.notice = options.notice ? options.notice : {};
-        var name = this.getFieldNameBy(field);
-        var fieldOptions = {
-          validation: options.validation,
-          min: options.min || defaultConfig.fields.min,
-          max: options.max || defaultConfig.fields.max,
-          send: options.send || defaultConfig.fields.send,
-          classNames: Object.assign({}, this.opts.classNames.fields, options.classNames)
-        };
-        var noticeOptions = {
-          attachTo: options.notice.attachTo || defaultConfig.notices.attachTo,
-          nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
-          message: options.notice.message || defaultConfig.notices.message,
-          classNames: Object.assign({}, this.opts.classNames.notices, options.notice.classNames)
-        };
-        this.makeField(name, fieldOptions);
-        this.makeNotice(name, noticeOptions);
-        return this.fields[name].node;
-      }
-    }, {
-      key: "removeField",
-      value: function removeField(field) {
-        var name = this.getFieldNameBy(field);
-        this.fields[name].remove();
-        this.notices[name].remove();
-      }
-    }, {
-      key: "validateField",
-      value: function validateField(field) {
-        // also turns on toggleClassNames
-        var name = this.getFieldNameBy(field);
-
-        if (field.validation) {
-          var validation = Validator.validate(this.fields[name].validatorOptions);
-          this.fields[name].submitted = true;
-          this.setFieldState(name, validation.valid);
-        }
-
-        return this.fields[name].node;
-      }
-    }, {
-      key: "validateForm",
-      value: function validateForm() {
-        var _this3 = this;
-
-        // also turns on toggleClassNames
-        Object.entries(this.fields).forEach(function (_ref7) {
-          var _ref8 = _slicedToArray(_ref7, 2),
-              name = _ref8[0],
-              field = _ref8[1];
-
-          if (field.validation) {
-            var validation = Validator.validate(field.validatorOptions);
-            field.setFieldSubmitted(true);
-
-            _this3.setFieldState(name, validation.valid, validation.message);
-          }
-        });
-        this.form.submitted = true;
-        return this.form.node;
-      }
-    }]);
-
-    return FormHandlerUtil;
-  }();
-
   var FormHandler =
   /*#__PURE__*/
-  function (_FormHandlerUtil) {
-    _inherits(FormHandler, _FormHandlerUtil);
-
+  function () {
     function FormHandler(_ref) {
-      var _this;
+      var _this = this;
 
       var args = _extends({}, _ref);
 
       _classCallCheck(this, FormHandler);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(FormHandler).call(this, Object.assign({}, args)));
-
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setFormStateFromResponse", function (result) {
+      _defineProperty(this, "setFormStateFromResponse", function (result) {
         if (result === SUCCESS) {
           _this.notices.form.message = _this.opts.form.notice.successMessage;
           _this.form.send = true;
@@ -1241,7 +1007,7 @@
         _this.notices.form.show();
       });
 
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "inputHandler", function (ev) {
+      _defineProperty(this, "inputHandler", function (ev) {
         var name = ev.target.name;
         var validation = Validator.validate(_this.fields[name].validatorOptions);
 
@@ -1250,7 +1016,7 @@
         }
       });
 
-      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
+      _defineProperty(this, "submitHandler", function (ev) {
         ev.preventDefault();
         var fieldNodes = []; // eslint-disable-next-line no-unused-vars
 
@@ -1298,9 +1064,54 @@
         }
       });
 
-      _this.init();
+      _defineProperty(this, "getFieldsAndValues", function () {
+        var data = {};
+        Object.entries(_this.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              field = _ref5[1];
 
-      return _this;
+          var type = field.node.constructor.name;
+
+          if (type === NODE_LIST) {
+            // Radio/Checkbox
+            var inputType = field.node[0].type;
+
+            if (inputType === CHECKBOX) {
+              data[name] = [];
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name].push(node.value);
+                }
+              });
+            }
+
+            if (inputType === RADIO) {
+              data[name] = '';
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name] = node.value;
+                }
+              });
+            }
+          } else if (type === HTML_SELECT_ELEMENT) {
+            // Select
+            data[name] = field.node.options[field.node.options.selectedIndex].value;
+          } else {
+            // Others
+            data[name] = field.node.value;
+          }
+        });
+        return data;
+      });
+
+      this.opts = args;
+      this.fields = {};
+      this.notices = {};
+      this.form = null;
+      this.validator = new Validator(this.opts.customValidations);
+      this.callbacks = this.opts.callbacks;
+      this.init();
     }
 
     _createClass(FormHandler, [{
@@ -1309,10 +1120,10 @@
         var _this2 = this;
 
         this.complementOptions().makeForm();
-        Object.entries(this.opts.fields).forEach(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              name = _ref5[0],
-              field = _ref5[1];
+        Object.entries(this.opts.fields).forEach(function (_ref6) {
+          var _ref7 = _slicedToArray(_ref6, 2),
+              name = _ref7[0],
+              field = _ref7[1];
 
           _this2.makeField(name, field);
 
@@ -1425,10 +1236,176 @@
         this.form.setState();
         return this;
       }
+    }, {
+      key: "complementOptions",
+      value: function complementOptions() {
+        var _this4 = this;
+
+        // Add lacks classNames and merge.
+        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
+        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
+        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
+        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
+
+        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
+        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
+        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
+
+        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
+        // eslint-disable-next-line no-unused-vars
+
+        Object.entries(this.opts.fields).forEach(function (_ref8) {
+          var _ref9 = _slicedToArray(_ref8, 2),
+              name = _ref9[0],
+              obj = _ref9[1];
+
+          _this4.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this4.opts.fields[name]);
+          _this4.opts.fields[name].classNames = _this4.opts.fields[name].classNames ? Object.assign({}, _this4.opts.classNames.fields, _this4.opts.fields[name].classNames) : _this4.opts.classNames.fields;
+          _this4.opts.fields[name].notice = Object.assign({}, _this4.opts.notices, _this4.opts.fields[name].notice);
+          _this4.opts.fields[name].notice.classNames = Object.assign({}, _this4.opts.classNames.notices, _this4.opts.fields[name].notice.classNames);
+        });
+        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
+        return this;
+      }
+    }, {
+      key: "getFieldNameBy",
+      value: function getFieldNameBy(field) {
+        // return field name get by NodeList/Selector(.className)
+        var type = _typeof(field);
+
+        var name = field.name;
+        var node = this.form.node;
+        var fieldName;
+
+        if (type === OBJECT) {
+          fieldName = name;
+        }
+
+        if (type === STRING) {
+          var isSelector = /\./.test(field);
+
+          if (isSelector) {
+            fieldName = node.querySelector(field).name;
+          } else {
+            fieldName = field;
+          }
+        }
+
+        return fieldName;
+      }
+    }, {
+      key: "isFieldValid",
+      value: function isFieldValid(field) {
+        return this.fields[this.getFieldNameBy(field)].valid;
+      }
+    }, {
+      key: "getFieldValue",
+      value: function getFieldValue(field) {
+        return this.fields[this.getFieldNameBy(field)].node.value;
+      }
+    }, {
+      key: "isFormValid",
+      value: function isFormValid() {
+        return this.form.valid;
+      }
+    }, {
+      key: "isFormSubmitted",
+      value: function isFormSubmitted() {
+        return this.form.submitted;
+      }
+    }, {
+      key: "isFormSent",
+      value: function isFormSent() {
+        return this.form.sended;
+      }
+    }, {
+      key: "clearForm",
+      value: function clearForm() {
+        this.form.clear();
+      }
+    }, {
+      key: "clearField",
+      value: function clearField(field) {
+        // Also clears classNames and field of instance like valid, submitted
+        this.fields[this.getFieldNameBy(field)].clear();
+      }
+    }, {
+      key: "getField",
+      value: function getField(field) {
+        // Returns a field node
+        return this.fields[this.getFieldNameBy(field)].node;
+      }
+    }, {
+      key: "addField",
+      value: function addField(field, _ref10) {
+        var opts = _extends({}, _ref10);
+
+        var options = opts;
+        options.notice = options.notice ? options.notice : {};
+        var name = this.getFieldNameBy(field);
+        var fieldOptions = {
+          validation: options.validation,
+          min: options.min || defaultConfig.fields.min,
+          max: options.max || defaultConfig.fields.max,
+          send: options.send || defaultConfig.fields.send,
+          classNames: Object.assign({}, this.opts.classNames.fields, options.classNames)
+        };
+        var noticeOptions = {
+          attachTo: options.notice.attachTo || defaultConfig.notices.attachTo,
+          nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
+          message: options.notice.message || defaultConfig.notices.message,
+          classNames: Object.assign({}, this.opts.classNames.notices, options.notice.classNames)
+        };
+        this.makeField(name, fieldOptions);
+        this.makeNotice(name, noticeOptions);
+        return this.fields[name].node;
+      }
+    }, {
+      key: "removeField",
+      value: function removeField(field) {
+        var name = this.getFieldNameBy(field);
+        this.fields[name].remove();
+        this.notices[name].remove();
+      }
+    }, {
+      key: "validateField",
+      value: function validateField(field) {
+        // also turns on toggleClassNames
+        var name = this.getFieldNameBy(field);
+
+        if (field.validation) {
+          var validation = Validator.validate(this.fields[name].validatorOptions);
+          this.fields[name].submitted = true;
+          this.setFieldState(name, validation.valid);
+        }
+
+        return this.fields[name].node;
+      }
+    }, {
+      key: "validateForm",
+      value: function validateForm() {
+        var _this5 = this;
+
+        // also turns on toggleClassNames
+        Object.entries(this.fields).forEach(function (_ref11) {
+          var _ref12 = _slicedToArray(_ref11, 2),
+              name = _ref12[0],
+              field = _ref12[1];
+
+          if (field.validation) {
+            var validation = Validator.validate(field.validatorOptions);
+            field.setFieldSubmitted(true);
+
+            _this5.setFieldState(name, validation.valid, validation.message);
+          }
+        });
+        this.form.submitted = true;
+        return this.form.node;
+      }
     }]);
 
     return FormHandler;
-  }(FormHandlerUtil);
+  }();
 
   return FormHandler;
 
