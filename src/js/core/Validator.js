@@ -31,7 +31,7 @@ export default class Validator {
 
   static validations = {
     isCheckboxChecked(node, min, max) {
-      const message = 'Check any boxes';
+      const message = 'Please, check any';
       let valid = false;
       let checked = 0;
 
@@ -56,8 +56,6 @@ export default class Validator {
     },
     isRadioChecked(node) {
       const valid = Array.from(node).some(el => el.checked === true);
-
-
       const message = 'Please, press any button';
 
       return {
@@ -69,42 +67,40 @@ export default class Validator {
       const valid = Array.from(node.options)
         .filter(el => el.value.length > 0)
         .some(el => el.selected === true);
-
-
       const message = 'Please, choose any option';
+
       return {
         valid,
         message,
       };
     },
     isName(node, min, max) {
-      const pattern = /^[A-Za-z]/;
+      const pattern = /[\u00BF-\u1FFF\u2C00-\uD7FF\w]/;
       let valid = pattern.test(node.value);
-      let message = 'Must contain any latin character';
+      let message = 'Must contain any letter';
 
       if (node.value.length === 0) {
         valid = false;
         if (min && !max) {
-          message = `Must contain at least ${min} latin character`;
+          message = `Must contain at least ${min} letter`;
         }
         if (!min && max) {
-          message = `Must contain at least one latin character and less than ${max + 1}`;
+          message = `Must contain at least one letter and less than ${max + 1}`;
         }
         if (min && max) {
-          message = `Must contain between ${min} and ${max} latin characters`;
+          message = `Must contain between ${min} and ${max} letters`;
         }
       } else {
         if (min && node.value.length < min) {
           valid = false;
-          message = `Must contain at least ${min} latin characters`;
+          message = `Must contain at least ${min === 1 ? `${min} letter` : `${min} letters`}`;
         }
-
         if (min && node.value.length > min) {
           valid = true;
         }
         if (max && node.value.length > max) {
           valid = false;
-          message = `Must contain less than ${max + 1} latin characters`;
+          message = `Must contain less than ${max + 1} letters`;
         }
       }
 
@@ -116,8 +112,6 @@ export default class Validator {
     isEmail(node) {
       const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       const valid = pattern.test(node.value);
-
-
       const message = 'Must be a valid email address';
 
       return {
@@ -128,7 +122,7 @@ export default class Validator {
     isPhone(node) {
       const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       const valid = pattern.test(node.value);
-      const message = 'Must contain a valid phone number';
+      const message = 'Must be a valid phone number';
 
       return {
         valid,
@@ -137,8 +131,6 @@ export default class Validator {
     },
     isNonEmpty(node, min, max) {
       let valid = node.value.length > 0;
-
-
       const message = 'Must be non empty';
 
       if (min && node.value.length < min && node.value.length !== 0) {
