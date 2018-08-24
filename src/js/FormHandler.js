@@ -3,6 +3,7 @@ import Form from './core/Form';
 import Input from './core/Input';
 import Radio from './core/Radio';
 import Select from './core/Select';
+import Color from './core/Color';
 import Notice from './core/Notice';
 import Sender from './core/Sender';
 import FormHandlerUtil from './core/FormHandlerUtil';
@@ -17,6 +18,7 @@ import {
   CHECKBOX,
   RADIO,
   SELECT,
+  COLOR,
 } from './common/constants';
 
 export default class FormHandler extends FormHandlerUtil {
@@ -73,6 +75,8 @@ export default class FormHandler extends FormHandlerUtil {
       this.fields[name] = new Radio(options);
     } else if (type === SELECT) {
       this.fields[name] = new Select(options);
+    } else if (type === COLOR) {
+      this.fields[name] = new Color(options);
     } else {
       this.fields[name] = new Input(options);
     }
@@ -106,7 +110,9 @@ export default class FormHandler extends FormHandlerUtil {
     if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
       this.form.send = true;
-      this.form.clear();
+      if (this.opts.sender.clearOnSuccess) {
+        this.form.clear();
+      }
     }
     if (result === ERROR) {
       this.notices.form.message = this.opts.form.notice.errorMessage;
@@ -120,7 +126,9 @@ export default class FormHandler extends FormHandlerUtil {
     if (typeof response.then !== UNDEFINED) {
       response
         .then(data => data.json())
-        .then(json => this.setFieldState(name, !!json[property], message));
+        .then((json) => {
+          this.setFieldState(name, !!json[property], message);
+        });
     } else {
       response.addEventListener(LOAD, (ev) => {
         this.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
@@ -135,16 +143,17 @@ export default class FormHandler extends FormHandlerUtil {
     if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
-      this.fields[name].setFieldState(valid);
+      this.fields[name].setState(valid);
     }
 
+    this.notices[name].message = this.opts.fields[name].message || message;
     if (!valid && submitted) {
       this.notices[name].show();
     } else {
       this.notices[name].hide();
     }
 
-    this.form.setFormState();
+    this.form.setState();
 
     return this;
   }
@@ -156,8 +165,6 @@ export default class FormHandler extends FormHandlerUtil {
     if (this.fields[name].validation) {
       this.setFieldState(name, validation.valid, validation.message);
     }
-
-    this.form.setFormState();
   };
 
   submitHandler = (ev) => {
@@ -182,6 +189,7 @@ export default class FormHandler extends FormHandlerUtil {
           type: this.opts.sender.type,
           url: this.form.node.action,
           method: this.form.node.method,
+          data: this.getFieldsAndValues,
           fields: this.fields,
           form: this.form.node,
           callbacks: {

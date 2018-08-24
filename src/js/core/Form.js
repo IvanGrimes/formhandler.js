@@ -30,7 +30,7 @@ export default class Form {
     return !validness.has(false);
   }
 
-  setFormState() {
+  setState() {
     const validity = this.fieldsValidity;
 
     this.callback(this.node, this.valid, validity);
@@ -58,6 +58,7 @@ export default class Form {
       field.clear();
     });
 
+    this.callback(this.node, this.valid, false);
     this.valid = false;
     this.node.classList.remove(this.classNames.isNotValid);
     this.node.classList.remove(this.classNames.isValid);

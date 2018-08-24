@@ -43,6 +43,7 @@ export default {
   sender: {
     send: true,
     type: 'xhr',
+    clearOnSuccess: true,
   },
   callbacks: {
     onFieldChangeState() {},

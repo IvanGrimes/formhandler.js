@@ -80,8 +80,6 @@ export default class Validator {
     isName(node, min, max) {
       const pattern = /^[A-Za-z]/;
       let valid = pattern.test(node.value);
-
-
       let message = 'Must contain any latin character';
 
       if (node.value.length === 0) {
@@ -100,12 +98,13 @@ export default class Validator {
           valid = false;
           message = `Must contain at least ${min} latin characters`;
         }
+
+        if (min && node.value.length > min) {
+          valid = true;
+        }
         if (max && node.value.length > max) {
           valid = false;
           message = `Must contain less than ${max + 1} latin characters`;
-        }
-        if (min && node.value.length > min) {
-          valid = true;
         }
       }
 

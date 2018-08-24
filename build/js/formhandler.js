@@ -354,13 +354,13 @@
           message = "Must contain at least ".concat(min, " latin characters");
         }
 
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+
         if (max && node.value.length > max) {
           valid = false;
           message = "Must contain less than ".concat(max + 1, " latin characters");
-        }
-
-        if (min && node.value.length > min) {
-          valid = true;
         }
       }
 
@@ -426,6 +426,7 @@
   var RADIO = 'radio';
   var SELECT = 'select-one';
   var NODE_LIST = 'NodeList';
+  var COLOR = 'color';
 
   var Form =
   /*#__PURE__*/
@@ -448,8 +449,8 @@
     }
 
     _createClass(Form, [{
-      key: "setFormState",
-      value: function setFormState() {
+      key: "setState",
+      value: function setState() {
         var validity = this.fieldsValidity;
         this.callback(this.node, this.valid, validity);
         this.valid = validity;
@@ -480,6 +481,7 @@
 
           field.clear();
         });
+        this.callback(this.node, this.valid, false);
         this.valid = false;
         this.node.classList.remove(this.classNames.isNotValid);
         this.node.classList.remove(this.classNames.isValid);
@@ -533,6 +535,16 @@
     }
 
     _createClass(Field, [{
+      key: "setState",
+      value: function setState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
+        this.valid = valid;
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
+      }
+    }, {
       key: "setFieldSubmitted",
       value: function setFieldSubmitted(value) {
         this.submitted = value;
@@ -593,16 +605,6 @@
     }
 
     _createClass(Input, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -616,6 +618,7 @@
     }, {
       key: "clear",
       value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
         this.node.value = '';
         this.valid = false;
         this.submitted = false;
@@ -641,16 +644,6 @@
     }
 
     _createClass(Radio, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         var _this = this;
@@ -676,6 +669,7 @@
       value: function clear() {
         var _this2 = this;
 
+        this.callback(this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.forEach(function (el) {
@@ -708,16 +702,6 @@
     }
 
     _createClass(Select, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -731,6 +715,7 @@
     }, {
       key: "clear",
       value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.classList.remove(this.classNames.isValid);
@@ -742,6 +727,45 @@
     }]);
 
     return Select;
+  }(Field);
+
+  var Color =
+  /*#__PURE__*/
+  function (_Field) {
+    _inherits(Color, _Field);
+
+    function Color(_ref) {
+      var opts = _extends({}, _ref);
+
+      _classCallCheck(this, Color);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(Color).call(this, Object.assign({}, opts)));
+    }
+
+    _createClass(Color, [{
+      key: "toggleClassNames",
+      value: function toggleClassNames() {
+        if (this.valid) {
+          this.node.classList.remove(this.classNames.isNotValid);
+          this.node.classList.add(this.classNames.isValid);
+        } else {
+          this.node.classList.remove(this.classNames.isValid);
+          this.node.classList.add(this.classNames.isNotValid);
+        }
+      }
+    }, {
+      key: "clear",
+      value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
+        this.node.value = '#000000';
+        this.valid = false;
+        this.submitted = false;
+        this.node.classList.remove(this.classNames.isNotValid);
+        this.node.classList.remove(this.classNames.isValid);
+      }
+    }]);
+
+    return Color;
   }(Field);
 
   var Notice =
@@ -816,6 +840,7 @@
       var type = _ref.type,
           url = _ref.url,
           method = _ref.method,
+          data = _ref.data,
           fields = _ref.fields,
           form = _ref.form,
           callbacks = _ref.callbacks;
@@ -825,6 +850,7 @@
       this.type = type;
       this.url = url;
       this.method = method;
+      this.data = data();
       this.fields = fields;
       this.form = form;
       this.callbacks = callbacks;
@@ -833,36 +859,25 @@
     _createClass(Sender, [{
       key: "makeData",
       value: function makeData() {
+        var _this = this;
+
         var data = new FormData(); // eslint-disable-next-line no-unused-vars
 
-        Object.entries(this.fields).forEach(function (_ref2) {
+        Object.entries(this.data).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
-              field = _ref3[1];
+              value = _ref3[1];
 
-          if (!field.send) return;
-          var type = field.node.constructor.name;
-
-          if (type === NODE_LIST) {
-            // Radio/Checkbox
-            Array.from(field.node).forEach(function (node) {
-              if (node.checked) {
-                data.append(field.name, node.value);
-              }
-            });
-          } else if (type === HTML_SELECT_ELEMENT) {
-            data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
-          } else {
-            // Others
-            data.append(field.name, field.node.value);
-          }
+          // eslint-disable-next-line no-useless-return
+          if (!_this.fields[name].send) return;
+          data.append(name, value);
         });
         return data;
       }
     }, {
       key: "sendRequest",
       value: function sendRequest(data) {
-        var _this = this;
+        var _this2 = this;
 
         if (this.type === XHR) {
           var xhr = new XMLHttpRequest();
@@ -870,13 +885,13 @@
           xhr.addEventListener(READY_STATE_CHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
-                _this.callbacks.setFormState(SUCCESS);
+                _this2.callbacks.setFormState(SUCCESS);
 
-                _this.callbacks.onSend(SUCCESS);
+                _this2.callbacks.onSend(SUCCESS);
               } else {
-                _this.callbacks.setFormState(ERROR);
+                _this2.callbacks.setFormState(ERROR);
 
-                _this.callbacks.onSend(ERROR);
+                _this2.callbacks.onSend(ERROR);
 
                 throw new FormHandlerError("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
               }
@@ -891,13 +906,13 @@
             body: data
           }).then(function (response) {
             if (response.status >= 200 && response.status < 400) {
-              _this.callbacks.setFormState(SUCCESS);
+              _this2.callbacks.setFormState(SUCCESS);
 
-              _this.callbacks.onSend(SUCCESS);
+              _this2.callbacks.onSend(SUCCESS);
             } else {
-              _this.callbacks.setFormState(ERROR);
+              _this2.callbacks.setFormState(ERROR);
 
-              _this.callbacks.onSend(ERROR);
+              _this2.callbacks.onSend(ERROR);
 
               throw new FormHandlerError("Status: ".concat(response.status, ", Text: ").concat(response.statusText));
             }
@@ -953,7 +968,8 @@
     },
     sender: {
       send: true,
-      type: 'xhr'
+      type: 'xhr',
+      clearOnSuccess: true
     },
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
@@ -967,9 +983,52 @@
   /*#__PURE__*/
   function () {
     function FormHandlerUtil(_ref) {
+      var _this = this;
+
       var args = _extends({}, _ref);
 
       _classCallCheck(this, FormHandlerUtil);
+
+      _defineProperty(this, "getFieldsAndValues", function () {
+        var data = {};
+        Object.entries(_this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
+
+          var type = field.node.constructor.name;
+
+          if (type === NODE_LIST) {
+            // Radio/Checkbox
+            var inputType = field.node[0].type;
+
+            if (inputType === CHECKBOX) {
+              data[name] = [];
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name].push(node.value);
+                }
+              });
+            }
+
+            if (inputType === RADIO) {
+              data[name] = '';
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name] = node.value;
+                }
+              });
+            }
+          } else if (type === HTML_SELECT_ELEMENT) {
+            // Select
+            data[name] = field.node.options[field.node.options.selectedIndex].value;
+          } else {
+            // Others
+            data[name] = field.node.value;
+          }
+        });
+        return data;
+      });
 
       this.opts = args;
       this.fields = {};
@@ -982,7 +1041,7 @@
     _createClass(FormHandlerUtil, [{
       key: "complementOptions",
       value: function complementOptions() {
-        var _this = this;
+        var _this2 = this;
 
         // Add lacks classNames and merge.
         this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
@@ -997,15 +1056,15 @@
         this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
         // eslint-disable-next-line no-unused-vars
 
-        Object.entries(this.opts.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              obj = _ref3[1];
+        Object.entries(this.opts.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              obj = _ref5[1];
 
-          _this.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this.opts.fields[name]);
-          _this.opts.fields[name].classNames = _this.opts.fields[name].classNames ? Object.assign({}, _this.opts.classNames.fields, _this.opts.fields[name].classNames) : _this.opts.classNames.fields;
-          _this.opts.fields[name].notice = Object.assign({}, _this.opts.notices, _this.opts.fields[name].notice);
-          _this.opts.fields[name].notice.classNames = Object.assign({}, _this.opts.classNames.notices, _this.opts.fields[name].notice.classNames);
+          _this2.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this2.opts.fields[name]);
+          _this2.opts.fields[name].classNames = _this2.opts.fields[name].classNames ? Object.assign({}, _this2.opts.classNames.fields, _this2.opts.fields[name].classNames) : _this2.opts.classNames.fields;
+          _this2.opts.fields[name].notice = Object.assign({}, _this2.opts.notices, _this2.opts.fields[name].notice);
+          _this2.opts.fields[name].notice.classNames = Object.assign({}, _this2.opts.classNames.notices, _this2.opts.fields[name].notice.classNames);
         });
         this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
@@ -1042,6 +1101,11 @@
         return this.fields[this.getFieldNameBy(field)].valid;
       }
     }, {
+      key: "getFieldValue",
+      value: function getFieldValue(field) {
+        return this.fields[this.getFieldNameBy(field)].node.value;
+      }
+    }, {
       key: "isFormValid",
       value: function isFormValid() {
         return this.form.valid;
@@ -1075,8 +1139,8 @@
       }
     }, {
       key: "addField",
-      value: function addField(field, _ref4) {
-        var opts = _extends({}, _ref4);
+      value: function addField(field, _ref6) {
+        var opts = _extends({}, _ref6);
 
         var options = opts;
         options.notice = options.notice ? options.notice : {};
@@ -1122,53 +1186,23 @@
     }, {
       key: "validateForm",
       value: function validateForm() {
-        var _this2 = this;
+        var _this3 = this;
 
         // also turns on toggleClassNames
-        Object.entries(this.fields).forEach(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              name = _ref6[0],
-              field = _ref6[1];
-
-          if (field.validation) {
-            var validation = Validator.validate(field.validatorOptions);
-            field.setFieldSubmitted(true);
-
-            _this2.setFieldState(name, validation.valid);
-          }
-        });
-        this.form.submitted = true;
-        this.form.setFormState();
-        return this.form.node;
-      }
-    }, {
-      key: "getFieldsAndValues",
-      value: function getFieldsAndValues() {
-        var data = {};
         Object.entries(this.fields).forEach(function (_ref7) {
           var _ref8 = _slicedToArray(_ref7, 2),
               name = _ref8[0],
               field = _ref8[1];
 
-          var type = field.node.constructor.name;
+          if (field.validation) {
+            var validation = Validator.validate(field.validatorOptions);
+            field.setFieldSubmitted(true);
 
-          if (type === NODE_LIST) {
-            // Radio/Checkbox
-            data[name] = [];
-            Array.from(field.node).forEach(function (node) {
-              if (node.checked) {
-                data[name].push(node.value);
-              }
-            });
-          } else if (type === HTML_SELECT_ELEMENT) {
-            // Select
-            data[name] = field.node.options[field.node.options.selectedIndex].value;
-          } else {
-            // Others
-            data[name] = field.node.value;
+            _this3.setFieldState(name, validation.valid, validation.message);
           }
         });
-        return data;
+        this.form.submitted = true;
+        return this.form.node;
       }
     }]);
 
@@ -1194,7 +1228,9 @@
           _this.notices.form.message = _this.opts.form.notice.successMessage;
           _this.form.send = true;
 
-          _this.form.clear();
+          if (_this.opts.sender.clearOnSuccess) {
+            _this.form.clear();
+          }
         }
 
         if (result === ERROR) {
@@ -1212,8 +1248,6 @@
         if (_this.fields[name].validation) {
           _this.setFieldState(name, validation.valid, validation.message);
         }
-
-        _this.form.setFormState();
       });
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
@@ -1241,6 +1275,7 @@
               type: _this.opts.sender.type,
               url: _this.form.node.action,
               method: _this.form.node.method,
+              data: _this.getFieldsAndValues,
               fields: _this.fields,
               form: _this.form.node,
               callbacks: {
@@ -1324,6 +1359,8 @@
           this.fields[name] = new Radio(options);
         } else if (type === SELECT) {
           this.fields[name] = new Select(options);
+        } else if (type === COLOR) {
+          this.fields[name] = new Color(options);
         } else {
           this.fields[name] = new Input(options);
         }
@@ -1357,7 +1394,7 @@
           response.then(function (data) {
             return data.json();
           }).then(function (json) {
-            return _this3.setFieldState(name, !!json[property], message);
+            _this3.setFieldState(name, !!json[property], message);
           });
         } else {
           response.addEventListener(LOAD, function (ev) {
@@ -1374,8 +1411,10 @@
         if (_typeof(valid) === OBJECT) {
           this.setFieldStateFromResponse(valid.response, valid.property, name, message);
         } else {
-          this.fields[name].setFieldState(valid);
+          this.fields[name].setState(valid);
         }
+
+        this.notices[name].message = this.opts.fields[name].message || message;
 
         if (!valid && submitted) {
           this.notices[name].show();
@@ -1383,7 +1422,7 @@
           this.notices[name].hide();
         }
 
-        this.form.setFormState();
+        this.form.setState();
         return this;
       }
     }]);

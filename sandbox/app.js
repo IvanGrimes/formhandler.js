@@ -8,36 +8,6 @@ const form = new FormHandler({
     },
   },
   fields: {
-    week: {
-      validation: 'isNonEmpty',
-    },
-    color: {
-      validation: 'isNonEmpty',
-    },
-    number: {
-      validation: 'isNonEmpty',
-    },
-    password: {
-      validation: 'isNonEmpty',
-    },
-    range: {
-      validation: 'isNonEmpty',
-    },
-    url: {
-      validation: 'isNonEmpty',
-    },
-    date: {
-      validation: 'isNonEmpty',
-    },
-    datetime: {
-      validation: 'isNonEmpty',
-    },
-    month: {
-      validation: 'isNonEmpty',
-    },
-    time: {
-      validation: 'isNonEmpty',
-    },
     checkbox: {
       validation: 'isCheckboxChecked',
       min: 2,
@@ -50,28 +20,25 @@ const form = new FormHandler({
       validation: 'isSelected',
     },
     firstname: {
-      validation: false,
+      validation: 'isName',
       send: false,
       min: 2,
       max: 20,
-      notice: {
-        message: 'this value is required',
-      },
     },
     email: {
       validation: 'isEmail',
     },
     phone: {
       validation: 'isPhone',
+      notice: {
+        message: 'phone blah-blah',
+      },
     },
     zip1: {
       validation: 'isZipPromise',
     },
     zip2: {
       validation: 'isZipXML',
-    },
-    custom: {
-      validation: 'isCustom',
     },
     file: {
       validation: 'isFile',
@@ -142,6 +109,7 @@ const form = new FormHandler({
   sender: {
     send: true,
     type: 'xhr',
+    clearOnSuccess: false,
   },
   callbacks: {
     onFieldChangeState(name, el, pastValidity, newValidity) {
@@ -158,5 +126,3 @@ const form = new FormHandler({
     },
   },
 });
-
-form.addField('lastname', {validation: 'isName'});

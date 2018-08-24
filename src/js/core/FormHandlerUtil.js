@@ -5,6 +5,8 @@ import {
   OBJECT,
   STRING,
   NODE_LIST,
+  CHECKBOX,
+  RADIO,
 } from '../common/constants';
 
 export default class FormHandlerUtil {
@@ -98,6 +100,10 @@ export default class FormHandlerUtil {
     return this.fields[this.getFieldNameBy(field)].valid;
   }
 
+  getFieldValue(field) {
+    return this.fields[this.getFieldNameBy(field)].node.value;
+  }
+
   isFormValid() {
     return this.form.valid;
   }
@@ -174,29 +180,40 @@ export default class FormHandlerUtil {
       if (field.validation) {
         const validation = Validator.validate(field.validatorOptions);
         field.setFieldSubmitted(true);
-        this.setFieldState(name, validation.valid);
+        this.setFieldState(name, validation.valid, validation.message);
       }
     });
 
     this.form.submitted = true;
-    this.form.setFormState();
 
     return this.form.node;
   }
 
-  getFieldsAndValues() {
+  getFieldsAndValues = () => {
     const data = {};
 
     Object.entries(this.fields).forEach(([name, field]) => {
       const type = field.node.constructor.name;
 
       if (type === NODE_LIST) { // Radio/Checkbox
-        data[name] = [];
-        Array.from(field.node).forEach((node) => {
-          if (node.checked) {
-            data[name].push(node.value);
-          }
-        });
+        const inputType = field.node[0].type;
+
+        if (inputType === CHECKBOX) {
+          data[name] = [];
+          Array.from(field.node).forEach((node) => {
+            if (node.checked) {
+              data[name].push(node.value);
+            }
+          });
+        }
+        if (inputType === RADIO) {
+          data[name] = '';
+          Array.from(field.node).forEach((node) => {
+            if (node.checked) {
+              data[name] = node.value;
+            }
+          });
+        }
       } else if (type === HTML_SELECT_ELEMENT) { // Select
         data[name] = field.node.options[field.node.options.selectedIndex].value;
       } else { // Others
