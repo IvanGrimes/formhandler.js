@@ -453,7 +453,6 @@
       key: "setState",
       value: function setState() {
         var validity = this.fieldsValidity;
-        console.log(validity);
         this.callback(this.node, this.valid, validity);
         this.valid = validity;
 
@@ -1185,12 +1184,25 @@
 
           if (type === NODE_LIST) {
             // Radio/Checkbox
-            data[name] = [];
-            Array.from(field.node).forEach(function (node) {
-              if (node.checked) {
-                data[name].push(node.value);
-              }
-            });
+            var inputType = field.node[0].type;
+
+            if (inputType === CHECKBOX) {
+              data[name] = [];
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name].push(node.value);
+                }
+              });
+            }
+
+            if (inputType === RADIO) {
+              data[name] = '';
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name] = node.value;
+                }
+              });
+            }
           } else if (type === HTML_SELECT_ELEMENT) {
             // Select
             data[name] = field.node.options[field.node.options.selectedIndex].value;

@@ -5,6 +5,8 @@ import {
   OBJECT,
   STRING,
   NODE_LIST,
+  CHECKBOX,
+  RADIO,
 } from '../common/constants';
 
 export default class FormHandlerUtil {
@@ -194,12 +196,25 @@ export default class FormHandlerUtil {
       const type = field.node.constructor.name;
 
       if (type === NODE_LIST) { // Radio/Checkbox
-        data[name] = [];
-        Array.from(field.node).forEach((node) => {
-          if (node.checked) {
-            data[name].push(node.value);
-          }
-        });
+        const inputType = field.node[0].type;
+
+        if (inputType === CHECKBOX) {
+          data[name] = [];
+          Array.from(field.node).forEach((node) => {
+            if (node.checked) {
+              data[name].push(node.value);
+            }
+          });
+        }
+        if (inputType === RADIO) {
+          data[name] = '';
+          Array.from(field.node).forEach((node) => {
+            if (node.checked) {
+              data[name] = node.value;
+            }
+          });
+        }
+
       } else if (type === HTML_SELECT_ELEMENT) { // Select
         data[name] = field.node.options[field.node.options.selectedIndex].value;
       } else { // Others

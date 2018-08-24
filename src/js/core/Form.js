@@ -32,7 +32,6 @@ export default class Form {
 
   setState() {
     const validity = this.fieldsValidity;
-    console.log(validity)
 
     this.callback(this.node, this.valid, validity);
 
