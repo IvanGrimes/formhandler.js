@@ -28,6 +28,16 @@ export default class Field {
     };
   }
 
+  setState(valid) {
+    this.callback(this.name, this.node, this.valid, valid);
+
+    this.valid = valid;
+
+    if (this.submitted) {
+      this.toggleClassNames();
+    }
+  }
+
   setFieldSubmitted(value) {
     this.submitted = value;
   }

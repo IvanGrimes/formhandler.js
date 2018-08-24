@@ -30,7 +30,7 @@ export default class Form {
     return !validness.has(false);
   }
 
-  setFormState() {
+  setState() {
     const validity = this.fieldsValidity;
     console.log(validity)
 

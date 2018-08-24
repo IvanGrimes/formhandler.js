@@ -52,10 +52,10 @@ export default class Sender {
       xhr.addEventListener(READY_STATE_CHANGE, (ev) => {
         if (ev.target.readyState === 4) {
           if (ev.target.status >= 200 && ev.target.status < 400) {
-            this.callbacks.setFormState(SUCCESS);
+            this.callbacks.setState(SUCCESS);
             this.callbacks.onSend(SUCCESS);
           } else {
-            this.callbacks.setFormState(ERROR);
+            this.callbacks.setState(ERROR);
             this.callbacks.onSend(ERROR);
             throw new FormHandlerError(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
           }
@@ -70,10 +70,10 @@ export default class Sender {
         body: data,
       }).then((response) => {
         if (response.status >= 200 && response.status < 400) {
-          this.callbacks.setFormState(SUCCESS);
+          this.callbacks.setState(SUCCESS);
           this.callbacks.onSend(SUCCESS);
         } else {
-          this.callbacks.setFormState(ERROR);
+          this.callbacks.setState(ERROR);
           this.callbacks.onSend(ERROR);
           throw new FormHandlerError(`Status: ${response.status}, Text: ${response.statusText}`);
         }

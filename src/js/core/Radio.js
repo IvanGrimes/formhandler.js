@@ -5,16 +5,6 @@ export default class Radio extends Field {
     super({ ...opts });
   }
 
-  setFieldState(valid) {
-    this.callback(this.name, this.node, this.valid, valid);
-
-    this.valid = valid;
-
-    if (this.submitted) {
-      this.toggleClassNames();
-    }
-  }
-
   toggleClassNames() {
     if (this.valid) {
       this.node.forEach(el => el.classList.remove(this.classNames.isNotValid));

@@ -144,7 +144,7 @@ export default class FormHandler extends FormHandlerUtil {
     if (typeof valid === OBJECT) {
       this.setFieldStateFromResponse(valid.response, valid.property, name, message);
     } else {
-      this.fields[name].setFieldState(valid);
+      this.fields[name].setState(valid);
     }
 
     this.notices[name].message = this.opts.fields[name].message || message;
@@ -154,7 +154,7 @@ export default class FormHandler extends FormHandlerUtil {
       this.notices[name].hide();
     }
 
-    this.form.setFormState();
+    this.form.setState();
 
     return this;
   }

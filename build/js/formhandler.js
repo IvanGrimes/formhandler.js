@@ -450,8 +450,8 @@
     }
 
     _createClass(Form, [{
-      key: "setFormState",
-      value: function setFormState() {
+      key: "setState",
+      value: function setState() {
         var validity = this.fieldsValidity;
         console.log(validity);
         this.callback(this.node, this.valid, validity);
@@ -537,6 +537,16 @@
     }
 
     _createClass(Field, [{
+      key: "setState",
+      value: function setState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
+        this.valid = valid;
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
+      }
+    }, {
       key: "setFieldSubmitted",
       value: function setFieldSubmitted(value) {
         this.submitted = value;
@@ -597,16 +607,6 @@
     }
 
     _createClass(Input, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -646,16 +646,6 @@
     }
 
     _createClass(Radio, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         var _this = this;
@@ -714,16 +704,6 @@
     }
 
     _createClass(Select, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -765,16 +745,6 @@
     }
 
     _createClass(Color, [{
-      key: "setFieldState",
-      value: function setFieldState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
-        this.valid = valid;
-
-        if (this.submitted) {
-          this.toggleClassNames();
-        }
-      }
-    }, {
       key: "toggleClassNames",
       value: function toggleClassNames() {
         if (this.valid) {
@@ -926,11 +896,11 @@
           xhr.addEventListener(READY_STATE_CHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
-                _this.callbacks.setFormState(SUCCESS);
+                _this.callbacks.setState(SUCCESS);
 
                 _this.callbacks.onSend(SUCCESS);
               } else {
-                _this.callbacks.setFormState(ERROR);
+                _this.callbacks.setState(ERROR);
 
                 _this.callbacks.onSend(ERROR);
 
@@ -947,11 +917,11 @@
             body: data
           }).then(function (response) {
             if (response.status >= 200 && response.status < 400) {
-              _this.callbacks.setFormState(SUCCESS);
+              _this.callbacks.setState(SUCCESS);
 
               _this.callbacks.onSend(SUCCESS);
             } else {
-              _this.callbacks.setFormState(ERROR);
+              _this.callbacks.setState(ERROR);
 
               _this.callbacks.onSend(ERROR);
 
@@ -1434,7 +1404,7 @@
         if (_typeof(valid) === OBJECT) {
           this.setFieldStateFromResponse(valid.response, valid.property, name, message);
         } else {
-          this.fields[name].setFieldState(valid);
+          this.fields[name].setState(valid);
         }
 
         this.notices[name].message = this.opts.fields[name].message || message;
@@ -1445,7 +1415,7 @@
           this.notices[name].hide();
         }
 
-        this.form.setFormState();
+        this.form.setState();
         return this;
       }
     }]);
