@@ -31,7 +31,6 @@ export default class FormHandler extends FormHandlerUtil {
     this.complementOptions().makeForm();
 
     Object.entries(this.opts.fields).forEach(([name, field]) => {
-      console.log(name, field)
       this.makeField(name, field);
       if (field.validation) {
         this.makeNotice(name, field.notice);
@@ -127,7 +126,7 @@ export default class FormHandler extends FormHandlerUtil {
     if (typeof response.then !== UNDEFINED) {
       response
         .then(data => data.json())
-        .then(json => {
+        .then((json) => {
           this.setFieldState(name, !!json[property], message);
         });
     } else {

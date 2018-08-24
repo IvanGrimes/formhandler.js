@@ -364,7 +364,6 @@
         }
       }
 
-      console.log(message);
       return {
         valid: valid,
         message: message
@@ -1314,8 +1313,6 @@
           var _ref5 = _slicedToArray(_ref4, 2),
               name = _ref5[0],
               field = _ref5[1];
-
-          console.log(name, field);
 
           _this2.makeField(name, field);
 

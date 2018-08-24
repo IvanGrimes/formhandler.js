@@ -107,8 +107,6 @@ export default class Validator {
           message = `Must contain less than ${max + 1} latin characters`;
         }
       }
-      console.log(message)
-
 
       return {
         valid,
