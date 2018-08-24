@@ -189,7 +189,7 @@ export default class FormHandlerUtil {
     return this.form.node;
   }
 
-  getFieldsAndValues() {
+  getFieldsAndValues = () => {
     const data = {};
 
     Object.entries(this.fields).forEach(([name, field]) => {
@@ -214,7 +214,6 @@ export default class FormHandlerUtil {
             }
           });
         }
-
       } else if (type === HTML_SELECT_ELEMENT) { // Select
         data[name] = field.node.options[field.node.options.selectedIndex].value;
       } else { // Others

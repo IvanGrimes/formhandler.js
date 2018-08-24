@@ -11,11 +11,12 @@ import {
 
 export default class Sender {
   constructor({
-    type, url, method, fields, form, callbacks,
+    type, url, method, data, fields, form, callbacks,
   }) {
     this.type = type;
     this.url = url;
     this.method = method;
+    this.data = data();
     this.fields = fields;
     this.form = form;
     this.callbacks = callbacks;
@@ -25,21 +26,10 @@ export default class Sender {
     const data = new FormData();
 
     // eslint-disable-next-line no-unused-vars
-    Object.entries(this.fields).forEach(([name, field]) => {
-      if (!field.send) return;
-      const type = field.node.constructor.name;
-
-      if (type === NODE_LIST) { // Radio/Checkbox
-        Array.from(field.node).forEach((node) => {
-          if (node.checked) {
-            data.append(field.name, node.value);
-          }
-        });
-      } else if (type === HTML_SELECT_ELEMENT) {
-        data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
-      } else { // Others
-        data.append(field.name, field.node.value);
-      }
+    Object.entries(this.data).forEach(([name, value]) => {
+      // eslint-disable-next-line no-useless-return
+      if (!this.fields[name].send) return;
+      data.append(name, value);
     });
 
     return data;
@@ -52,10 +42,10 @@ export default class Sender {
       xhr.addEventListener(READY_STATE_CHANGE, (ev) => {
         if (ev.target.readyState === 4) {
           if (ev.target.status >= 200 && ev.target.status < 400) {
-            this.callbacks.setState(SUCCESS);
+            this.callbacks.setFormState(SUCCESS);
             this.callbacks.onSend(SUCCESS);
           } else {
-            this.callbacks.setState(ERROR);
+            this.callbacks.setFormState(ERROR);
             this.callbacks.onSend(ERROR);
             throw new FormHandlerError(`Status: ${ev.target.status}, Text: ${ev.target.statusText}`);
           }
@@ -70,10 +60,10 @@ export default class Sender {
         body: data,
       }).then((response) => {
         if (response.status >= 200 && response.status < 400) {
-          this.callbacks.setState(SUCCESS);
+          this.callbacks.setFormState(SUCCESS);
           this.callbacks.onSend(SUCCESS);
         } else {
-          this.callbacks.setState(ERROR);
+          this.callbacks.setFormState(ERROR);
           this.callbacks.onSend(ERROR);
           throw new FormHandlerError(`Status: ${response.status}, Text: ${response.statusText}`);
         }

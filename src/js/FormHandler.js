@@ -190,6 +190,7 @@ export default class FormHandler extends FormHandlerUtil {
           type: this.opts.sender.type,
           url: this.form.node.action,
           method: this.form.node.method,
+          data: this.getFieldsAndValues,
           fields: this.fields,
           form: this.form.node,
           callbacks: {

@@ -841,6 +841,7 @@
       var type = _ref.type,
           url = _ref.url,
           method = _ref.method,
+          data = _ref.data,
           fields = _ref.fields,
           form = _ref.form,
           callbacks = _ref.callbacks;
@@ -850,6 +851,7 @@
       this.type = type;
       this.url = url;
       this.method = method;
+      this.data = data();
       this.fields = fields;
       this.form = form;
       this.callbacks = callbacks;
@@ -858,36 +860,25 @@
     _createClass(Sender, [{
       key: "makeData",
       value: function makeData() {
+        var _this = this;
+
         var data = new FormData(); // eslint-disable-next-line no-unused-vars
 
-        Object.entries(this.fields).forEach(function (_ref2) {
+        Object.entries(this.data).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
               name = _ref3[0],
-              field = _ref3[1];
+              value = _ref3[1];
 
-          if (!field.send) return;
-          var type = field.node.constructor.name;
-
-          if (type === NODE_LIST) {
-            // Radio/Checkbox
-            Array.from(field.node).forEach(function (node) {
-              if (node.checked) {
-                data.append(field.name, node.value);
-              }
-            });
-          } else if (type === HTML_SELECT_ELEMENT) {
-            data.append(field.name, field.node.options[field.node.options.selectedIndex].value);
-          } else {
-            // Others
-            data.append(field.name, field.node.value);
-          }
+          // eslint-disable-next-line no-useless-return
+          if (!_this.fields[name].send) return;
+          data.append(name, value);
         });
         return data;
       }
     }, {
       key: "sendRequest",
       value: function sendRequest(data) {
-        var _this = this;
+        var _this2 = this;
 
         if (this.type === XHR) {
           var xhr = new XMLHttpRequest();
@@ -895,13 +886,13 @@
           xhr.addEventListener(READY_STATE_CHANGE, function (ev) {
             if (ev.target.readyState === 4) {
               if (ev.target.status >= 200 && ev.target.status < 400) {
-                _this.callbacks.setState(SUCCESS);
+                _this2.callbacks.setFormState(SUCCESS);
 
-                _this.callbacks.onSend(SUCCESS);
+                _this2.callbacks.onSend(SUCCESS);
               } else {
-                _this.callbacks.setState(ERROR);
+                _this2.callbacks.setFormState(ERROR);
 
-                _this.callbacks.onSend(ERROR);
+                _this2.callbacks.onSend(ERROR);
 
                 throw new FormHandlerError("Status: ".concat(ev.target.status, ", Text: ").concat(ev.target.statusText));
               }
@@ -916,13 +907,13 @@
             body: data
           }).then(function (response) {
             if (response.status >= 200 && response.status < 400) {
-              _this.callbacks.setState(SUCCESS);
+              _this2.callbacks.setFormState(SUCCESS);
 
-              _this.callbacks.onSend(SUCCESS);
+              _this2.callbacks.onSend(SUCCESS);
             } else {
-              _this.callbacks.setState(ERROR);
+              _this2.callbacks.setFormState(ERROR);
 
-              _this.callbacks.onSend(ERROR);
+              _this2.callbacks.onSend(ERROR);
 
               throw new FormHandlerError("Status: ".concat(response.status, ", Text: ").concat(response.statusText));
             }
@@ -993,9 +984,52 @@
   /*#__PURE__*/
   function () {
     function FormHandlerUtil(_ref) {
+      var _this = this;
+
       var args = _extends({}, _ref);
 
       _classCallCheck(this, FormHandlerUtil);
+
+      _defineProperty(this, "getFieldsAndValues", function () {
+        var data = {};
+        Object.entries(_this.fields).forEach(function (_ref2) {
+          var _ref3 = _slicedToArray(_ref2, 2),
+              name = _ref3[0],
+              field = _ref3[1];
+
+          var type = field.node.constructor.name;
+
+          if (type === NODE_LIST) {
+            // Radio/Checkbox
+            var inputType = field.node[0].type;
+
+            if (inputType === CHECKBOX) {
+              data[name] = [];
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name].push(node.value);
+                }
+              });
+            }
+
+            if (inputType === RADIO) {
+              data[name] = '';
+              Array.from(field.node).forEach(function (node) {
+                if (node.checked) {
+                  data[name] = node.value;
+                }
+              });
+            }
+          } else if (type === HTML_SELECT_ELEMENT) {
+            // Select
+            data[name] = field.node.options[field.node.options.selectedIndex].value;
+          } else {
+            // Others
+            data[name] = field.node.value;
+          }
+        });
+        return data;
+      });
 
       this.opts = args;
       this.fields = {};
@@ -1008,7 +1042,7 @@
     _createClass(FormHandlerUtil, [{
       key: "complementOptions",
       value: function complementOptions() {
-        var _this = this;
+        var _this2 = this;
 
         // Add lacks classNames and merge.
         this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
@@ -1023,15 +1057,15 @@
         this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
         // eslint-disable-next-line no-unused-vars
 
-        Object.entries(this.opts.fields).forEach(function (_ref2) {
-          var _ref3 = _slicedToArray(_ref2, 2),
-              name = _ref3[0],
-              obj = _ref3[1];
+        Object.entries(this.opts.fields).forEach(function (_ref4) {
+          var _ref5 = _slicedToArray(_ref4, 2),
+              name = _ref5[0],
+              obj = _ref5[1];
 
-          _this.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this.opts.fields[name]);
-          _this.opts.fields[name].classNames = _this.opts.fields[name].classNames ? Object.assign({}, _this.opts.classNames.fields, _this.opts.fields[name].classNames) : _this.opts.classNames.fields;
-          _this.opts.fields[name].notice = Object.assign({}, _this.opts.notices, _this.opts.fields[name].notice);
-          _this.opts.fields[name].notice.classNames = Object.assign({}, _this.opts.classNames.notices, _this.opts.fields[name].notice.classNames);
+          _this2.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this2.opts.fields[name]);
+          _this2.opts.fields[name].classNames = _this2.opts.fields[name].classNames ? Object.assign({}, _this2.opts.classNames.fields, _this2.opts.fields[name].classNames) : _this2.opts.classNames.fields;
+          _this2.opts.fields[name].notice = Object.assign({}, _this2.opts.notices, _this2.opts.fields[name].notice);
+          _this2.opts.fields[name].notice.classNames = Object.assign({}, _this2.opts.classNames.notices, _this2.opts.fields[name].notice.classNames);
         });
         this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
@@ -1106,8 +1140,8 @@
       }
     }, {
       key: "addField",
-      value: function addField(field, _ref4) {
-        var opts = _extends({}, _ref4);
+      value: function addField(field, _ref6) {
+        var opts = _extends({}, _ref6);
 
         var options = opts;
         options.notice = options.notice ? options.notice : {};
@@ -1153,65 +1187,23 @@
     }, {
       key: "validateForm",
       value: function validateForm() {
-        var _this2 = this;
+        var _this3 = this;
 
         // also turns on toggleClassNames
-        Object.entries(this.fields).forEach(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              name = _ref6[0],
-              field = _ref6[1];
-
-          if (field.validation) {
-            var validation = Validator.validate(field.validatorOptions);
-            field.setFieldSubmitted(true);
-
-            _this2.setFieldState(name, validation.valid, validation.message);
-          }
-        });
-        this.form.submitted = true;
-        return this.form.node;
-      }
-    }, {
-      key: "getFieldsAndValues",
-      value: function getFieldsAndValues() {
-        var data = {};
         Object.entries(this.fields).forEach(function (_ref7) {
           var _ref8 = _slicedToArray(_ref7, 2),
               name = _ref8[0],
               field = _ref8[1];
 
-          var type = field.node.constructor.name;
+          if (field.validation) {
+            var validation = Validator.validate(field.validatorOptions);
+            field.setFieldSubmitted(true);
 
-          if (type === NODE_LIST) {
-            // Radio/Checkbox
-            var inputType = field.node[0].type;
-
-            if (inputType === CHECKBOX) {
-              data[name] = [];
-              Array.from(field.node).forEach(function (node) {
-                if (node.checked) {
-                  data[name].push(node.value);
-                }
-              });
-            }
-
-            if (inputType === RADIO) {
-              data[name] = '';
-              Array.from(field.node).forEach(function (node) {
-                if (node.checked) {
-                  data[name] = node.value;
-                }
-              });
-            }
-          } else if (type === HTML_SELECT_ELEMENT) {
-            // Select
-            data[name] = field.node.options[field.node.options.selectedIndex].value;
-          } else {
-            // Others
-            data[name] = field.node.value;
+            _this3.setFieldState(name, validation.valid, validation.message);
           }
         });
-        return data;
+        this.form.submitted = true;
+        return this.form.node;
       }
     }]);
 
@@ -1284,6 +1276,7 @@
               type: _this.opts.sender.type,
               url: _this.form.node.action,
               method: _this.form.node.method,
+              data: _this.getFieldsAndValues,
               fields: _this.fields,
               form: _this.form.node,
               callbacks: {
