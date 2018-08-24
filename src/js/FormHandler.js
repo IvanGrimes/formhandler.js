@@ -25,7 +25,7 @@ import {
 } from './common/constants';
 
 export default class FormHandler {
-  constructor({ ...args }) {
+  constructor({ ...args }) { // TODO: Add toggling submit button onFormChangeState!
     this.opts = args;
     this.fields = {};
     this.notices = {};
@@ -45,6 +45,61 @@ export default class FormHandler {
         this.makeNotice(name, field.notice);
       }
     });
+
+    return this;
+  }
+
+  complementOptions() {
+    // Add lacks classNames and merge.
+    this.opts.classNames = this.opts.classNames
+      ? { ...defaultConfig.classNames, ...this.opts.classNames }
+      : defaultConfig.classNames;
+    this.opts.classNames.form = {
+      ...defaultConfig.classNames.form,
+      ...this.opts.classNames.form,
+    };
+    this.opts.classNames.fields = {
+      ...defaultConfig.classNames.fields,
+      ...this.opts.classNames.fields,
+    };
+    this.opts.classNames.notices = {
+      ...defaultConfig.classNames.notices,
+      ...this.opts.classNames.notices,
+    };
+
+
+    // Add lacks form options and merge.
+    this.opts.form = this.opts.form
+      ? { ...defaultConfig.form, ...this.opts.form }
+      : defaultConfig.form;
+    this.opts.form.notice = { ...defaultConfig.form.notice, ...this.opts.form.notice };
+    this.opts.form.notice.classNames = {
+      ...this.opts.classNames.notice,
+      ...this.opts.form.notice.classNames,
+    };
+
+
+    // Add lacks notices options and merge
+    this.opts.notices = { ...defaultConfig.notices, ...this.opts.notices };
+
+
+    // Add lacks fields options and merge
+    // eslint-disable-next-line no-unused-vars
+    Object.entries(this.opts.fields).forEach(([name, obj]) => {
+      this.opts.fields[name] = { ...defaultConfig.fields, ...this.opts.fields[name] };
+      this.opts.fields[name].classNames = this.opts.fields[name].classNames
+        ? { ...this.opts.classNames.fields, ...this.opts.fields[name].classNames }
+        : this.opts.classNames.fields;
+      this.opts.fields[name].notice = { ...this.opts.notices, ...this.opts.fields[name].notice };
+      this.opts.fields[name].notice.classNames = {
+        ...this.opts.classNames.notices,
+        ...this.opts.fields[name].notice.classNames,
+      };
+    });
+
+    this.opts.sender = this.opts.sender
+      ? { ...defaultConfig.sender, ...this.opts.sender }
+      : defaultConfig.sender;
 
     return this;
   }
@@ -220,61 +275,6 @@ export default class FormHandler {
         this.notices.form.hide();
       }, 2000);
     }
-  }
-
-  complementOptions() {
-    // Add lacks classNames and merge.
-    this.opts.classNames = this.opts.classNames
-      ? { ...defaultConfig.classNames, ...this.opts.classNames }
-      : defaultConfig.classNames;
-    this.opts.classNames.form = {
-      ...defaultConfig.classNames.form,
-      ...this.opts.classNames.form,
-    };
-    this.opts.classNames.fields = {
-      ...defaultConfig.classNames.fields,
-      ...this.opts.classNames.fields,
-    };
-    this.opts.classNames.notices = {
-      ...defaultConfig.classNames.notices,
-      ...this.opts.classNames.notices,
-    };
-
-
-    // Add lacks form options and merge.
-    this.opts.form = this.opts.form
-      ? { ...defaultConfig.form, ...this.opts.form }
-      : defaultConfig.form;
-    this.opts.form.notice = { ...defaultConfig.form.notice, ...this.opts.form.notice };
-    this.opts.form.notice.classNames = {
-      ...this.opts.classNames.notice,
-      ...this.opts.form.notice.classNames,
-    };
-
-
-    // Add lacks notices options and merge
-    this.opts.notices = { ...defaultConfig.notices, ...this.opts.notices };
-
-
-    // Add lacks fields options and merge
-    // eslint-disable-next-line no-unused-vars
-    Object.entries(this.opts.fields).forEach(([name, obj]) => {
-      this.opts.fields[name] = { ...defaultConfig.fields, ...this.opts.fields[name] };
-      this.opts.fields[name].classNames = this.opts.fields[name].classNames
-        ? { ...this.opts.classNames.fields, ...this.opts.fields[name].classNames }
-        : this.opts.classNames.fields;
-      this.opts.fields[name].notice = { ...this.opts.notices, ...this.opts.fields[name].notice };
-      this.opts.fields[name].notice.classNames = {
-        ...this.opts.classNames.notices,
-        ...this.opts.fields[name].notice.classNames,
-      };
-    });
-
-    this.opts.sender = this.opts.sender
-      ? { ...defaultConfig.sender, ...this.opts.sender }
-      : defaultConfig.sender;
-
-    return this;
   }
 
   getFieldNameBy(field) { // return field name get by NodeList/Selector(.className)

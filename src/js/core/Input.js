@@ -16,7 +16,7 @@ export default class Input extends Field {
   }
 
   clear() {
-    this.callback(this.name, this.node, this.valid, false);
+    this.callback(this.name, this.node, this.valid, false); // TODO: Pass the validation type
     this.node.value = '';
     this.valid = false;
     this.submitted = false;

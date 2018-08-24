@@ -109,7 +109,7 @@ export default class Validator {
         message,
       };
     },
-    isEmail(node) {
+    isEmail(node) { // TODO: add min/max
       const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       const valid = pattern.test(node.value);
       const message = 'Must be a valid email address';
@@ -119,7 +119,7 @@ export default class Validator {
         message,
       };
     },
-    isPhone(node) {
+    isPhone(node) { // TODO: add min/max
       const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       const valid = pattern.test(node.value);
       const message = 'Must be a valid phone number';

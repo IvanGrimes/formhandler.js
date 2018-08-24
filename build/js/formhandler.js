@@ -265,7 +265,7 @@
       }
     },
     sender: {
-      send: true,
+      send: false,
       type: 'xhr',
       clearOnSuccess: true
     },
@@ -425,6 +425,7 @@
       };
     },
     isEmail: function isEmail(node) {
+      // TODO: add min/max
       var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       var valid = pattern.test(node.value);
       var message = 'Must be a valid email address';
@@ -434,6 +435,7 @@
       };
     },
     isPhone: function isPhone(node) {
+      // TODO: add min/max
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value);
       var message = 'Must be a valid phone number';
@@ -673,7 +675,8 @@
     }, {
       key: "clear",
       value: function clear() {
-        this.callback(this.name, this.node, this.valid, false);
+        this.callback(this.name, this.node, this.valid, false); // TODO: Pass the validation type
+
         this.node.value = '';
         this.valid = false;
         this.submitted = false;
@@ -1105,6 +1108,7 @@
         return data;
       });
 
+      // TODO: Add toggling submit button onFormChangeState!
       this.opts = args;
       this.fields = {};
       this.notices = {};
@@ -1131,6 +1135,37 @@
             _this2.makeNotice(name, field.notice);
           }
         });
+        return this;
+      }
+    }, {
+      key: "complementOptions",
+      value: function complementOptions() {
+        var _this3 = this;
+
+        // Add lacks classNames and merge.
+        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
+        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
+        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
+        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
+
+        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
+        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
+        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
+
+        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
+        // eslint-disable-next-line no-unused-vars
+
+        Object.entries(this.opts.fields).forEach(function (_ref8) {
+          var _ref9 = _slicedToArray(_ref8, 2),
+              name = _ref9[0],
+              obj = _ref9[1];
+
+          _this3.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this3.opts.fields[name]);
+          _this3.opts.fields[name].classNames = _this3.opts.fields[name].classNames ? Object.assign({}, _this3.opts.classNames.fields, _this3.opts.fields[name].classNames) : _this3.opts.classNames.fields;
+          _this3.opts.fields[name].notice = Object.assign({}, _this3.opts.notices, _this3.opts.fields[name].notice);
+          _this3.opts.fields[name].notice.classNames = Object.assign({}, _this3.opts.classNames.notices, _this3.opts.fields[name].notice.classNames);
+        });
+        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
       }
     }, {
@@ -1198,18 +1233,18 @@
     }, {
       key: "setFieldStateFromResponse",
       value: function setFieldStateFromResponse(response, property, name, message) {
-        var _this3 = this;
+        var _this4 = this;
 
         // eslint-disable-next-line valid-typeof
         if (_typeof(response.then) !== UNDEFINED) {
           response.then(function (data) {
             return data.json();
           }).then(function (json) {
-            _this3.setFieldState(name, !!json[property], message);
+            _this4.setFieldState(name, !!json[property], message);
           });
         } else {
           response.addEventListener(LOAD, function (ev) {
-            _this3.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
+            _this4.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
           });
         }
       }
@@ -1234,37 +1269,6 @@
         }
 
         this.form.setState();
-        return this;
-      }
-    }, {
-      key: "complementOptions",
-      value: function complementOptions() {
-        var _this4 = this;
-
-        // Add lacks classNames and merge.
-        this.opts.classNames = this.opts.classNames ? Object.assign({}, defaultConfig.classNames, this.opts.classNames) : defaultConfig.classNames;
-        this.opts.classNames.form = Object.assign({}, defaultConfig.classNames.form, this.opts.classNames.form);
-        this.opts.classNames.fields = Object.assign({}, defaultConfig.classNames.fields, this.opts.classNames.fields);
-        this.opts.classNames.notices = Object.assign({}, defaultConfig.classNames.notices, this.opts.classNames.notices); // Add lacks form options and merge.
-
-        this.opts.form = this.opts.form ? Object.assign({}, defaultConfig.form, this.opts.form) : defaultConfig.form;
-        this.opts.form.notice = Object.assign({}, defaultConfig.form.notice, this.opts.form.notice);
-        this.opts.form.notice.classNames = Object.assign({}, this.opts.classNames.notice, this.opts.form.notice.classNames); // Add lacks notices options and merge
-
-        this.opts.notices = Object.assign({}, defaultConfig.notices, this.opts.notices); // Add lacks fields options and merge
-        // eslint-disable-next-line no-unused-vars
-
-        Object.entries(this.opts.fields).forEach(function (_ref8) {
-          var _ref9 = _slicedToArray(_ref8, 2),
-              name = _ref9[0],
-              obj = _ref9[1];
-
-          _this4.opts.fields[name] = Object.assign({}, defaultConfig.fields, _this4.opts.fields[name]);
-          _this4.opts.fields[name].classNames = _this4.opts.fields[name].classNames ? Object.assign({}, _this4.opts.classNames.fields, _this4.opts.fields[name].classNames) : _this4.opts.classNames.fields;
-          _this4.opts.fields[name].notice = Object.assign({}, _this4.opts.notices, _this4.opts.fields[name].notice);
-          _this4.opts.fields[name].notice.classNames = Object.assign({}, _this4.opts.classNames.notices, _this4.opts.fields[name].notice.classNames);
-        });
-        this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
         return this;
       }
     }, {

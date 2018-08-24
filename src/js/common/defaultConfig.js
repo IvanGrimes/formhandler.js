@@ -41,7 +41,7 @@ export default {
     },
   },
   sender: {
-    send: true,
+    send: false,
     type: 'xhr',
     clearOnSuccess: true,
   },
