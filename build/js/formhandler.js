@@ -616,6 +616,7 @@
     }, {
       key: "clear",
       value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
         this.node.value = '';
         this.valid = false;
         this.submitted = false;
@@ -676,6 +677,7 @@
       value: function clear() {
         var _this2 = this;
 
+        this.callback(this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.forEach(function (el) {
@@ -731,6 +733,7 @@
     }, {
       key: "clear",
       value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.classList.remove(this.classNames.isValid);

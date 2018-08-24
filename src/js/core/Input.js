@@ -26,6 +26,7 @@ export default class Input extends Field {
   }
 
   clear() {
+    this.callback(this.name, this.node, this.valid, false);
     this.node.value = '';
     this.valid = false;
     this.submitted = false;
