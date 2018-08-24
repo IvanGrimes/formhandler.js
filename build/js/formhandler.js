@@ -480,6 +480,7 @@
 
           field.clear();
         });
+        this.callback(this.node, this.valid, false);
         this.valid = false;
         this.node.classList.remove(this.classNames.isNotValid);
         this.node.classList.remove(this.classNames.isValid);
