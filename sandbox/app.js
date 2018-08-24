@@ -8,36 +8,6 @@ const form = new FormHandler({
     },
   },
   fields: {
-    week: {
-      validation: 'isNonEmpty',
-    },
-    color: {
-      validation: 'isNonEmpty',
-    },
-    number: {
-      validation: 'isNonEmpty',
-    },
-    password: {
-      validation: 'isNonEmpty',
-    },
-    range: {
-      validation: 'isNonEmpty',
-    },
-    url: {
-      validation: 'isNonEmpty',
-    },
-    date: {
-      validation: 'isNonEmpty',
-    },
-    datetime: {
-      validation: 'isNonEmpty',
-    },
-    month: {
-      validation: 'isNonEmpty',
-    },
-    time: {
-      validation: 'isNonEmpty',
-    },
     checkbox: {
       validation: 'isCheckboxChecked',
       min: 2,
@@ -69,9 +39,6 @@ const form = new FormHandler({
     },
     zip2: {
       validation: 'isZipXML',
-    },
-    custom: {
-      validation: 'isCustom',
     },
     file: {
       validation: 'isFile',
@@ -158,5 +125,3 @@ const form = new FormHandler({
     },
   },
 });
-
-form.addField('lastname', {validation: 'isName'});

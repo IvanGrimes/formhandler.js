@@ -452,6 +452,7 @@
       key: "setFormState",
       value: function setFormState() {
         var validity = this.fieldsValidity;
+        console.log(validity);
         this.callback(this.node, this.valid, validity);
         this.valid = validity;
 
@@ -1192,7 +1193,6 @@
           }
         });
         this.form.submitted = true;
-        this.form.setFormState();
         return this.form.node;
       }
     }, {
@@ -1266,8 +1266,6 @@
         if (_this.fields[name].validation) {
           _this.setFieldState(name, validation.valid, validation.message);
         }
-
-        _this.form.setFormState();
       });
 
       _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "submitHandler", function (ev) {
@@ -1333,6 +1331,8 @@
               name = _ref5[0],
               field = _ref5[1];
 
+          console.log(name, field);
+
           _this2.makeField(name, field);
 
           if (field.validation) {
@@ -1362,7 +1362,6 @@
         var node = this.form.node.querySelector("[name=".concat(name, "]"));
         var _node = node,
             type = _node.type;
-        console.log(type);
         var options = {
           node: node,
           validation: field.validation,
@@ -1414,7 +1413,7 @@
           response.then(function (data) {
             return data.json();
           }).then(function (json) {
-            return _this3.setFieldState(name, !!json[property], message);
+            _this3.setFieldState(name, !!json[property], message);
           });
         } else {
           response.addEventListener(LOAD, function (ev) {

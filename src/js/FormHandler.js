@@ -31,6 +31,7 @@ export default class FormHandler extends FormHandlerUtil {
     this.complementOptions().makeForm();
 
     Object.entries(this.opts.fields).forEach(([name, field]) => {
+      console.log(name, field)
       this.makeField(name, field);
       if (field.validation) {
         this.makeNotice(name, field.notice);
@@ -59,7 +60,6 @@ export default class FormHandler extends FormHandlerUtil {
   makeField(name, field) {
     let node = this.form.node.querySelector(`[name=${name}]`);
     const { type } = node;
-    console.log(type);
     const options = {
       node,
       validation: field.validation,
@@ -125,7 +125,9 @@ export default class FormHandler extends FormHandlerUtil {
     if (typeof response.then !== UNDEFINED) {
       response
         .then(data => data.json())
-        .then(json => this.setFieldState(name, !!json[property], message));
+        .then(json => {
+          this.setFieldState(name, !!json[property], message);
+        });
     } else {
       response.addEventListener(LOAD, (ev) => {
         this.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
@@ -148,7 +150,6 @@ export default class FormHandler extends FormHandlerUtil {
     } else {
       this.notices[name].hide();
     }
-
     this.form.setFormState();
 
     return this;
@@ -161,8 +162,6 @@ export default class FormHandler extends FormHandlerUtil {
     if (this.fields[name].validation) {
       this.setFieldState(name, validation.valid, validation.message);
     }
-
-    this.form.setFormState();
   };
 
   submitHandler = (ev) => {

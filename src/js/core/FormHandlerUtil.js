@@ -179,7 +179,6 @@ export default class FormHandlerUtil {
     });
 
     this.form.submitted = true;
-    this.form.setFormState();
 
     return this.form.node;
   }

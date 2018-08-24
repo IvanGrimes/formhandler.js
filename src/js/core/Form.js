@@ -32,6 +32,7 @@ export default class Form {
 
   setFormState() {
     const validity = this.fieldsValidity;
+    console.log(validity)
 
     this.callback(this.node, this.valid, validity);
 
@@ -59,7 +60,6 @@ export default class Form {
     });
 
     this.callback(this.node, this.valid, false);
-
     this.valid = false;
     this.node.classList.remove(this.classNames.isNotValid);
     this.node.classList.remove(this.classNames.isValid);
