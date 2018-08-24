@@ -111,7 +111,9 @@ export default class FormHandler extends FormHandlerUtil {
     if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
       this.form.send = true;
-      this.form.clear();
+      if (this.opts.sender.clearOnSuccess) {
+        this.form.clear();
+      }
     }
     if (result === ERROR) {
       this.notices.form.message = this.opts.form.notice.errorMessage;
@@ -150,6 +152,7 @@ export default class FormHandler extends FormHandlerUtil {
     } else {
       this.notices[name].hide();
     }
+
     this.form.setFormState();
 
     return this;

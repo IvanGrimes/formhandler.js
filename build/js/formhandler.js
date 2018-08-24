@@ -1008,7 +1008,8 @@
     },
     sender: {
       send: true,
-      type: 'xhr'
+      type: 'xhr',
+      clearOnSuccess: true
     },
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
@@ -1248,7 +1249,9 @@
           _this.notices.form.message = _this.opts.form.notice.successMessage;
           _this.form.send = true;
 
-          _this.form.clear();
+          if (_this.opts.sender.clearOnSuccess) {
+            _this.form.clear();
+          }
         }
 
         if (result === ERROR) {

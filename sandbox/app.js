@@ -109,6 +109,7 @@ const form = new FormHandler({
   sender: {
     send: true,
     type: 'xhr',
+    clearOnSuccess: false,
   },
   callbacks: {
     onFieldChangeState(name, el, pastValidity, newValidity) {
