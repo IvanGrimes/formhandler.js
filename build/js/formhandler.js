@@ -283,7 +283,7 @@
 
   _defineProperty(Validator, "validations", {
     isCheckboxChecked: function isCheckboxChecked(node, min, max) {
-      var message = 'Check any boxes';
+      var message = 'Please, check any';
       var valid = false;
       var checked = 0;
       node.forEach(function (el) {
@@ -330,28 +330,28 @@
       };
     },
     isName: function isName(node, min, max) {
-      var pattern = /^[A-Za-z]/;
+      var pattern = /[\u00BF-\u1FFF\u2C00-\uD7FF\w]/;
       var valid = pattern.test(node.value);
-      var message = 'Must contain any latin character';
+      var message = 'Must contain any letter';
 
       if (node.value.length === 0) {
         valid = false;
 
         if (min && !max) {
-          message = "Must contain at least ".concat(min, " latin character");
+          message = "Must contain at least ".concat(min, " letter");
         }
 
         if (!min && max) {
-          message = "Must contain at least one latin character and less than ".concat(max + 1);
+          message = "Must contain at least one letter and less than ".concat(max + 1);
         }
 
         if (min && max) {
-          message = "Must contain between ".concat(min, " and ").concat(max, " latin characters");
+          message = "Must contain between ".concat(min, " and ").concat(max, " letters");
         }
       } else {
         if (min && node.value.length < min) {
           valid = false;
-          message = "Must contain at least ".concat(min, " latin characters");
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " letter") : "".concat(min, " letters"));
         }
 
         if (min && node.value.length > min) {
@@ -360,7 +360,7 @@
 
         if (max && node.value.length > max) {
           valid = false;
-          message = "Must contain less than ".concat(max + 1, " latin characters");
+          message = "Must contain less than ".concat(max + 1, " letters");
         }
       }
 
@@ -381,7 +381,7 @@
     isPhone: function isPhone(node) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value);
-      var message = 'Must contain a valid phone number';
+      var message = 'Must be a valid phone number';
       return {
         valid: valid,
         message: message
