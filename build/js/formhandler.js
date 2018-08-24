@@ -426,6 +426,7 @@
   var RADIO = 'radio';
   var SELECT = 'select-one';
   var NODE_LIST = 'NodeList';
+  var COLOR = 'color';
 
   var Form =
   /*#__PURE__*/
@@ -746,6 +747,55 @@
     }]);
 
     return Select;
+  }(Field);
+
+  var Color =
+  /*#__PURE__*/
+  function (_Field) {
+    _inherits(Color, _Field);
+
+    function Color(_ref) {
+      var opts = _extends({}, _ref);
+
+      _classCallCheck(this, Color);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(Color).call(this, Object.assign({}, opts)));
+    }
+
+    _createClass(Color, [{
+      key: "setFieldState",
+      value: function setFieldState(valid) {
+        this.callback(this.name, this.node, this.valid, valid);
+        this.valid = valid;
+
+        if (this.submitted) {
+          this.toggleClassNames();
+        }
+      }
+    }, {
+      key: "toggleClassNames",
+      value: function toggleClassNames() {
+        if (this.valid) {
+          this.node.classList.remove(this.classNames.isNotValid);
+          this.node.classList.add(this.classNames.isValid);
+        } else {
+          this.node.classList.remove(this.classNames.isValid);
+          this.node.classList.add(this.classNames.isNotValid);
+        }
+      }
+    }, {
+      key: "clear",
+      value: function clear() {
+        this.callback(this.name, this.node, this.valid, false);
+        this.node.value = '#000000';
+        this.valid = false;
+        this.submitted = false;
+        this.node.classList.remove(this.classNames.isNotValid);
+        this.node.classList.remove(this.classNames.isValid);
+      }
+    }]);
+
+    return Color;
   }(Field);
 
   var Notice =
@@ -1312,6 +1362,7 @@
         var node = this.form.node.querySelector("[name=".concat(name, "]"));
         var _node = node,
             type = _node.type;
+        console.log(type);
         var options = {
           node: node,
           validation: field.validation,
@@ -1328,6 +1379,8 @@
           this.fields[name] = new Radio(options);
         } else if (type === SELECT) {
           this.fields[name] = new Select(options);
+        } else if (type === COLOR) {
+          this.fields[name] = new Color(options);
         } else {
           this.fields[name] = new Input(options);
         }

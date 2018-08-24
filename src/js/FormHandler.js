@@ -3,6 +3,7 @@ import Form from './core/Form';
 import Input from './core/Input';
 import Radio from './core/Radio';
 import Select from './core/Select';
+import Color from './core/Color';
 import Notice from './core/Notice';
 import Sender from './core/Sender';
 import FormHandlerUtil from './core/FormHandlerUtil';
@@ -17,6 +18,7 @@ import {
   CHECKBOX,
   RADIO,
   SELECT,
+  COLOR,
 } from './common/constants';
 
 export default class FormHandler extends FormHandlerUtil {
@@ -57,6 +59,7 @@ export default class FormHandler extends FormHandlerUtil {
   makeField(name, field) {
     let node = this.form.node.querySelector(`[name=${name}]`);
     const { type } = node;
+    console.log(type);
     const options = {
       node,
       validation: field.validation,
@@ -73,6 +76,8 @@ export default class FormHandler extends FormHandlerUtil {
       this.fields[name] = new Radio(options);
     } else if (type === SELECT) {
       this.fields[name] = new Select(options);
+    } else if (type === COLOR) {
+      this.fields[name] = new Color(options);
     } else {
       this.fields[name] = new Input(options);
     }

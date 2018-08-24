@@ -18,3 +18,4 @@ export const CHECKBOX = 'checkbox';
 export const RADIO = 'radio';
 export const SELECT = 'select-one';
 export const NODE_LIST = 'NodeList';
+export const COLOR = 'color';
