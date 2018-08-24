@@ -147,6 +147,7 @@ export default class FormHandler extends FormHandlerUtil {
       this.fields[name].setFieldState(valid);
     }
 
+    this.notices[name].message = this.opts.fields[name].message || message;
     if (!valid && submitted) {
       this.notices[name].show();
     } else {

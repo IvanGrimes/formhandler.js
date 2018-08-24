@@ -354,16 +354,17 @@
           message = "Must contain at least ".concat(min, " latin characters");
         }
 
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+
         if (max && node.value.length > max) {
           valid = false;
           message = "Must contain less than ".concat(max + 1, " latin characters");
         }
-
-        if (min && node.value.length > min) {
-          valid = true;
-        }
       }
 
+      console.log(message);
       return {
         valid: valid,
         message: message
@@ -1190,7 +1191,7 @@
             var validation = Validator.validate(field.validatorOptions);
             field.setFieldSubmitted(true);
 
-            _this2.setFieldState(name, validation.valid);
+            _this2.setFieldState(name, validation.valid, validation.message);
           }
         });
         this.form.submitted = true;
@@ -1435,6 +1436,8 @@
         } else {
           this.fields[name].setFieldState(valid);
         }
+
+        this.notices[name].message = this.opts.fields[name].message || message;
 
         if (!valid && submitted) {
           this.notices[name].show();

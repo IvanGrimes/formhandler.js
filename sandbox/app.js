@@ -20,19 +20,19 @@ const form = new FormHandler({
       validation: 'isSelected',
     },
     firstname: {
-      validation: false,
+      validation: 'isName',
       send: false,
       min: 2,
       max: 20,
-      notice: {
-        message: 'this value is required',
-      },
     },
     email: {
       validation: 'isEmail',
     },
     phone: {
       validation: 'isPhone',
+      notice: {
+        message: 'phone blah-blah',
+      },
     },
     zip1: {
       validation: 'isZipPromise',

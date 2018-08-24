@@ -174,7 +174,7 @@ export default class FormHandlerUtil {
       if (field.validation) {
         const validation = Validator.validate(field.validatorOptions);
         field.setFieldSubmitted(true);
-        this.setFieldState(name, validation.valid);
+        this.setFieldState(name, validation.valid, validation.message);
       }
     });
 
