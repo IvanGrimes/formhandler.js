@@ -1,6 +1,0 @@
-build/js/*.js
-dist/js/*.js
-gulp/**/*.js
-src/js/test/*.js
-gulpfile.js
-sandbox/*.js
