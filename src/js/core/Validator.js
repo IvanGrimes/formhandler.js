@@ -109,20 +109,70 @@ export default class Validator {
         message,
       };
     },
-    isEmail(node) { // TODO: add min/max
+    isEmail(node, min, max) {
       const pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-      const valid = pattern.test(node.value);
-      const message = 'Must be a valid email address';
+      let valid = pattern.test(node.value);
+      let message = 'Must be a valid email address';
+
+      if (node.value.length === 0) {
+        valid = false;
+        if (min && !max) {
+          message = `Must contain at least ${min === 1 ? `${min} character` : `${min} characters`}`;
+        }
+        if (!min && max) {
+          message = `Must contain at least one character and less than ${max + 1}`;
+        }
+        if (min && max) {
+          message = `Must contain between ${min} and ${max} characters`;
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = `Must contain at least ${min === 1 ? `${min} character` : `${min} characters`}`;
+        }
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+        if (max && node.value.length > max) {
+          valid = false;
+          message = `Must contain less than ${max + 1} characters`;
+        }
+      }
 
       return {
         valid,
         message,
       };
     },
-    isPhone(node) { // TODO: add min/max
+    isPhone(node, min, max) {
       const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
-      const valid = pattern.test(node.value);
-      const message = 'Must be a valid phone number';
+      let valid = pattern.test(node.value);
+      let message = 'Must be a valid phone number';
+
+      if (node.value.length === 0) {
+        valid = false;
+        if (min && !max) {
+          message = `Must contain at least ${min === 1 ? `${min} digit` : `${min} digits`}`;
+        }
+        if (!min && max) {
+          message = `Must contain at least one digit and less than ${max + 1}`;
+        }
+        if (min && max) {
+          message = `Must contain between ${min} and ${max} digits`;
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = `Must contain at least ${min === 1 ? `${min} digit` : `${min} digits`}`;
+        }
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+        if (max && node.value.length > max) {
+          valid = false;
+          message = `Must contain less than ${max + 1} letters`;
+        }
+      }
 
       return {
         valid,
@@ -131,13 +181,31 @@ export default class Validator {
     },
     isNonEmpty(node, min, max) {
       let valid = node.value.length > 0;
-      const message = 'Must be non empty';
+      let message = 'Must be non empty';
 
-      if (min && node.value.length < min && node.value.length !== 0) {
+      if (node.value.length === 0) {
         valid = false;
-      }
-      if (max && node.value.length > max && node.value.length !== 0) {
-        valid = false;
+        if (min && !max) {
+          message = `Must contain at least ${min === 1 ? `${min} character` : `${min} characters`}`;
+        }
+        if (!min && max) {
+          message = `Must contain at least one character and less than ${max + 1}`;
+        }
+        if (min && max) {
+          message = `Must contain between ${min} and ${max} characters`;
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = `Must contain at least ${min === 1 ? `${min} character` : `${min} characters`}`;
+        }
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+        if (max && node.value.length > max) {
+          valid = false;
+          message = `Must contain less than ${max + 1} characters`;
+        }
       }
 
       return {

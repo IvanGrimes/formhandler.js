@@ -424,21 +424,81 @@
         message: message
       };
     },
-    isEmail: function isEmail(node) {
-      // TODO: add min/max
+    isEmail: function isEmail(node, min, max) {
       var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       var valid = pattern.test(node.value);
       var message = 'Must be a valid email address';
+
+      if (node.value.length === 0) {
+        valid = false;
+
+        if (min && !max) {
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
+        }
+
+        if (!min && max) {
+          message = "Must contain at least one character and less than ".concat(max + 1);
+        }
+
+        if (min && max) {
+          message = "Must contain between ".concat(min, " and ").concat(max, " characters");
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
+        }
+
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+
+        if (max && node.value.length > max) {
+          valid = false;
+          message = "Must contain less than ".concat(max + 1, " characters");
+        }
+      }
+
       return {
         valid: valid,
         message: message
       };
     },
-    isPhone: function isPhone(node) {
-      // TODO: add min/max
+    isPhone: function isPhone(node, min, max) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
       var valid = pattern.test(node.value);
       var message = 'Must be a valid phone number';
+
+      if (node.value.length === 0) {
+        valid = false;
+
+        if (min && !max) {
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " digit") : "".concat(min, " digits"));
+        }
+
+        if (!min && max) {
+          message = "Must contain at least one digit and less than ".concat(max + 1);
+        }
+
+        if (min && max) {
+          message = "Must contain between ".concat(min, " and ").concat(max, " digits");
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " digit") : "".concat(min, " digits"));
+        }
+
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+
+        if (max && node.value.length > max) {
+          valid = false;
+          message = "Must contain less than ".concat(max + 1, " letters");
+        }
+      }
+
       return {
         valid: valid,
         message: message
@@ -448,12 +508,34 @@
       var valid = node.value.length > 0;
       var message = 'Must be non empty';
 
-      if (min && node.value.length < min && node.value.length !== 0) {
+      if (node.value.length === 0) {
         valid = false;
-      }
 
-      if (max && node.value.length > max && node.value.length !== 0) {
-        valid = false;
+        if (min && !max) {
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
+        }
+
+        if (!min && max) {
+          message = "Must contain at least one character and less than ".concat(max + 1);
+        }
+
+        if (min && max) {
+          message = "Must contain between ".concat(min, " and ").concat(max, " characters");
+        }
+      } else {
+        if (min && node.value.length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
+        }
+
+        if (min && node.value.length > min) {
+          valid = true;
+        }
+
+        if (max && node.value.length > max) {
+          valid = false;
+          message = "Must contain less than ".concat(max + 1, " characters");
+        }
       }
 
       return {
