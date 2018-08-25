@@ -166,6 +166,7 @@ After that FormHandler instance will be initialized with default settings.
 |---------------|------------------|----------------|------------|
 | block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes.
 | submit:       | string           | '.formhandler__submit' | Selector for the submit button.
+| delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared
 | notice:       | {                |  |
 | message:      | string           | 'Please, fill the form' |
 | succesMessage:| string           | 'Form successfully sent'|

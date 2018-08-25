@@ -242,6 +242,7 @@ export default class FormHandler { // TODO: Переименовать опци�
   submitHandler = (ev) => {
     ev.preventDefault();
     const fieldNodes = [];
+    const { delayForNotice } = this.opts.form;
 
     // eslint-disable-next-line no-unused-vars
     Object.entries(this.fields).forEach(([name, field]) => {
@@ -279,9 +280,12 @@ export default class FormHandler { // TODO: Переименовать опци�
       }
     } else {
       this.notices.form.show();
-      setTimeout(() => {
-        this.notices.form.hide();
-      }, 2000);
+
+      if (delayForNotice) {
+        setTimeout(() => {
+          this.notices.form.hide();
+        }, delayForNotice);
+      }
     }
   }
 

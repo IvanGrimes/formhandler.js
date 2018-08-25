@@ -226,6 +226,7 @@
     form: {
       block: '.formhandler',
       submit: '.formhandler__submit',
+      delayForNotice: 3000,
       notice: {
         appendTo: '.formhandler__notices',
         message: 'please, fill the form',
@@ -1130,7 +1131,8 @@
 
       _defineProperty(this, "submitHandler", function (ev) {
         ev.preventDefault();
-        var fieldNodes = []; // eslint-disable-next-line no-unused-vars
+        var fieldNodes = [];
+        var delayForNotice = _this.opts.form.delayForNotice; // eslint-disable-next-line no-unused-vars
 
         Object.entries(_this.fields).forEach(function (_ref2) {
           var _ref3 = _slicedToArray(_ref2, 2),
@@ -1170,9 +1172,11 @@
         } else {
           _this.notices.form.show();
 
-          setTimeout(function () {
-            _this.notices.form.hide();
-          }, 2000);
+          if (delayForNotice) {
+            setTimeout(function () {
+              _this.notices.form.hide();
+            }, delayForNotice);
+          }
         }
       });
 

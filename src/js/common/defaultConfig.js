@@ -2,6 +2,7 @@ export default {
   form: {
     block: '.formhandler',
     submit: '.formhandler__submit',
+    delayForNotice: 3000,
     notice: {
       appendTo: '.formhandler__notices',
       message: 'please, fill the form',
