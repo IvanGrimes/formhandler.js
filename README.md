@@ -501,6 +501,6 @@ const formhandler = new FormHandler({
 <b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
 
 ## More examples
-### Validation of the field with Promise API | [Demo](https://codepen.io/IvanGrimes/pen/JaGLoM)
-### Validation of the field with XMLHttpRequest | [Demo](https://codepen.io/IvanGrimes/pen/dqGmPK)
-### Sending of the form with built-in component | [Demo](https://codepen.io/IvanGrimes/pen/OoMvPY)
+### [Validation of the field with Promise API](https://codepen.io/IvanGrimes/pen/JaGLoM)
+### [Validation of the field with XMLHttpRequest](https://codepen.io/IvanGrimes/pen/dqGmPK)
+### [Sending of the form with built-in component](https://codepen.io/IvanGrimes/pen/OoMvPY)
