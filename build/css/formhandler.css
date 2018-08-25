@@ -4,14 +4,27 @@
 
 .formhandler {
   margin-top: 0; }
-  .formhandler__notice--hidden {
-    display: none; }
-  .formhandler__notice--visible {
-    display: block; }
-  .formhandler__notice-form--hidden {
-    display: none; }
-  .formhandler__notice-form--visible {
-    display: block; }
+  .formhandler__notice {
+    background-color: rgba(233, 153, 131, 0.25);
+    margin: 20px 0 10px 0;
+    padding: 5px 15px;
+    -webkit-border-radius: 2.5px;
+    border-radius: 2.5px;
+    border: 1px solid rgba(233, 153, 131, 0.75); }
+    .formhandler__notice--hidden {
+      display: none; }
+    .formhandler__notice--visible {
+      display: block; }
+  .formhandler__notice-form {
+    background-color: rgba(229, 229, 229, 0.54);
+    border-left: 4px solid rgba(233, 153, 131, 0.5);
+    padding: 20px 30px; }
+    .formhandler__notice-form--hidden {
+      display: none; }
+    .formhandler__notice-form--visible {
+      display: block; }
+  .formhandler__field, .formhandler select {
+    width: auto; }
   .formhandler__field {
     border: 0;
     background-color: blue;
@@ -22,7 +35,7 @@
     font-family: Arial, sans-serif;
     height: 35px;
     padding: 0 20px;
-    margin-top: 15px;
+    margin-bottom: 10px;
     width: 100%;
     background-color: #f0f0f0;
     color: #080808;
@@ -34,6 +47,16 @@
     -o-transition: border-color .15s linear, box-shadow .15s linear;
     transition: border-color .15s linear, box-shadow .15s linear;
     transition: border-color .15s linear, box-shadow .15s linear, -webkit-box-shadow .15s linear; }
+    .formhandler__field[type="checkbox"] {
+      width: auto;
+      background-color: transparent;
+      -webkit-box-shadow: none;
+      box-shadow: none; }
+    .formhandler__field[type="radio"] {
+      width: auto;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-color: transparent; }
     .formhandler__field::-webkit-input-placeholder {
       color: #080808; }
     .formhandler__field::-moz-placeholder {
@@ -57,9 +80,23 @@
       resize: none; }
     .formhandler__field--is-not-valid {
       border-bottom: 3.5px solid rgba(233, 153, 131, 0.5); }
+      .formhandler__field--is-not-valid[type="checkbox"] {
+        position: relative; }
+        .formhandler__field--is-not-valid[type="checkbox"]::after {
+          position: absolute;
+          content: '';
+          width: 12px;
+          height: 2px;
+          background-color: #e99983;
+          bottom: 5px; }
+      .formhandler__field--is-not-valid[type="radio"] {
+        position: relative; }
+        .formhandler__field--is-not-valid[type="radio"]::after {
+          position: absolute;
+          content: '';
+          width: 12px;
+          height: 2px;
+          background-color: #e99983;
+          bottom: 5px; }
     .formhandler__field--is-valid {
       border-bottom: 3.5px solid rgba(182, 233, 175, 0.5); }
-  .formhandler__notice {
-    background-color: rgba(229, 229, 229, 0.54);
-    border-left: 4px solid rgba(233, 153, 131, 0.5);
-    padding: 20px 30px; }
