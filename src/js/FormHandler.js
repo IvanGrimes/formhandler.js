@@ -333,6 +333,7 @@ export default class FormHandler { // TODO: Переименовать опци�
 
   clearField(field) { // Also clears classNames and field of instance like valid, submitted
     this.fields[this.getFieldNameBy(field)].clear();
+    this.form.setState();
   }
 
   getField(field) { // Returns a field node

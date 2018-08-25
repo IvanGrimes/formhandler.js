@@ -1439,6 +1439,7 @@
       value: function clearField(field) {
         // Also clears classNames and field of instance like valid, submitted
         this.fields[this.getFieldNameBy(field)].clear();
+        this.form.setState();
       }
     }, {
       key: "getField",
