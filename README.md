@@ -20,8 +20,8 @@
 </p>
 
 * **Custom validations**: you can add your own validations, just add them in the option object.
-* **Highly customizable**: has a powerful API and can be used however you want.
-* **Built-in sender**: has a built-in sender for a sending your form to the server through XMLHttpRequest or Fetch API.
+* **Highly customizable**: has a powerful **[API](https://ivangrimes.github.io/formhandler/#api)** and can be used however you want.
+* **Built-in sender**: has a **[built-in sender](https://ivangrimes.github.io/formhandler/#options-for-the-sender-object--demo)** for a sending your form to the server through XMLHttpRequest or Fetch API.
 * **EcmasScript 6**: uses last features of Javascript.
 * **MIT Licensed**: free for personal and commercial use.
 
