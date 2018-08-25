@@ -227,7 +227,7 @@
       block: '.formhandler',
       submit: '.formhandler__submit',
       notice: {
-        attachTo: '.formhandler__notices',
+        appendTo: '.formhandler__notices',
         message: 'please, fill the form',
         successMessage: 'ok',
         errorMessage: 'oops',
@@ -244,7 +244,7 @@
       send: true
     },
     notices: {
-      attachTo: '.formhandler__notices',
+      appendTo: '.formhandler__notices',
       nextToField: false,
       message: false
     },
@@ -267,8 +267,7 @@
     sender: {
       send: false,
       type: 'xhr',
-      clearFormOnSuccess: true // TODO: Переминовать => clearFormOnSuccess
-
+      clearFormOnSuccess: true
     },
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
@@ -927,7 +926,7 @@
       var form = _ref.form,
           message = _ref.message,
           classNames = _ref.classNames,
-          attachTo = _ref.attachTo,
+          appendTo = _ref.appendTo,
           nextToField = _ref.nextToField,
           parent = _ref.parent;
 
@@ -936,7 +935,7 @@
       this.form = form;
       this.message = message;
       this.classNames = classNames;
-      this.attachTo = attachTo;
+      this.appendTo = appendTo;
       this.nextToField = nextToField;
       this.parent = parent;
       this.node = null;
@@ -950,7 +949,7 @@
         this.node.classList.add(this.classNames.block);
         this.node.classList.add(this.classNames.hidden);
 
-        if (this.attachTo) {
+        if (this.appendTo) {
           this.parent.appendChild(this.node);
         } else {
           if (this.nextToField === BEFORE) {
@@ -1079,7 +1078,7 @@
   var FormHandler =
   /*#__PURE__*/
   function () {
-    // TODO: Переименовать опцию attachTo => appendTo
+    // TODO: Переименовать опцию appendTo => appendTo
     function FormHandler(_ref) {
       var _this = this;
 
@@ -1322,11 +1321,11 @@
       key: "makeNotice",
       value: function makeNotice(name, notice) {
         var message = this.fields[name] ? Validator.validate(this.fields[name].validatorOptions).message : false;
-        var parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.attachTo);
+        var parent = notice.nextToField ? this.fields[name].node : document.querySelector(notice.appendTo);
         var options = {
           form: this.form.node,
           classNames: notice.classNames,
-          attachTo: notice.attachTo,
+          appendTo: notice.appendTo,
           message: notice.message || message,
           nextToField: notice.nextToField,
           parent: parent
@@ -1463,7 +1462,7 @@
           classNames: Object.assign({}, this.opts.classNames.fields, options.classNames)
         };
         var noticeOptions = {
-          attachTo: options.notice.attachTo || defaultConfig.notices.attachTo,
+          appendTo: options.notice.appendTo || defaultConfig.notices.appendTo,
           nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
           message: options.notice.message || defaultConfig.notices.message,
           classNames: Object.assign({}, this.opts.classNames.notices, options.notice.classNames)

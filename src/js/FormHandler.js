@@ -24,7 +24,7 @@ import {
   HTML_SELECT_ELEMENT,
 } from './common/constants';
 
-export default class FormHandler { // TODO: Переименовать опцию attachTo => appendTo
+export default class FormHandler { // TODO: Переименовать опцию appendTo => appendTo
   constructor({ ...args }) {
     this.opts = args;
     this.fields = {};
@@ -158,11 +158,11 @@ export default class FormHandler { // TODO: Переименовать опци�
       : false;
     const parent = notice.nextToField
       ? this.fields[name].node
-      : document.querySelector(notice.attachTo);
+      : document.querySelector(notice.appendTo);
     const options = {
       form: this.form.node,
       classNames: notice.classNames,
-      attachTo: notice.attachTo,
+      appendTo: notice.appendTo,
       message: notice.message || message,
       nextToField: notice.nextToField,
       parent,
@@ -356,7 +356,7 @@ export default class FormHandler { // TODO: Переименовать опци�
 
 
     const noticeOptions = {
-      attachTo: options.notice.attachTo || defaultConfig.notices.attachTo,
+      appendTo: options.notice.appendTo || defaultConfig.notices.appendTo,
       nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
       message: options.notice.message || defaultConfig.notices.message,
       classNames: { ...this.opts.classNames.notices, ...options.notice.classNames },

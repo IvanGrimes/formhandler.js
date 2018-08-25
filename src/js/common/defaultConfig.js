@@ -3,7 +3,7 @@ export default {
     block: '.formhandler',
     submit: '.formhandler__submit',
     notice: {
-      attachTo: '.formhandler__notices',
+      appendTo: '.formhandler__notices',
       message: 'please, fill the form',
       successMessage: 'ok',
       errorMessage: 'oops',
@@ -20,7 +20,7 @@ export default {
     send: true,
   },
   notices: {
-    attachTo: '.formhandler__notices',
+    appendTo: '.formhandler__notices',
     nextToField: false,
     message: false,
   },
@@ -43,7 +43,7 @@ export default {
   sender: {
     send: false,
     type: 'xhr',
-    clearFormOnSuccess: true, // TODO: Переминовать => clearFormOnSuccess
+    clearFormOnSuccess: true,
   },
   callbacks: {
     onFieldChangeState() {},

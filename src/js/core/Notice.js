@@ -6,12 +6,12 @@ import {
 
 export default class Notice {
   constructor({
-    form, message, classNames, attachTo, nextToField, parent,
+    form, message, classNames, appendTo, nextToField, parent,
   }) {
     this.form = form;
     this.message = message;
     this.classNames = classNames;
-    this.attachTo = attachTo;
+    this.appendTo = appendTo;
     this.nextToField = nextToField;
     this.parent = parent;
     this.node = null;
@@ -23,7 +23,7 @@ export default class Notice {
     this.node.classList.add(this.classNames.block);
     this.node.classList.add(this.classNames.hidden);
 
-    if (this.attachTo) {
+    if (this.appendTo) {
       this.parent.appendChild(this.node);
     } else {
       if (this.nextToField === BEFORE) {
