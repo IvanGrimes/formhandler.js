@@ -226,7 +226,7 @@ const formhandler = new FormHandler({
 | errorMessage: | string           | 'Oops, something went wrong' | 
 | appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option. |
 | nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option. |
-| classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices. |
+| classNames:   | {                |            | Contains classNames that applying **ONLY** to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices. |
 | block:        | string           | 'formhandler__notice' | className for a div of notice. |
 | hidden:       | string           | 'formhandler__notice--hidden' | className for a hidden notice. |
 | visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice. |
