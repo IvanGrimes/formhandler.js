@@ -267,7 +267,7 @@
     sender: {
       send: false,
       type: 'xhr',
-      clearOnSuccess: true // TODO: Переминовать => clearFormOnSuccess
+      clearFormOnSuccess: true // TODO: Переминовать => clearFormOnSuccess
 
     },
     callbacks: {
@@ -1092,7 +1092,7 @@
           _this.notices.form.message = _this.opts.form.notice.successMessage;
           _this.form.send = true;
 
-          if (_this.opts.sender.clearOnSuccess) {
+          if (_this.opts.sender.clearFormOnSuccess) {
             _this.form.clear();
           }
         }

@@ -177,7 +177,7 @@ export default class FormHandler { // TODO: Переименовать опци�
     if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
       this.form.send = true;
-      if (this.opts.sender.clearOnSuccess) {
+      if (this.opts.sender.clearFormOnSuccess) {
         this.form.clear();
       }
     }
