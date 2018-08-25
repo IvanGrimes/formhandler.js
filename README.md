@@ -4,6 +4,10 @@
   <a href="https://travis-ci.org/IvanGrimes/formhandler">
     <img src="https://travis-ci.org/IvanGrimes/formhandler.svg?branch=master" />
   </a>
+  <a href="https://github.com/IvanGrimes/formhandler/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/mashape/apistatus.svg" />
+  </a>
+  
 </p>
 
 <p align="center">
