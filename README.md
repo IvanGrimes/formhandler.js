@@ -1,7 +1,7 @@
 <h1 align="center"><img height="150" src="./sandbox/logo.png" /><br>FormHandler</h1>
 
 <p align="center">
-  <b>Pure Javascript form validation with a feature of adding your own validations and with powerful API</b>
+  <b>Powerful pure Javascript form validator with a feature of adding your own validations</b>
 </p>
 <p align="center">
   <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b>
