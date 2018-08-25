@@ -1,7 +1,7 @@
 {
   "name": "formhandler",
   "version": "1.0.0",
-  "description": "Pure Javascript (ES6) and BEM friendly slider",
+  "description": "Powerful pure Javascript form validator with a feature of adding your own validations",
   "author": "Ivan Grimes",
   "license": "MIT",
   "homepage": "https://github.com/IvanGrimes/formhandler",
@@ -12,19 +12,15 @@
     "url": "https://github.com/IvanGrimes/formhandler"
   },
   "keywords": [
-    "slider",
-    "slide",
-    "swipe",
-    "es6",
+    "form",
+    "validation",
+    "validator",
+    "html5",
     "javascript",
+    "es6",
     "ecmascript",
     "ecmascript6",
     "bem",
-    "slider",
-    "touch",
-    "mobile",
-    "carousel",
-    "gallery",
     "plugin"
   ],
   "bugs": {
