@@ -224,9 +224,9 @@ const formhandler = new FormHandler({
 | submit:       | string           | '.formhandler__submit' | Selector for the submit button. |
 | delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared |
 | notice:       | {                |  |
-| message:      | string           | 'Please, fill the form' |
-| succesMessage:| string           | 'Form successfully sent'|
-| errorMessage: | string           | 'Oops, something went wrong' |
+| message:      | string           | 'Please, fill the form' | 
+| succesMessage:| string           | 'Form successfully sent'| 
+| errorMessage: | string           | 'Oops, something went wrong' | 
 | appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option. |
 | nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option. |
 | classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices. |
@@ -345,7 +345,49 @@ const formhandler = new FormHandler({
 });
 ```
 
-### Options for the className object | [Demo](https://codepen.io/IvanGrimes/pen/mGVXNQ)
+### Options for the notice object (Applying to all notices, except form's notice) | [Demo](https://codepen.io/IvanGrimes/pen/wEMmeB)
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| notice:      | {                |            | Contains options and classNames of notice that applying **TO ALL** notices |
+| message:      | string           | Set up message, that returns the validator or that one you returned in your own validator | Message of the notice that will appear if field is not valid. |
+| appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option. |
+| nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option. |
+| },             |                  |            |  |
+
+#### Example:
+```javascript
+const formhandler = new FormHandler({
+  fields: {
+    firstname: {
+      validation: 'isName',
+      },
+    },
+    lastname: {
+      validation: 'isName',
+    },
+    select: {
+      validation: 'isSelected',
+    },
+    checkbox: {
+      validation: 'isCheckboxChecked',
+    },
+    radio: {
+      validation: 'isRadioChecked',
+    },
+    message: {
+      validation: 'isNonEmpty',
+    },
+  },
+  notice: {
+    message: 'The value is required',
+    appendTo: false,
+    nextToField: 'after',
+  },
+});
+```
+
+### Options for the className object (Applying to all fields and notices) | [Demo](https://codepen.io/IvanGrimes/pen/mGVXNQ)
 
 | Option | Default | Description |
 |--------|---------|-------------|
