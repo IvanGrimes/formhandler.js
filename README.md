@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler">
-    <img src="https://travis-ci.org/IvanGrimes/formhandler.svg?branch=master" alt="Build Status>
+    <img src="https://travis-ci.org/IvanGrimes/formhandler.svg?branch=master" />
   </a>
 </p>
 
