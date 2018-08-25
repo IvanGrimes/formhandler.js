@@ -4,8 +4,8 @@
   <b>Pure Javascript form validation with a feature of adding your own validations and with powerful API</b>
 </p>
 <p align="center">
-  <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b> |
-  <b><a href="https://codepen.io/IvanGrimes/pen/XPrWMJ" target="_blank">Demo</a></b>
+  <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b>
+  <!-- | <b><a href="https://codepen.io/IvanGrimes/pen/XPrWMJ" target="_blank">Demo</a></b> -->
 </p>
 
 * **Custom validations**: you can add your own validations, just add them in the option object.
@@ -118,7 +118,7 @@ Every inputs must have an attribute name.
 After including FormHandler with one of methods and adding HTML markup.
 Initialize FormHandler instance in your Javascript file or inside ``<script>`` tag.
 
-### Initialization
+### Initialization<!-- | [Demo](https://codepen.io/) -->
 Every property of object fields must fit to value of the name attribute input tag.
 For example, if you have <input type="text" name="firstname> then for recognizing field object with options must have name is 'firstname'.
 
@@ -161,7 +161,7 @@ After that FormHandler instance will be initialized with default settings.
 | isRadioChecked | No             | radio | Any radio button in the group (radios with the same values of name attribute) must be checked.
 | isSelected     | No             | select | Selected 'options' of the 'select' tag must have value.
 
-### Options for a form object
+### Options for a form object<!-- | [Demo](https://codepen.io/) -->
 | Option        | Type             | Default        | Description
 |---------------|------------------|----------------|------------|
 | block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes.
@@ -180,7 +180,6 @@ After that FormHandler instance will be initialized with default settings.
 | },             |                  |            |  |
 | },            |                  |  |
 #### Example:
-[Demo](https://codepen.io)
 ```javascript
 const formhandler = new FormHandler({
   form: {
@@ -222,7 +221,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a field object
+### Options for a field object<!-- | [Demo](https://codepen.io/) -->
 | Option        | Type             | Default    | Description
 |---------------|------------------|------------|------------|
 | firstname:    | {                |            | Name attribute of the input tag.
@@ -245,7 +244,6 @@ const formhandler = new FormHandler({
 | },             |                  |            |  |
 | },             |                  |            |  |
 #### Example:
-[Demo](https://codepen.io/)
 ```javascript
 const formhandler = new FormHandler({
   fields: {
@@ -289,11 +287,10 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a custom validations
+### Options for a custom validations<!-- | [Demo](https://codepen.io/) -->
 Custom validation must be a function that passes argument node (dom element).
 Function should return object with 'valid' property that contains result of validation (boolean) and 'message' property that contains string with a message of the notice.
 #### Example:
-[Demo](https://codepen.io/)
 ```javascript
 const formhandler = new FormHandler({
   fields: {
@@ -332,7 +329,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a className object
+### Options for a className object<!-- | [Demo](https://codepen.io/) -->
 | Option | Default | Description
 |--------|---------|------------|
 | form: | { |
@@ -349,7 +346,6 @@ const formhandler = new FormHandler({
 | visible: | string           | 'formhandler__notice-form--visible' | className for a visible notice.
 | }, |  |
 #### Example:
-[Demo](https://codepen.io/)
 ```javascript
 const formhandler = new FormHandler({
   fields: {
@@ -391,14 +387,13 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a sender object
+### Options for a sender object<!-- | [Demo](https://codepen.io/) -->
 | Option | Type | Default | Description
 |--------|------|---------|------------|
 | type | string | 'xhr' | Type of the request, can be 'xhr' (XMLHttpRequest) or 'fetch' (Promise API).
 | send | boolean | false | Appoints will it be sent or won't.
 | clearFormOnSuccess | true | Appoints will the form be cleared or not after sucessful sending.
 #### Example:
-[Demo](https://codepen.io/)
 ```javascript
 const formhandler = new FormHandler({
   fields: {
@@ -430,7 +425,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Callbacks
+### Callbacks<!-- | [Demo](https://codepen.io/) -->
 | Callback | Description
 |----------|------------|
 | onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state
@@ -438,7 +433,6 @@ const formhandler = new FormHandler({
 | onSubmit(form, fields) | Fires when the form submitted
 | onSend(result) | Fires when the form was sent
 #### Example:
-[Demo](https://codepen.io/)
 ```javascript
 const formhandler = new FormHandler({
   fields: {
@@ -478,7 +472,7 @@ const formhandler = new FormHandler({
 });
 ```
 
-### Methods
+### Methods<!-- | [Demo](https://codepen.io/) -->
 | Method          | Type | Description
 |-----------------|------|------------|
 | isFieldValid(field)  | name(string)  | Returns validity of the field
@@ -497,6 +491,6 @@ const formhandler = new FormHandler({
 <br />
 <b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
 
-## More examples
-### Validation with Promise
-### Validation with XHR
+<!-- ## More examples
+### Validation with Promise | [Demo](https://codepen.io/)
+### Validation with XHR | [Demo](https://codepen.io/) -->
