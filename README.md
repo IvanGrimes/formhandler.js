@@ -107,16 +107,16 @@ Every inputs must have an attribute name.
   </select>
 
   <div>
-    Checkbox 1 <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 1">
-    Checkbox 2 <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 2">
-    Checkbox 3 <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 3">
-    Checkbox 4 <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 4">
-    Checkbox 5 <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 5">
+    <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 1"> Checkbox 1
+     <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 2"> Checkbox 2
+     <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 3"> Checkbox 3
+     <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 4"> Checkbox 4
+     <input class="formhandler__field" type="checkbox" name="checkbox" value="Checkbox 5"> Checkbox 5
   </div>
 
   <div>
-    Radio 1 <input class="formhandler__field" type="radio" name="radio" value="Radio 1">
-    Radio 2 <input class="formhandler__field" type="radio" name="radio" value="Radio 2">
+     <input class="formhandler__field" type="radio" name="radio" value="Radio 1"> Radio 1
+     <input class="formhandler__field" type="radio" name="radio" value="Radio 2"> Radio 2
   </div>
 
   <textarea class="formhandler__field" name="message"
