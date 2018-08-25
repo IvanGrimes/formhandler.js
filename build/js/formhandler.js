@@ -606,7 +606,7 @@
     _createClass(Field, [{
       key: "setState",
       value: function setState(valid) {
-        this.callback(this.name, this.node, this.valid, valid);
+        this.callback(this.validation, this.name, this.node, this.valid, valid);
         this.valid = valid;
 
         if (this.submitted) {
@@ -687,8 +687,7 @@
     }, {
       key: "clear",
       value: function clear() {
-        this.callback(this.name, this.node, this.valid, false); // TODO: Pass the validation type
-
+        this.callback(this.validation, this.name, this.node, this.valid, false);
         this.node.value = '';
         this.valid = false;
         this.submitted = false;
@@ -739,7 +738,7 @@
       value: function clear() {
         var _this2 = this;
 
-        this.callback(this.name, this.node, this.valid, false);
+        this.callback(this.validation, this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.forEach(function (el) {
@@ -785,7 +784,7 @@
     }, {
       key: "clear",
       value: function clear() {
-        this.callback(this.name, this.node, this.valid, false);
+        this.callback(this.validation, this.name, this.node, this.valid, false);
         this.valid = false;
         this.submitted = false;
         this.node.classList.remove(this.classNames.isValid);
@@ -826,7 +825,7 @@
     }, {
       key: "clear",
       value: function clear() {
-        this.callback(this.name, this.node, this.valid, false);
+        this.callback(this.validation, this.name, this.node, this.valid, false);
         this.node.value = '#000000';
         this.valid = false;
         this.submitted = false;
@@ -1120,7 +1119,6 @@
         return data;
       });
 
-      // TODO: Add toggling submit button onFormChangeState!
       this.opts = args;
       this.fields = {};
       this.notices = {};

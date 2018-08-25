@@ -16,7 +16,7 @@ export default class Radio extends Field {
   }
 
   clear() {
-    this.callback(this.name, this.node, this.valid, false);
+    this.callback(this.validation, this.name, this.node, this.valid, false);
     this.valid = false;
     this.submitted = false;
     this.node.forEach(el => el.classList.remove(this.classNames.isValid));
