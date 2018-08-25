@@ -161,7 +161,9 @@ After that FormHandler instance will be initialized with default settings.
 
 
 ## API
+
 ### Built-in validations
+
 | Name       | Support of min/max | Support of input types | Description |
 |------------|--------------------|------------------------|--------------------------------------------|
 | isNonEmpty | Yes                | Any (including textarea) | If input is not empty then it will be valid in range of min and max if it specified. |
