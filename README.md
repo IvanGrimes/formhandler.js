@@ -162,15 +162,15 @@ After that FormHandler instance will be initialized with default settings.
 
 ## API
 ### Built-in validations
-| Name       | Support of min/max | Support of input types | Description
+| Name       | Support of min/max | Support of input types | Description |
 |------------|--------------------|------------------------|--------------------------------------------|
-| isNonEmpty | Yes                | Any (including textarea) | If input is not empty then it will be valid in range of min and max if it specified.
-| isName     | Yes                | Any text-like input types (including textarea) | If input contain only letters then it will be valid in range of min and max if it specified.
-| isEmail    | Yes                | Any text-like input types (including textarea) | If input contain valid email address (ex. example@domain.com) then it will be valid in range of min and max if it specified.
-| isPhone    | Yes                | Any text-like input types (including textarea) | If input contain valid phone number then it will be valid in range of min and max if it specified.
-| isCheckboxChecked | Yes         | checkbox | If any checkbox is checked, then it will be valid. If 'min' was specified, then you must check at least that number of checkboxes. If 'max' was specified, then you must check less or equal number of checkboxes.
-| isRadioChecked | No             | radio | Any radio button in the group (radios with the same values of name attribute) must be checked.
-| isSelected     | No             | select | Selected 'options' of the 'select' tag must have value.
+| isNonEmpty | Yes                | Any (including textarea) | If input is not empty then it will be valid in range of min and max if it specified. |
+| isName     | Yes                | Any text-like input types (including textarea) | If input contain only letters then it will be valid in range of min and max if it specified. |
+| isEmail    | Yes                | Any text-like input types (including textarea) | If input contain valid email address (ex. example@domain.com) then it will be valid in range of min and max if it specified. |
+| isPhone    | Yes                | Any text-like input types (including textarea) | If input contain valid phone number then it will be valid in range of min and max if it specified. |
+| isCheckboxChecked | Yes         | checkbox | If any checkbox is checked, then it will be valid. If 'min' was specified, then you must check at least that number of checkboxes. If 'max' was specified, then you must check less or equal number of checkboxes. |
+| isRadioChecked | No             | radio | Any radio button in the group (radios with the same values of name attribute) must be checked. |
+| isSelected     | No             | select | Selected 'options' of the 'select' tag must have value. |
 
 ### Adding your own validations | [Demo](https://codepen.io/IvanGrimes/pen/KxVQOd)
 Custom validation must be a function that passes argument node (dom element).
