@@ -1,4 +1,4 @@
-<h1 align="center"><img height="150" src="./sandbox/logo.png" /><br>FormHandler</h1>
+<h1 align="center"><img height="150" src="https://github.com/IvanGrimes/formhandler.js/blob/master/sandbox/logo.png?raw=true" /><br>FormHandler</h1>
 
 <p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler.js">
