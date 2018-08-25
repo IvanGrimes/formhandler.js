@@ -1,6 +1,6 @@
 {
   "name": "formhandler",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Pure Javascript (ES6) and BEM friendly slider",
   "author": "Ivan Grimes",
   "license": "MIT",
