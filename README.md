@@ -496,6 +496,8 @@ const formhandler = new FormHandler({
 
 ### Methods | [Demo](https://codepen.io/IvanGrimes/pen/KxVoKd)
 
+<b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
+
 | Method | Type | Description |
 |--------|------|-------------|
 | isFieldValid(field)  | name(string)  | Returns validity of the field |
@@ -511,8 +513,6 @@ const formhandler = new FormHandler({
 | validateField(field) | string(name) | Validates this field, also toggle classNames. |
 | validateForm() | none | Validates all fields of the form, also toggle classNames. |
 | getFieldAndValues() | none | Returns an object with all fields as property and their value as key (if checkbox, then return Array). |
-<br />
-<b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
 
 ## More examples
 ### [Validation of the field with Promise API](https://codepen.io/IvanGrimes/pen/JaGLoM)
