@@ -27,6 +27,8 @@
 
 
 ## Getting started
+**_Demos are in the process of creating_**  
+   
 FormHandler has a few methods to connect to your project: CDN, npm or downloading latest release.
 ### CDN
 For using FormHandler with CDN you need to include CSS in your ``<head>`` tag.
