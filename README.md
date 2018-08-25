@@ -338,7 +338,6 @@ const formhandler = new FormHandler({
 | form: | { |
 | isValid: | 'formhandler--is-valid' | Classname for a valid form
 | isNotValid: | 'formhandler--is-not-valid' | Classname for a invalid form
-| disabledSubmitButton: | 'formhandler__submit--disabled' | Classname for a disabled submit button
 | }, |  |
 | fields: | { |
 | isValid: |'formhandler__field--is-valid' | Classname for a valid input.
@@ -377,7 +376,6 @@ const formhandler = new FormHandler({
     form: {
       isValid: 'formhandler--is-valid',
       isNotValid: 'formhandler--is-not-valid',
-      disabledSubmitButton: 'formhandler__submit--disabled',
     },
     fields: {
       isValid: 'formhandler__field--is-valid',

@@ -34,7 +34,6 @@ export default {
     form: {
       isValid: 'formhandler--is-valid',
       isNotValid: 'formhandler--is-not-valid',
-      disabledSubmitButton: 'formhandler__submit--disabled',
     },
     fields: {
       isValid: 'formhandler__field--is-valid',

@@ -100,3 +100,16 @@
           bottom: 5px; }
     .formhandler__field--is-valid {
       border-bottom: 3.5px solid rgba(182, 233, 175, 0.5); }
+  .formhandler__submit {
+    background-color: #f0f0f0;
+    padding: 10px 30px;
+    font-size: 16px;
+    outline: 0;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #d7d7d7;
+    opacity: 1;
+    -webkit-transition: opacity .15s linear;
+    -o-transition: opacity .15s linear;
+    transition: opacity .15s linear;
+    cursor: pointer; }

@@ -257,8 +257,7 @@
       },
       form: {
         isValid: 'formhandler--is-valid',
-        isNotValid: 'formhandler--is-not-valid',
-        disabledSubmitButton: 'formhandler__submit--disabled'
+        isNotValid: 'formhandler--is-not-valid'
       },
       fields: {
         isValid: 'formhandler__field--is-valid',
@@ -599,8 +598,6 @@
         if (this.submitted) {
           this.toggleClassNames();
         }
-
-        this.toggleSubmitButton();
       }
     }, {
       key: "toggleClassNames",
@@ -611,15 +608,6 @@
         } else {
           this.node.classList.remove(this.classNames.isValid);
           this.node.classList.add(this.classNames.isNotValid);
-        }
-      }
-    }, {
-      key: "toggleSubmitButton",
-      value: function toggleSubmitButton() {
-        if (this.valid) {
-          this.submit.classList.remove(this.classNames.disabledSubmitButton);
-        } else {
-          this.submit.classList.add(this.classNames.disabledSubmitButton);
         }
       }
     }, {
