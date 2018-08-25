@@ -162,8 +162,9 @@ After that FormHandler instance will be initialized with default settings.
 
 ## API
 ### Built-in validations
-| Name       | Support of min/max | Support of input types | Description
-|------------|--------------------|------------------------|--------------------------------------------|
+
+| Name | Support of min/max | Support of input types | Description
+|------|--------------------|------------------------|------------|
 | isNonEmpty | Yes                | Any (including textarea) | If input is not empty then it will be valid in range of min and max if it specified.
 | isName     | Yes                | Any text-like input types (including textarea) | If input contain only letters then it will be valid in range of min and max if it specified.
 | isEmail    | Yes                | Any text-like input types (including textarea) | If input contain valid email address (ex. example@domain.com) then it will be valid in range of min and max if it specified.
@@ -173,8 +174,10 @@ After that FormHandler instance will be initialized with default settings.
 | isSelected     | No             | select | Selected 'options' of the 'select' tag must have value.
 
 ### Adding your own validations | [Demo](https://codepen.io/IvanGrimes/pen/KxVQOd)
+
 Custom validation must be a function that passes argument node (dom element).
 Function should return object with 'valid' property that contains result of validation (boolean) and 'message' property that contains string with a message of the notice.
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -214,8 +217,9 @@ const formhandler = new FormHandler({
 ```
 
 ### Options for the form | [Demo](https://codepen.io/IvanGrimes/pen/VGeQOx)
-| Option        | Type             | Default        | Description
-|---------------|------------------|----------------|------------|
+
+| Option | Type | Default| Description
+|--------|------|--------|------------|
 | block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes.
 | submit:       | string           | '.formhandler__submit' | Selector for the submit button.
 | delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared
@@ -231,6 +235,7 @@ const formhandler = new FormHandler({
 | visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice.
 | },             |                  |            |  |
 | },            |                  |  |
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -274,8 +279,9 @@ const formhandler = new FormHandler({
 
 
 ### Options for the fields | [Demo](https://codepen.io/IvanGrimes/pen/bxELyP)
-| Option        | Type             | Default    | Description
-|---------------|------------------|------------|------------|
+
+| Option | Type | Default | Description
+|--------|------|---------|------------|
 | firstname:    | {                |            | Name attribute of the input tag.
 | validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **(link to the section 'Built-in validations')**. If set to false then field won't be validated.
 | min:          | number / boolean | false      | Specifies the minimum of characters that must be entered for a validity.
@@ -295,6 +301,7 @@ const formhandler = new FormHandler({
 | visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice.
 | },             |                  |            |  |
 | },             |                  |            |  |
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -339,6 +346,7 @@ const formhandler = new FormHandler({
 ```
 
 ### Options for the className object | [Demo](https://codepen.io/IvanGrimes/pen/mGVXNQ)
+
 | Option | Default | Description
 |--------|---------|------------|
 | form: | { |
@@ -354,6 +362,7 @@ const formhandler = new FormHandler({
 | hidden: | string           | 'formhandler__notice--hidden' | className for a hidden notice.
 | visible: | string           | 'formhandler__notice-form--visible' | className for a visible notice.
 | }, |  |
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -397,11 +406,13 @@ const formhandler = new FormHandler({
 
 
 ### Options for the sender object | [Demo](https://codepen.io/IvanGrimes/pen/zJrWOw)
+
 | Option | Type | Default | Description
 |--------|------|---------|------------|
 | type | string | 'xhr' | Type of the request, can be 'xhr' (XMLHttpRequest) or 'fetch' (Promise API).
 | send | boolean | false | Appoints will it be sent or won't.
 | clearFormOnSuccess | true | Appoints will the form be cleared or not after sucessful sending.
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -435,12 +446,14 @@ const formhandler = new FormHandler({
 
 
 ### Callbacks | [Demo](https://codepen.io/IvanGrimes/pen/BOjrBe)
+
 | Callback | Description
 |----------|------------|
 | onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state
 | onFormChangeState(el, pastValidity, newValidity) | Fires when the form changes state
 | onSubmit(form, fields) | Fires when the form submitted
 | onSend(result) | Fires when the form was sent
+
 #### Example:
 ```javascript
 const formhandler = new FormHandler({
@@ -482,8 +495,9 @@ const formhandler = new FormHandler({
 ```
 
 ### Methods | [Demo](https://codepen.io/IvanGrimes/pen/KxVoKd)
-| Method          | Type | Description
-|-----------------|------|------------|
+
+| Method | Type | Description
+|--------|------|------------|
 | isFieldValid(field)  | name(string)  | Returns validity of the field
 | getFieldValue(field) | name(string) | Returns value of the field
 | isFormValid()   | none | Returns validity of the form
