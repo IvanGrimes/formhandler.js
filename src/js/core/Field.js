@@ -29,7 +29,7 @@ export default class Field {
   }
 
   setState(valid) {
-    this.callback(this.name, this.node, this.valid, valid);
+    this.callback(this.validation, this.name, this.node, this.valid, valid);
 
     this.valid = valid;
 

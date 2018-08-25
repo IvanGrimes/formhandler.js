@@ -112,8 +112,8 @@ const form = new FormHandler({
     clearOnSuccess: false,
   },
   callbacks: {
-    onFieldChangeState(name, el, pastValidity, newValidity) {
-      console.log('onFieldChangeState', name, el, pastValidity, newValidity);
+    onFieldChangeState(validation, name, el, pastValidity, newValidity) {
+      console.log('onFieldChangeState', validation, name, el, pastValidity, newValidity);
     },
     onFormChangeState(el, pastValidity, newValidity) {
       console.log('onFormChangeState', el, pastValidity, newValidity);

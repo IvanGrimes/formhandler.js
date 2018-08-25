@@ -16,7 +16,7 @@ export default class Color extends Field {
   }
 
   clear() {
-    this.callback(this.name, this.node, this.valid, false);
+    this.callback(this.validation, this.name, this.node, this.valid, false);
     this.node.value = '#000000';
     this.valid = false;
     this.submitted = false;

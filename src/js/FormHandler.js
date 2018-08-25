@@ -25,7 +25,7 @@ import {
 } from './common/constants';
 
 export default class FormHandler {
-  constructor({ ...args }) { // TODO: Add toggling submit button onFormChangeState!
+  constructor({ ...args }) {
     this.opts = args;
     this.fields = {};
     this.notices = {};
@@ -45,6 +45,8 @@ export default class FormHandler {
         this.makeNotice(name, field.notice);
       }
     });
+
+    this.form.setState();
 
     return this;
   }
