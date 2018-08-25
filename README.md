@@ -218,21 +218,21 @@ const formhandler = new FormHandler({
 
 ### Options for the form | [Demo](https://codepen.io/IvanGrimes/pen/VGeQOx)
 
-| Option | Type | Default| Description
-|--------|------|--------|------------|
-| block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes.
-| submit:       | string           | '.formhandler__submit' | Selector for the submit button.
-| delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared
+| Option | Type | Default| Description |
+|--------|------|--------|-------------|
+| block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes. |
+| submit:       | string           | '.formhandler__submit' | Selector for the submit button. |
+| delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared |
 | notice:       | {                |  |
 | message:      | string           | 'Please, fill the form' |
 | succesMessage:| string           | 'Form successfully sent'|
 | errorMessage: | string           | 'Oops, something went wrong' |
-| appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option.
-| nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option.
-| classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices.
-| block:        | string           | 'formhandler__notice' | className for a div of notice.
-| hidden:       | string           | 'formhandler__notice--hidden' | className for a hidden notice.
-| visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice.
+| appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option. |
+| nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option. |
+| classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices. |
+| block:        | string           | 'formhandler__notice' | className for a div of notice. |
+| hidden:       | string           | 'formhandler__notice--hidden' | className for a hidden notice. |
+| visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice. |
 | },             |                  |            |  |
 | },            |                  |  |
 
@@ -280,25 +280,25 @@ const formhandler = new FormHandler({
 
 ### Options for the fields | [Demo](https://codepen.io/IvanGrimes/pen/bxELyP)
 
-| Option | Type | Default | Description
-|--------|------|---------|------------|
-| firstname:    | {                |            | Name attribute of the input tag.
-| validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **(link to the section 'Built-in validations')**. If set to false then field won't be validated.
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| firstname:    | {                |            | Name attribute of the input tag. |
+| validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **(link to the section 'Built-in validations')**. If set to false then field won't be validated. |
 | min:          | number / boolean | false      | Specifies the minimum of characters that must be entered for a validity.
 | max:          | number / boolean | false      | Specifies the maximum of characters that must be entered for a validity.
 | send:         | boolean          | true       | If set to true/false then field will be sent or not (Using component of FormHandler).
-| classNames:   | {                |            | Contains classNames that applying ONLY to this field. If you don't create this object  then classNames will be applied to this field from classNames.fields.
-| isValid:      | string           | 'formhandler__field--is-valid' | Classname for a valid input.
-| isNotValid:   | string           | 'formhandler__field--is-not-valid' | Classname for an invalid input.
+| classNames:   | {                |            | Contains classNames that applying ONLY to this field. If you don't create this object  then classNames will be applied to this field from classNames.fields. |
+| isValid:      | string           | 'formhandler__field--is-valid' | Classname for a valid input. |
+| isNotValid:   | string           | 'formhandler__field--is-not-valid' | Classname for an invalid input. |
 | },            |                  |            |  |
 | notice:      | {                |            | Contains options and classNames of notice that applying ONLY to this notice |
-| message:      | string           | Set up message, that returns the validator or that one you returned in your own validator | Message of the notice that will appear if field is not valid.
-| appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option.
-| nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option.
-| classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices.
-| block:        | string           | 'formhandler__notice' | className for a div of notice.
-| hidden:       | string           | 'formhandler__notice--hidden' | className for a hidden notice.
-| visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice.
+| message:      | string           | Set up message, that returns the validator or that one you returned in your own validator | Message of the notice that will appear if field is not valid. |
+| appendTo:     | string / boolean | false      | Selector of the block to that notice will be append (ex. '.formhandler__notices'). Set to false if you want apply nextToField option. |
+| nextToField:  | string / boolean | 'after'    | If set to 'before' then notice will appear before input, if set to 'after' then will appear after input. Set to false if you want apply appendTo option. |
+| classNames:   | {                |            | Contains classNames that applying ONLY to this notice. If you won't create this object, then classNames will be applied to this field from classNames.notices. |
+| block:        | string           | 'formhandler__notice' | className for a div of notice. |
+| hidden:       | string           | 'formhandler__notice--hidden' | className for a hidden notice. |
+| visible:      | string           | 'formhandler__notice-form--visible' | className for a visible notice. |
 | },             |                  |            |  |
 | },             |                  |            |  |
 
@@ -347,21 +347,21 @@ const formhandler = new FormHandler({
 
 ### Options for the className object | [Demo](https://codepen.io/IvanGrimes/pen/mGVXNQ)
 
-| Option | Default | Description
-|--------|---------|------------|
-| form: | { |
-| isValid: | 'formhandler--is-valid' | Classname for a valid form
-| isNotValid: | 'formhandler--is-not-valid' | Classname for a invalid form
-| }, |  |
-| fields: | { |
-| isValid: |'formhandler__field--is-valid' | Classname for a valid input.
-| isNotValid: | 'formhandler__field--is-not-valid' | Classname for an invalid input.
-| }, |  |
-| notices | { |
-| block: | 'formhandler__notice' | className for a div of notice.
-| hidden: | string           | 'formhandler__notice--hidden' | className for a hidden notice.
-| visible: | string           | 'formhandler__notice-form--visible' | className for a visible notice.
-| }, |  |
+| Option | Default | Description |
+|--------|---------|-------------|
+| form: | { |  |
+| isValid: | 'formhandler--is-valid' | Classname for a valid form |
+| isNotValid: | 'formhandler--is-not-valid' | Classname for a invalid form |
+| }, |  |  |
+| fields: | { |  |
+| isValid: |'formhandler__field--is-valid' | Classname for a valid input. |
+| isNotValid: | 'formhandler__field--is-not-valid' | Classname for an invalid input. |
+| }, |  |  |
+| notices | { |  |
+| block: | 'formhandler__notice' | className for a div of notice. |
+| hidden: | string           | 'formhandler__notice--hidden' | className for a hidden notice. |
+| visible: | string           | 'formhandler__notice-form--visible' | className for a visible notice. |
+| }, |  |  |
 
 #### Example:
 ```javascript
@@ -407,11 +407,11 @@ const formhandler = new FormHandler({
 
 ### Options for the sender object | [Demo](https://codepen.io/IvanGrimes/pen/zJrWOw)
 
-| Option | Type | Default | Description
-|--------|------|---------|------------|
-| type | string | 'xhr' | Type of the request, can be 'xhr' (XMLHttpRequest) or 'fetch' (Promise API).
-| send | boolean | false | Appoints will it be sent or won't.
-| clearFormOnSuccess | true | Appoints will the form be cleared or not after sucessful sending.
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| type | string | 'xhr' | Type of the request, can be 'xhr' (XMLHttpRequest) or 'fetch' (Promise API). |
+| send | boolean | false | Appoints will it be sent or won't. |
+| clearFormOnSuccess | true | Appoints will the form be cleared or not after sucessful sending. |
 
 #### Example:
 ```javascript
@@ -447,12 +447,12 @@ const formhandler = new FormHandler({
 
 ### Callbacks | [Demo](https://codepen.io/IvanGrimes/pen/BOjrBe)
 
-| Callback | Description
-|----------|------------|
-| onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state
-| onFormChangeState(el, pastValidity, newValidity) | Fires when the form changes state
-| onSubmit(form, fields) | Fires when the form submitted
-| onSend(result) | Fires when the form was sent
+| Callback | Description |
+|----------|-------------|
+| onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state |
+| onFormChangeState(el, pastValidity, newValidity) | Fires when the form changes state |
+| onSubmit(form, fields) | Fires when the form submitted |
+| onSend(result) | Fires when the form was sent |
 
 #### Example:
 ```javascript
@@ -496,21 +496,21 @@ const formhandler = new FormHandler({
 
 ### Methods | [Demo](https://codepen.io/IvanGrimes/pen/KxVoKd)
 
-| Method | Type | Description
-|--------|------|------------|
-| isFieldValid(field)  | name(string)  | Returns validity of the field
-| getFieldValue(field) | name(string) | Returns value of the field
-| isFormValid()   | none | Returns validity of the form
-| isFormSubmitted()| none | Returns true if form was submitted
-| isFormSent() | none | Returns true if form was sent. Works with built-in sender.
-| clearForm() | none | Clears all fields and sets their values to the default
-| clearField(field) | name(string) | Clears the field
-| getField(field) | string(name) | Returns node of the field
-| addField(field, {...options}) | string(name), object(options) | Example
-| removeField(field) | string(name) | Removes field (node) and it's notice (node).
-| validateField(field) | string(name) | Validates this field, also toggle classNames.
-| validateForm() | none | Validates all fields of the form, also toggle classNames.
-| getFieldAndValues() | none | Returns an object with all fields as property and their value as key (if checkbox, then return Array).
+| Method | Type | Description |
+|--------|------|-------------|
+| isFieldValid(field)  | name(string)  | Returns validity of the field |
+| getFieldValue(field) | name(string) | Returns value of the field |
+| isFormValid()   | none | Returns validity of the form |
+| isFormSubmitted()| none | Returns true if form was submitted |
+| isFormSent() | none | Returns true if form was sent. Works with built-in sender. |
+| clearForm() | none | Clears all fields and sets their values to the default |
+| clearField(field) | name(string) | Clears the field |
+| getField(field) | string(name) | Returns node of the field |
+| addField(field, {...options}) | string(name), object(options) | Example |
+| removeField(field) | string(name) | Removes field (node) and it's notice (node). |
+| validateField(field) | string(name) | Validates this field, also toggle classNames. |
+| validateForm() | none | Validates all fields of the form, also toggle classNames. |
+| getFieldAndValues() | none | Returns an object with all fields as property and their value as key (if checkbox, then return Array). |
 <br />
 <b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
 
