@@ -1,13 +1,15 @@
 <h1 align="center"><img height="150" src="./sandbox/logo.png" /><br>FormHandler</h1>
 
-<p align="center>
+<p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler">
     <img src="https://travis-ci.org/IvanGrimes/formhandler.svg?branch=master" alt="Build Status>
   </a>
 </p>
+
 <p align="center">
   <b>Powerful pure Javascript form validator with a feature of adding your own validations</b>
 </p>
+
 <p align="center">
   <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b>
   <!-- | <b><a href="https://codepen.io/IvanGrimes/pen/XPrWMJ" target="_blank">Demo</a></b> -->
