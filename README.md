@@ -15,8 +15,8 @@
 </p>
 
 <p align="center">
-  <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b>
-  <!-- | <b><a href="https://codepen.io/IvanGrimes/pen/XPrWMJ" target="_blank">Demo</a></b> -->
+  <b><a href="https://ivangrimes.github.io/formhandler/" target="_blank">Documentation</a></b> | 
+  <b><a href="https://codepen.io/IvanGrimes/pen/XPXZQp" target="_blank">Demo</a></b>
 </p>
 
 * **Custom validations**: you can add your own validations, just add them in the option object.
@@ -129,7 +129,7 @@ Every inputs must have an attribute name.
 After including FormHandler with one of methods and adding HTML markup.
 Initialize FormHandler instance in your Javascript file or inside ``<script>`` tag.
 
-### Initialization<!-- | [Demo](https://codepen.io/) -->
+### Initialization
 Every property of object fields must fit to value of the name attribute input tag.
 For example, if you have <input type="text" name="firstname> then for recognizing field object with options must have name is 'firstname'.
 
@@ -172,7 +172,48 @@ After that FormHandler instance will be initialized with default settings.
 | isRadioChecked | No             | radio | Any radio button in the group (radios with the same values of name attribute) must be checked.
 | isSelected     | No             | select | Selected 'options' of the 'select' tag must have value.
 
-### Options for a form object<!-- | [Demo](https://codepen.io/) -->
+### Adding your own validations | [Demo](https://codepen.io/IvanGrimes/pen/KxVQOd)
+Custom validation must be a function that passes argument node (dom element).
+Function should return object with 'valid' property that contains result of validation (boolean) and 'message' property that contains string with a message of the notice.
+#### Example:
+```javascript
+const formhandler = new FormHandler({
+  fields: {
+    firstname: {
+      validation: 'isName',
+    },
+    lastname: {
+      validation: 'isName',
+    },
+    select: {
+      validation: 'isSelected',
+    },
+    checkbox: {
+      validation: 'isCheckboxChecked',
+    },
+    radio: {
+      validation: 'isRadioChecked',
+    },
+    message: {
+      validation: 'isCustom', // We're apply our custom validation to the field message (textarea tag)
+    },
+  },
+  customValidation: {
+    isCustom(node) {
+      const pattern = /[a-z]/;
+      let valid = pattern.test(node.value),
+          message = 'iscustom invalid';
+
+      return {
+        valid,
+        message,
+      };
+    },
+  },
+});
+```
+
+### Options for the form | [Demo](https://codepen.io/IvanGrimes/pen/VGeQOx)
 | Option        | Type             | Default        | Description
 |---------------|------------------|----------------|------------|
 | block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes.
@@ -232,7 +273,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a field object<!-- | [Demo](https://codepen.io/) -->
+### Options for the fields | [Demo](https://codepen.io/IvanGrimes/pen/bxELyP)
 | Option        | Type             | Default    | Description
 |---------------|------------------|------------|------------|
 | firstname:    | {                |            | Name attribute of the input tag.
@@ -297,50 +338,7 @@ const formhandler = new FormHandler({
 });
 ```
 
-
-### Options for a custom validations<!-- | [Demo](https://codepen.io/) -->
-Custom validation must be a function that passes argument node (dom element).
-Function should return object with 'valid' property that contains result of validation (boolean) and 'message' property that contains string with a message of the notice.
-#### Example:
-```javascript
-const formhandler = new FormHandler({
-  fields: {
-    firstname: {
-      validation: 'isName',
-    },
-    lastname: {
-      validation: 'isName',
-    },
-    select: {
-      validation: 'isSelected',
-    },
-    checkbox: {
-      validation: 'isCheckboxChecked',
-    },
-    radio: {
-      validation: 'isRadioChecked',
-    },
-    message: {
-      validation: 'isCustom', // We're apply our custom validation to the field message (textarea tag)
-    },
-  },
-  customValidation: {
-    isCustom(node) {
-      const pattern = /[a-z]/;
-      let valid = pattern.test(node.value),
-          message = 'iscustom invalid';
-
-      return {
-        valid,
-        message,
-      };
-    },
-  },
-});
-```
-
-
-### Options for a className object<!-- | [Demo](https://codepen.io/) -->
+### Options for the className object | [Demo](https://codepen.io/IvanGrimes/pen/mGVXNQ)
 | Option | Default | Description
 |--------|---------|------------|
 | form: | { |
@@ -376,7 +374,7 @@ const formhandler = new FormHandler({
       validation: 'isRadioChecked',
     },
     message: {
-      validation: 'isNonEmpty', // We're apply our custom validation to the field message (textarea tag)
+      validation: 'isNonEmpty',
     },
   },
   classNames: {
@@ -398,7 +396,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Options for a sender object<!-- | [Demo](https://codepen.io/) -->
+### Options for the sender object | [Demo](https://codepen.io/IvanGrimes/pen/zJrWOw)
 | Option | Type | Default | Description
 |--------|------|---------|------------|
 | type | string | 'xhr' | Type of the request, can be 'xhr' (XMLHttpRequest) or 'fetch' (Promise API).
@@ -436,7 +434,7 @@ const formhandler = new FormHandler({
 ```
 
 
-### Callbacks<!-- | [Demo](https://codepen.io/) -->
+### Callbacks | [Demo](https://codepen.io/IvanGrimes/pen/BOjrBe)
 | Callback | Description
 |----------|------------|
 | onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state
@@ -483,7 +481,7 @@ const formhandler = new FormHandler({
 });
 ```
 
-### Methods<!-- | [Demo](https://codepen.io/) -->
+### Methods | [Demo](https://codepen.io/IvanGrimes/pen/KxVoKd)
 | Method          | Type | Description
 |-----------------|------|------------|
 | isFieldValid(field)  | name(string)  | Returns validity of the field
@@ -502,6 +500,7 @@ const formhandler = new FormHandler({
 <br />
 <b>Method with argument 'field' can pass name attribute of the input tag, className (ex. '.formhandler__field) of the input or the node of the input.</b>
 
-<!-- ## More examples
-### Validation with Promise | [Demo](https://codepen.io/)
-### Validation with XHR | [Demo](https://codepen.io/) -->
+## More examples
+### Validation of the field with Promise API | [Demo](https://codepen.io/IvanGrimes/pen/JaGLoM)
+### Validation of the field with XMLHttpRequest | [Demo](https://codepen.io/IvanGrimes/pen/dqGmPK)
+### Sending of the form with built-in component | [Demo](https://codepen.io/IvanGrimes/pen/OoMvPY)
