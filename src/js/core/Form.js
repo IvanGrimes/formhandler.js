@@ -13,7 +13,7 @@ export default class Form {
     this.submitted = false;
     this.sended = null;
     this.callback = opts.callback;
-
+    console.log(this.classNames)
     this.submit.addEventListener(CLICK, this.listener);
   }
 
@@ -40,6 +40,7 @@ export default class Form {
     if (this.submitted) {
       this.toggleClassNames();
     }
+    this.toggleSubmitButton();
   }
 
   toggleClassNames() {
@@ -49,6 +50,14 @@ export default class Form {
     } else {
       this.node.classList.remove(this.classNames.isValid);
       this.node.classList.add(this.classNames.isNotValid);
+    }
+  }
+
+  toggleSubmitButton() {
+    if (this.valid) {
+      this.submit.classList.remove(this.classNames.disabledSubmitButton);
+    } else {
+      this.submit.classList.add(this.classNames.disabledSubmitButton);
     }
   }
 

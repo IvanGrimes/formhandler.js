@@ -46,6 +46,8 @@ export default class FormHandler {
       }
     });
 
+    this.form.setState();
+
     return this;
   }
 

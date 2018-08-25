@@ -502,6 +502,7 @@
       this.submitted = false;
       this.sended = null;
       this.callback = opts.callback;
+      console.log(this.classNames);
       this.submit.addEventListener(CLICK, this.listener);
     }
 
@@ -515,6 +516,8 @@
         if (this.submitted) {
           this.toggleClassNames();
         }
+
+        this.toggleSubmitButton();
       }
     }, {
       key: "toggleClassNames",
@@ -525,6 +528,15 @@
         } else {
           this.node.classList.remove(this.classNames.isValid);
           this.node.classList.add(this.classNames.isNotValid);
+        }
+      }
+    }, {
+      key: "toggleSubmitButton",
+      value: function toggleSubmitButton() {
+        if (this.valid) {
+          this.submit.classList.remove(this.classNames.disabledSubmitButton);
+        } else {
+          this.submit.classList.add(this.classNames.disabledSubmitButton);
         }
       }
     }, {
@@ -1135,6 +1147,7 @@
             _this2.makeNotice(name, field.notice);
           }
         });
+        this.form.setState();
         return this;
       }
     }, {
