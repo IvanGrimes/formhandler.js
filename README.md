@@ -285,7 +285,7 @@ const formhandler = new FormHandler({
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | firstname:    | {                |            | Name attribute of the input tag. |
-| validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **(link to the section 'Built-in validations')**. If set to false then field won't be validated. |
+| validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **[Built-in validations](https://ivangrimes.github.io/formhandler/#built-in-validations)**. If set to false then field won't be validated. |
 | min:          | number / boolean | false      | Specifies the minimum of characters that must be entered for a validity.
 | max:          | number / boolean | false      | Specifies the maximum of characters that must be entered for a validity.
 | send:         | boolean          | true       | If set to true/false then field will be sent or not (Using component of FormHandler).
@@ -552,7 +552,7 @@ const formhandler = new FormHandler({
 | clearForm() | none | Clears all fields and sets their values to the default |
 | clearField(field) | name(string) | Clears the field |
 | getField(field) | string(name) | Returns node of the field |
-| addField(field, {...options}) | string(name), object(options) | Example |
+| addField(field, {...options}) | string(name), object(options) | Adding existing input to the instance of the FormHandler [Example](https://codepen.io/IvanGrimes/pen/WgrzJG) |
 | removeField(field) | string(name) | Removes field (node) and it's notice (node). |
 | validateField(field) | string(name) | Validates this field, also toggle classNames. |
 | validateForm() | none | Validates all fields of the form, also toggle classNames. |
