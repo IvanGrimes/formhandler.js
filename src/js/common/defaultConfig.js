@@ -43,7 +43,7 @@ export default {
   sender: {
     send: false,
     type: 'xhr',
-    clearOnSuccess: true,
+    clearOnSuccess: true, // TODO: Переминовать => clearFormOnSuccess
   },
   callbacks: {
     onFieldChangeState() {},

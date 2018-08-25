@@ -24,7 +24,7 @@ import {
   HTML_SELECT_ELEMENT,
 } from './common/constants';
 
-export default class FormHandler {
+export default class FormHandler { // TODO: Переименовать опцию attachTo => appendTo
   constructor({ ...args }) {
     this.opts = args;
     this.fields = {};
@@ -42,10 +42,11 @@ export default class FormHandler {
     Object.entries(this.opts.fields).forEach(([name, field]) => {
       this.makeField(name, field);
       if (field.validation) {
+        const validation = Validator.validate(this.fields[name].validatorOptions);
         this.makeNotice(name, field.notice);
+        this.setFieldState(name, validation.valid, validation.message);
       }
     });
-
     this.form.setState();
 
     return this;
@@ -194,10 +195,12 @@ export default class FormHandler {
         .then(data => data.json())
         .then((json) => {
           this.setFieldState(name, !!json[property], message);
+          this.form.setState();
         });
     } else {
       response.addEventListener(LOAD, (ev) => {
         this.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
+        this.form.setState();
       });
     }
   }
@@ -219,8 +222,6 @@ export default class FormHandler {
       this.notices[name].hide();
     }
 
-    this.form.setState();
-
     return this;
   }
 
@@ -230,6 +231,11 @@ export default class FormHandler {
 
     if (this.fields[name].validation) {
       this.setFieldState(name, validation.valid, validation.message);
+
+      // eslint-disable-next-line valid-typeof
+      if (typeof validation.valid !== OBJECT) {
+        this.form.setState();
+      }
     }
   };
 
@@ -390,6 +396,7 @@ export default class FormHandler {
     });
 
     this.form.submitted = true;
+    this.form.setState();
 
     return this.form.node;
   }

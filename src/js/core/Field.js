@@ -14,7 +14,7 @@ export default class Field {
     this.min = min;
     this.max = max;
     this.classNames = classNames;
-    this.valid = false;
+    this.valid = null;
     this.submitted = false;
     this.callback = callback;
   }

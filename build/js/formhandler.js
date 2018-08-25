@@ -267,7 +267,8 @@
     sender: {
       send: false,
       type: 'xhr',
-      clearOnSuccess: true
+      clearOnSuccess: true // TODO: Переминовать => clearFormOnSuccess
+
     },
     callbacks: {
       onFieldChangeState: function onFieldChangeState() {},
@@ -580,7 +581,7 @@
       this.classNames = opts.classNames;
       this.fields = opts.fields;
       this.listener = opts.listener;
-      this.valid = false;
+      this.valid = null;
       this.submitted = false;
       this.sended = null;
       this.callback = opts.callback;
@@ -680,7 +681,7 @@
       this.min = min;
       this.max = max;
       this.classNames = classNames;
-      this.valid = false;
+      this.valid = null;
       this.submitted = false;
       this.callback = callback;
     }
@@ -1078,6 +1079,7 @@
   var FormHandler =
   /*#__PURE__*/
   function () {
+    // TODO: Переименовать опцию attachTo => appendTo
     function FormHandler(_ref) {
       var _this = this;
 
@@ -1108,7 +1110,12 @@
         var validation = Validator.validate(_this.fields[name].validatorOptions);
 
         if (_this.fields[name].validation) {
-          _this.setFieldState(name, validation.valid, validation.message);
+          _this.setFieldState(name, validation.valid, validation.message); // eslint-disable-next-line valid-typeof
+
+
+          if (_typeof(validation.valid) !== OBJECT) {
+            _this.form.setState();
+          }
         }
       });
 
@@ -1224,7 +1231,11 @@
           _this2.makeField(name, field);
 
           if (field.validation) {
+            var validation = Validator.validate(_this2.fields[name].validatorOptions);
+
             _this2.makeNotice(name, field.notice);
+
+            _this2.setFieldState(name, validation.valid, validation.message);
           }
         });
         this.form.setState();
@@ -1334,10 +1345,14 @@
             return data.json();
           }).then(function (json) {
             _this4.setFieldState(name, !!json[property], message);
+
+            _this4.form.setState();
           });
         } else {
           response.addEventListener(LOAD, function (ev) {
             _this4.setFieldState(name, !!JSON.parse(ev.target.response)[property], message);
+
+            _this4.form.setState();
           });
         }
       }
@@ -1361,7 +1376,6 @@
           this.notices[name].hide();
         }
 
-        this.form.setState();
         return this;
       }
     }, {
@@ -1497,6 +1511,7 @@
           }
         });
         this.form.submitted = true;
+        this.form.setState();
         return this.form.node;
       }
     }]);

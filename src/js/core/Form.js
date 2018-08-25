@@ -9,7 +9,7 @@ export default class Form {
     this.classNames = opts.classNames;
     this.fields = opts.fields;
     this.listener = opts.listener;
-    this.valid = false;
+    this.valid = null;
     this.submitted = false;
     this.sended = null;
     this.callback = opts.callback;
