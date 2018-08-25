@@ -1,7 +1,7 @@
 import {
   DIV,
   BEFORE,
-  AFTER,
+  AFTER, NODE_LIST,
 } from '../common/constants';
 
 export default class Notice {
@@ -16,6 +16,7 @@ export default class Notice {
     this.parent = parent;
     this.node = null;
     this.mount();
+    console.log(this);
   }
 
   mount() {
@@ -27,10 +28,17 @@ export default class Notice {
       this.parent.appendChild(this.node);
     } else {
       if (this.nextToField === BEFORE) {
-        this.form.insertBefore(this.node, this.parent);
+        if (this.parent.constructor.name === NODE_LIST) {
+          this.parent = this.parent[0];
+        }
+        this.parent.parentElement.insertBefore(this.node, this.parent);
       }
       if (this.nextToField === AFTER) {
-        this.form.insertBefore(this.node, this.parent.nextElementSibling);
+        if (this.parent.constructor.name === NODE_LIST) {
+          this.parent = this.parent[this.parent.length - 1];
+        }
+        console.log(this.parent);
+        this.parent.parentElement.insertBefore(this.node, this.parent.nextElementSibling);
       }
     }
   }

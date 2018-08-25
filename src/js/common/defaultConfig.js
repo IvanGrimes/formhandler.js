@@ -20,8 +20,8 @@ export default {
     send: true,
   },
   notices: {
-    appendTo: '.formhandler__notices',
-    nextToField: false,
+    appendTo: false,
+    nextToField: 'before',
     message: false,
   },
   classNames: {
