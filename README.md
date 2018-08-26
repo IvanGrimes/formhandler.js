@@ -1,4 +1,4 @@
-<h1 align="center"><img height="150" src="https://github.com/IvanGrimes/formhandler.js/blob/master/sandbox/logo.png?raw=true" /><br>FormHandler 1.0.1</h1>
+<h1 align="center"><img height="150" src="https://github.com/IvanGrimes/formhandler.js/blob/master/sandbox/logo.png?raw=true" /><br>FormHandler 1.0.2</h1>
 
 <p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler.js">
@@ -27,9 +27,9 @@
 
 
 ## Getting started
-FormHandler has a few methods to connect to your project: CDN, npm or downloading latest release.
+formhandler.js has a few methods to connect to your project: CDN, npm or downloading latest release.
 ### CDN
-For using FormHandler with CDN you need to include CSS in your ``<head>`` tag.
+For using formhandler.js with CDN you need to include CSS in your ``<head>`` tag.
 ##### Instead **x.x.x** in formhandler.js@**x.x.x** put version from the top readme.
 ```html
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/formhandler.js@x.x.x/dist/css/formhandler.min.css">
@@ -41,7 +41,7 @@ Also needed inclusion Javascript before closing ``<body>`` tag.
 ```
 
 ### npm
-Firstly install FormHandler package from npm.
+Firstly install formhandler.js package from npm.
 ```
 npm i -D formhandler.js
 ```
@@ -50,7 +50,7 @@ npm i -D formhandler.js
 ##### If you're using Webpack
 In your Javascript file import formhandler.
 ```javascript
-import FormHandler from 'formhandler';
+import FormHandler from 'formhandler.js';
 ```
 
 ##### If you're not using Javascript bundler.
@@ -127,8 +127,8 @@ Every inputs must have an attribute name.
 </form>
 ```
 
-After including FormHandler with one of methods and adding HTML markup.
-Initialize FormHandler instance in your Javascript file or inside ``<script>`` tag.
+After including formhandler.js with one of methods and adding HTML markup.
+Initialize formhandler.js instance in your Javascript file or inside ``<script>`` tag.
 
 ### Initialization
 Every property of object fields must fit to value of the name attribute input tag.
@@ -220,7 +220,7 @@ const formhandler = new FormHandler({
 
 | Option | Type | Default| Description |
 |--------|------|--------|-------------|
-| block:        | string           | '.formhandler' | Selector for element (block) in which the FormHandler initializes. |
+| block:        | string           | '.formhandler' | Selector for element (block) in which the formhandler.js initializes. |
 | submit:       | string           | '.formhandler__submit' | Selector for the submit button. |
 | delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared |
 | notice:       | {                |  |
@@ -283,10 +283,10 @@ const formhandler = new FormHandler({
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | firstname:    | {                |            | Name attribute of the input tag. |
-| validation:   | string / boolean | none       | Specifies which validation type will be applied. FormHandler have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **[Built-in validations](https://ivangrimes.github.io/formhandler.js/#built-in-validations)**. If set to false then field won't be validated. |
+| validation:   | string / boolean | none       | Specifies which validation type will be applied. formhandler.js have a few built-in types of validation: isNonEmpty, isName, isEmail, isPhone, isCheckboxChecked, isRadioChecked, isSelected **[Built-in validations](https://ivangrimes.github.io/formhandler.js/#built-in-validations)**. If set to false then field won't be validated. |
 | min:          | number / boolean | false      | Specifies the minimum of characters that must be entered for a validity.
 | max:          | number / boolean | false      | Specifies the maximum of characters that must be entered for a validity.
-| send:         | boolean          | true       | If set to true/false then field will be sent or not (Using component of FormHandler).
+| send:         | boolean          | true       | If set to true/false then field will be sent or not (Using component of formhandler.js).
 | classNames:   | {                |            | Contains classNames that applying ONLY to this field. If you don't create this object  then classNames will be applied to this field from classNames.fields. |
 | isValid:      | string           | 'formhandler__field--is-valid' | Classname for a valid input. |
 | isNotValid:   | string           | 'formhandler__field--is-not-valid' | Classname for an invalid input. |
@@ -550,7 +550,7 @@ const formhandler = new FormHandler({
 | clearForm() | none | Clears all fields and sets their values to the default |
 | clearField(field) | name(string) | Clears the field |
 | getField(field) | string(name) | Returns node of the field |
-| addField(field, {...options}) | string(name), object(options) | Adding existing input to the instance of the FormHandler. **[Example](https://codepen.io/IvanGrimes/pen/WgrzJG)** |
+| addField(field, {...options}) | string(name), object(options) | Adding existing input to the instance of the formhandler.js. **[Example](https://codepen.io/IvanGrimes/pen/WgrzJG)** |
 | removeField(field) | string(name) | Removes field (node) and it's notice (node). |
 | validateField(field) | string(name) | Validates this field, also toggle classNames. |
 | validateForm() | none | Validates all fields of the form, also toggle classNames. |
