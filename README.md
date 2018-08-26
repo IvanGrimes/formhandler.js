@@ -201,7 +201,7 @@ const formhandler = new FormHandler({
       validation: 'isCustom', // We're apply our custom validation to the field message (textarea tag)
     },
   },
-  customValidation: {
+  customValidations: {
     isCustom(node) {
       const pattern = /[a-z]/;
       let valid = pattern.test(node.value),
