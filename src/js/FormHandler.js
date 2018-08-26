@@ -375,6 +375,8 @@ export default class FormHandler { // TODO: Переименовать опци�
     };
 
     this.makeField(name, this.opts.fields[name]);
+    this.fields[name].on(INPUT, this.inputHandler);
+
     this.makeNotice(name, this.opts.fields[name].notice);
 
     return this.fields[name].node;
