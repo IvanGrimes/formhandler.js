@@ -27,9 +27,9 @@
 
 
 ## Getting started
-FormHandler has a few methods to connect to your project: CDN, npm or downloading latest release.
+formhandler.js has a few methods to connect to your project: CDN, npm or downloading latest release.
 ### CDN
-For using FormHandler with CDN you need to include CSS in your ``<head>`` tag.
+For using formhandler.js with CDN you need to include CSS in your ``<head>`` tag.
 ##### Instead **x.x.x** in formhandler.js@**x.x.x** put version from the top readme.
 ```html
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/formhandler.js@x.x.x/dist/css/formhandler.min.css">
@@ -41,14 +41,14 @@ Also needed inclusion Javascript before closing ``<body>`` tag.
 ```
 
 ### npm
-Firstly install FormHandler package from npm.
+Firstly install formhandler.js package from npm.
 ```
 npm i -D formhandler.js
 ```
 
 #### Include Javascript
 ##### If you're using Webpack
-In your Javascript file import formhandler.
+In your Javascript file import formhandler.js.
 ```javascript
 import FormHandler from 'formhandler';
 ```
@@ -126,8 +126,8 @@ Every inputs must have an attribute name.
 </form>
 ```
 
-After including FormHandler with one of methods and adding HTML markup.
-Initialize FormHandler instance in your Javascript file or inside ``<script>`` tag.
+After including formhandler.js with one of methods and adding HTML markup.
+Initialize formhandler.js instance in your Javascript file or inside ``<script>`` tag.
 
 ### Initialization
 Every property of object fields must fit to value of the name attribute input tag.
@@ -157,7 +157,7 @@ const formhandler = new FormHandler({
   },
 });
 ```
-After that FormHandler instance will be initialized with default settings.
+After that formhandler.js instance will be initialized with default settings.
 
 
 ## API
