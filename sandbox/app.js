@@ -129,11 +129,4 @@ const form = new FormHandler({
   },
 });
 
-form.addField('message2', {
-  validation: 'isNonEmpty',
-  min: 12,
-  max: 48,
-  notice: {
-    message: 'This fields was added from method',
-  },
-});
+form.validateField('email');

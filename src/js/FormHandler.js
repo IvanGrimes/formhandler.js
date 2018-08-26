@@ -390,11 +390,12 @@ export default class FormHandler { // TODO: Переименовать опци�
   validateField(field) { // also turns on toggleClassNames
     const name = this.getFieldNameBy(field);
 
-    if (field.validation) {
+    if (this.fields[name].validation) {
       const validation = Validator.validate(this.fields[name].validatorOptions);
       this.fields[name].submitted = true;
       this.setFieldState(name, validation.valid);
     }
+    this.form.setState();
 
     return this.fields[name].node;
   }
