@@ -58,7 +58,7 @@ function umd() {
         if (env === 'development') {
           return;
         }
-        gulp.src('./dist/js/FormHandler.js')
+        gulp.src('./dist/js/formhandler.js')
             .pipe(sourcemaps.init())
             .pipe(uglify())
             .pipe(header(copyrights))
