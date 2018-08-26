@@ -223,9 +223,9 @@ var defaultConfig = {
     delayForNotice: 3000,
     notice: {
       appendTo: '.formhandler__notices',
-      message: 'please, fill the form',
-      successMessage: 'ok',
-      errorMessage: 'oops',
+      message: 'This form seems to be invalid',
+      successMessage: 'Form was successfully sent',
+      errorMessage: 'Oops, something went wrong',
       classNames: {
         block: 'formhandler__notice-form',
         hidden: 'formhandler__notice-form--hidden',

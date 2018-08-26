@@ -1,6 +1,6 @@
 {
   "name": "formhandler.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Powerful pure Javascript form validator with a feature of adding your own validations",
   "author": "Ivan Grimes",
   "license": "MIT",
