@@ -586,9 +586,8 @@ function () {
     this.listener = opts.listener;
     this.valid = null;
     this.submitted = false;
-    this.sended = null;
+    this.sent = null;
     this.callback = opts.callback;
-    console.log(this.classNames);
     this.submit.addEventListener(CLICK, this.listener);
   }
 
@@ -627,6 +626,7 @@ function () {
       });
       this.callback(this.node, this.valid, false);
       this.valid = false;
+      this.submitted = false;
       this.node.classList.remove(this.classNames.isNotValid);
       this.node.classList.remove(this.classNames.isValid);
     }
@@ -1092,7 +1092,7 @@ function () {
     _defineProperty(this, "setFormStateFromResponse", function (result) {
       if (result === SUCCESS) {
         _this.notices.form.message = _this.opts.form.notice.successMessage;
-        _this.form.send = true;
+        _this.form.sent = true;
 
         if (_this.opts.sender.clearFormOnSuccess) {
           _this.form.clear();
@@ -1101,7 +1101,7 @@ function () {
 
       if (result === ERROR) {
         _this.notices.form.message = _this.opts.form.notice.errorMessage;
-        _this.form.send = false;
+        _this.form.sent = false;
       }
 
       _this.notices.form.show();
@@ -1435,7 +1435,7 @@ function () {
   }, {
     key: "isFormSent",
     value: function isFormSent() {
-      return this.form.sended;
+      return this.form.sent;
     }
   }, {
     key: "clearForm",
