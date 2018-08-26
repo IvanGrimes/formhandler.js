@@ -94,7 +94,7 @@ Every inputs must have an attribute name.
 <form class="formhandler"
         action="#"
         method="POST">
-  <div class="formhandler__notice"></div> <!-- For notice of the form -->
+  <div class="formhandler__notices"></div> <!-- For notice of the form -->
   <input class="formhandler__field" type="text" name="firstname" placeholder="First name">
   <input class="formhandler__field" type="text" name="lastname" placeholder="Last name">
 
