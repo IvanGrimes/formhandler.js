@@ -23,7 +23,7 @@ const form = new FormHandler({
       validation: 'isName',
       send: false,
       min: 2,
-      max: 20,
+      // max: 20,
     },
     email: {
       validation: 'isEmail',

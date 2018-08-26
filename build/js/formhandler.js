@@ -410,8 +410,10 @@
     isName: function isName(node, min, max) {
       var pattern = /^[a-zA-Z]+$/;
       var valid = pattern.test(node.value);
-      var message = 'Must contain at least one letter';
-      var length = node.value.length;
+      var message = 'Must contain only letters';
+
+      var _node$value$trim = node.value.trim(),
+          length = _node$value$trim.length;
 
       if (min && max) {
         if (length < min) {
@@ -464,7 +466,10 @@
     },
     isPhone: function isPhone(node, min, max) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
-      var length = node.value.length;
+
+      var _node$value$trim2 = node.value.trim(),
+          length = _node$value$trim2.length;
+
       var valid = pattern.test(node.value);
       var message = 'Must be a valid phone number';
 
@@ -504,7 +509,9 @@
       };
     },
     isNonEmpty: function isNonEmpty(node, min, max) {
-      var length = node.value.length;
+      var _node$value$trim3 = node.value.trim(),
+          length = _node$value$trim3.length;
+
       var valid = length > 0;
       var message = 'Must contain at least one character';
 

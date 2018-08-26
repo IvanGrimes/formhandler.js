@@ -97,8 +97,8 @@ export default class Validator {
     isName(node, min, max) {
       const pattern = /^[a-zA-Z]+$/;
       let valid = pattern.test(node.value);
-      let message = 'Must contain at least one letter';
-      const { length } = node.value;
+      let message = 'Must contain only letters';
+      const { length } = node.value.trim();
 
       if (min && max) {
         if (length < min) {
@@ -147,7 +147,7 @@ export default class Validator {
     },
     isPhone(node, min, max) {
       const pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
-      const { length } = node.value;
+      const { length } = node.value.trim();
       let valid = pattern.test(node.value);
       let message = 'Must be a valid phone number';
 
@@ -183,7 +183,7 @@ export default class Validator {
       };
     },
     isNonEmpty(node, min, max) {
-      const { length } = node.value;
+      const { length } = node.value.trim();
       let valid = length > 0;
       let message = 'Must contain at least one character';
 
