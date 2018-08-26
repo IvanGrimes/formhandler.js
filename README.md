@@ -490,10 +490,10 @@ const formhandler = new FormHandler({
 
 | Callback | Description |
 |----------|-------------|
-| onFieldChangeState(name, el, pastValidity, newValidity) | Fires when the field changes state |
+| onFieldChangeState(validation, name, el, pastValidity, newValidity) | Fires when the field changes state. 'Validation' is a name of the validation that applyied to the field, 'name' is a value of name attribute of the input tag, 'el' is a node of input, 'pastValidity' is a previous value of the field validity (null if validated first), 'newValidity' is a new value of the field validity.  |
 | onFormChangeState(el, pastValidity, newValidity) | Fires when the form changes state |
-| onSubmit(form, fields) | Fires when the form submitted |
-| onSend(result) | Fires when the form was sent |
+| onSubmit(form, fields) | Fires when the form submitted. 'form' contain an element of the form and 'fields' contains all input elements of the form. |
+| onSend(result) | Fires when the form was sent. 'result' is a string that can be 'success' if form was sent, and 'error' if something went wrong :) |
 
 #### Example:
 ```javascript
@@ -519,8 +519,8 @@ const formhandler = new FormHandler({
     },
   },
   callbacks: {
-    onFieldChangeState(name, el, pastValidity, newValidity) {
-      console.log('onFieldChangeState', name, el, pastValidity, newValidity);
+    onFieldChangeState(validation, name, el, pastValidity, newValidity) {
+      console.log('onFieldChangeState', validation, name, el, pastValidity, newValidity);
     },
     onFormChangeState(el, pastValidity, newValidity) {
       console.log('onFormChangeState', el, pastValidity, newValidity);
