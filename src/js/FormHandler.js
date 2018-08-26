@@ -180,14 +180,14 @@ export default class FormHandler { // TODO: Переименовать опци�
   setFormStateFromResponse = (result) => {
     if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
-      this.form.send = true;
+      this.form.sent = true;
       if (this.opts.sender.clearFormOnSuccess) {
         this.form.clear();
       }
     }
     if (result === ERROR) {
       this.notices.form.message = this.opts.form.notice.errorMessage;
-      this.form.send = false;
+      this.form.sent = false;
     }
     this.notices.form.show();
   };
@@ -333,7 +333,7 @@ export default class FormHandler { // TODO: Переименовать опци�
   }
 
   isFormSent() {
-    return this.form.sended;
+    return this.form.sent;
   }
 
   clearForm() {

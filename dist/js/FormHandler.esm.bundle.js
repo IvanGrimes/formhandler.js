@@ -1139,6 +1139,8 @@ function () {
 
       _this.validateForm();
 
+      _this.notices.form.message = _this.opts.form.notice.message;
+
       if (_this.form.valid) {
         _this.notices.form.hide();
 
