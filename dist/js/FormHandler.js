@@ -299,7 +299,10 @@
       _classCallCheck(this, Validator);
 
       this.custom = custom;
-      this.addCustomValidations();
+
+      if (this.custom) {
+        this.addCustomValidations();
+      }
     }
 
     _createClass(Validator, [{
@@ -338,23 +341,46 @@
 
   _defineProperty(Validator, "validations", {
     isCheckboxChecked: function isCheckboxChecked(node, min, max) {
-      var message = 'Please, check any';
-      var valid = false;
+      var message = 'At least one checkbox must be selected';
+      var valid = true;
       var checked = 0;
       node.forEach(function (el) {
         if (el.checked) checked += 1;
       });
 
       if (min && max) {
-        valid = !!(min && max && checked >= min && checked <= max);
+        if (checked < min) {
+          valid = false;
+          message = "Minimum ".concat(min, ", maximum ").concat(max, " checkboxes must be selected");
+        }
+
+        if (checked > max) {
+          valid = false;
+          message = "Not more than ".concat(max, " ").concat(max === 1 ? 'checkbox' : 'checkboxes', " must be selected");
+        }
       }
 
       if (min && !max) {
-        valid = checked >= min;
+        if (checked < min) {
+          valid = false;
+          message = "At least ".concat(min, " ").concat(min === 1 ? 'checkbox' : 'checkboxes', " must be selected");
+        }
       }
 
       if (!min && max) {
-        valid = checked <= max;
+        if (!checked) {
+          message = "Minimum 1, maximum ".concat(max, " checkboxes must be selected");
+        }
+
+        if (checked > max) {
+          valid = false;
+          message = "Not more than ".concat(max, " ").concat(max === 1 ? 'checkbox' : 'checkboxes', " must be selected");
+        }
+      }
+
+      if (!min && !max && !checked) {
+        valid = false;
+        message = 'At least one checkbox must be selected';
       }
 
       return {
@@ -366,7 +392,7 @@
       var valid = Array.from(node).some(function (el) {
         return el.checked === true;
       });
-      var message = 'Please, press any button';
+      var message = 'Please select one of the buttons';
       return {
         valid: valid,
         message: message
@@ -378,45 +404,53 @@
       }).some(function (el) {
         return el.selected === true;
       });
-      var message = 'Please, choose any option';
+      var message = 'Please select one of the options';
       return {
         valid: valid,
         message: message
       };
     },
     isName: function isName(node, min, max) {
-      var pattern = /[\u00BF-\u1FFF\u2C00-\uD7FF\w]/;
+      var pattern = /^[a-zA-Z]+$/;
       var valid = pattern.test(node.value);
-      var message = 'Must contain any letter';
+      var message = 'Must contain only letters';
 
-      if (node.value.length === 0) {
+      var _node$value$trim = node.value.trim(),
+          length = _node$value$trim.length;
+
+      if (min && max) {
+        if (length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'letter' : 'letters', " but not more than ").concat(max);
+        }
+
+        if (length > max) {
+          valid = false;
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'letter' : 'letters');
+        }
+      }
+
+      if (min && !max) {
+        if (length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'letter' : 'letters');
+        }
+      }
+
+      if (!min && max) {
+        if (!length) {
+          message = "Must contain at least 1 letter but not more than ".concat(max);
+        }
+
+        if (length > max) {
+          valid = false;
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'letter' : 'letters');
+        }
+      }
+
+      if (!min && !max && !length) {
         valid = false;
-
-        if (min && !max) {
-          message = "Must contain at least ".concat(min, " letter");
-        }
-
-        if (!min && max) {
-          message = "Must contain at least one letter and less than ".concat(max + 1);
-        }
-
-        if (min && max) {
-          message = "Must contain between ".concat(min, " and ").concat(max, " letters");
-        }
-      } else {
-        if (min && node.value.length < min) {
-          valid = false;
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " letter") : "".concat(min, " letters"));
-        }
-
-        if (min && node.value.length > min) {
-          valid = true;
-        }
-
-        if (max && node.value.length > max) {
-          valid = false;
-          message = "Must contain less than ".concat(max + 1, " letters");
-        }
+        message = 'Must contain at least one letter';
       }
 
       return {
@@ -424,41 +458,10 @@
         message: message
       };
     },
-    isEmail: function isEmail(node, min, max) {
+    isEmail: function isEmail(node) {
       var pattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       var valid = pattern.test(node.value);
       var message = 'Must be a valid email address';
-
-      if (node.value.length === 0) {
-        valid = false;
-
-        if (min && !max) {
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
-        }
-
-        if (!min && max) {
-          message = "Must contain at least one character and less than ".concat(max + 1);
-        }
-
-        if (min && max) {
-          message = "Must contain between ".concat(min, " and ").concat(max, " characters");
-        }
-      } else {
-        if (min && node.value.length < min) {
-          valid = false;
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
-        }
-
-        if (min && node.value.length > min) {
-          valid = true;
-        }
-
-        if (max && node.value.length > max) {
-          valid = false;
-          message = "Must contain less than ".concat(max + 1, " characters");
-        }
-      }
-
       return {
         valid: valid,
         message: message
@@ -466,36 +469,40 @@
     },
     isPhone: function isPhone(node, min, max) {
       var pattern = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
+
+      var _node$value$trim2 = node.value.trim(),
+          length = _node$value$trim2.length;
+
       var valid = pattern.test(node.value);
       var message = 'Must be a valid phone number';
 
-      if (node.value.length === 0) {
-        valid = false;
-
-        if (min && !max) {
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " digit") : "".concat(min, " digits"));
-        }
-
-        if (!min && max) {
-          message = "Must contain at least one digit and less than ".concat(max + 1);
-        }
-
-        if (min && max) {
-          message = "Must contain between ".concat(min, " and ").concat(max, " digits");
-        }
-      } else {
-        if (min && node.value.length < min) {
+      if (min && max) {
+        if (length < min) {
           valid = false;
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " digit") : "".concat(min, " digits"));
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'digit' : 'digits', " but not more than ").concat(max);
         }
 
-        if (min && node.value.length > min) {
-          valid = true;
-        }
-
-        if (max && node.value.length > max) {
+        if (length > max) {
           valid = false;
-          message = "Must contain less than ".concat(max + 1, " letters");
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'digit' : 'digits');
+        }
+      }
+
+      if (min && !max) {
+        if (length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'digit' : 'digits');
+        }
+      }
+
+      if (!min && max) {
+        if (!length) {
+          message = "Must contain at least 1 digit but not more than ".concat(max);
+        }
+
+        if (length > max) {
+          valid = false;
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'digit' : 'digits');
         }
       }
 
@@ -505,36 +512,39 @@
       };
     },
     isNonEmpty: function isNonEmpty(node, min, max) {
-      var valid = node.value.length > 0;
-      var message = 'Must be non empty';
+      var _node$value$trim3 = node.value.trim(),
+          length = _node$value$trim3.length;
 
-      if (node.value.length === 0) {
-        valid = false;
+      var valid = length > 0;
+      var message = 'Must contain at least one character';
 
-        if (min && !max) {
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
-        }
-
-        if (!min && max) {
-          message = "Must contain at least one character and less than ".concat(max + 1);
-        }
-
-        if (min && max) {
-          message = "Must contain between ".concat(min, " and ").concat(max, " characters");
-        }
-      } else {
-        if (min && node.value.length < min) {
+      if (min && max) {
+        if (length < min) {
           valid = false;
-          message = "Must contain at least ".concat(min === 1 ? "".concat(min, " character") : "".concat(min, " characters"));
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'character' : 'characters', " but not more than ").concat(max);
         }
 
-        if (min && node.value.length > min) {
-          valid = true;
-        }
-
-        if (max && node.value.length > max) {
+        if (length > max) {
           valid = false;
-          message = "Must contain less than ".concat(max + 1, " characters");
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'character' : 'characters');
+        }
+      }
+
+      if (min && !max) {
+        if (length < min) {
+          valid = false;
+          message = "Must contain at least ".concat(min, " ").concat(min === 1 ? 'character' : 'characters');
+        }
+      }
+
+      if (!min && max) {
+        if (!length) {
+          message = "Must contain at least 1 character but not more than ".concat(max);
+        }
+
+        if (length > max) {
+          valid = false;
+          message = "Must contain not more than ".concat(max, " ").concat(max === 1 ? 'character' : 'characters');
         }
       }
 
@@ -1214,7 +1224,7 @@
       this.notices = {};
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
-      this.callbacks = this.opts.callbacks;
+      this.callbacks = {};
       this.init();
     }
 
@@ -1271,6 +1281,7 @@
           _this3.opts.fields[name].notice.classNames = Object.assign({}, _this3.opts.classNames.notices, _this3.opts.fields[name].notice.classNames);
         });
         this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
+        this.callbacks = this.opts.callbacks ? Object.assign({}, defaultConfig.callbacks, this.opts.callbacks) : defaultConfig.callbacks;
         return this;
       }
     }, {
