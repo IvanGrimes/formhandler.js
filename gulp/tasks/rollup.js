@@ -26,8 +26,8 @@ function es() {
         strict: true,
         copyrights,
         sourcemap: env === 'development',
-        sourcemapFile: `./${env === 'development' ? 'build' : 'dist'}/js/FormHandler.esm.bundle.js.map`,
-        file: `./${env === 'development' ? 'build' : 'dist'}/js/FormHandler.esm.bundle.js`,
+        sourcemapFile: `./${env === 'development' ? 'build' : 'dist'}/js/formhandler.esm.bundle.js.map`,
+        file: `./${env === 'development' ? 'build' : 'dist'}/js/formhandler.esm.bundle.js`,
     })).catch((err) => {
         console.error(err.toString());
     });
@@ -48,11 +48,11 @@ function umd() {
     }).then(bundle => {
         return bundle.write({
             name: 'FormHandler',
-            file: `./${env === 'development' ? 'build' : 'dist'}/js/FormHandler.js`,
+            file: `./${env === 'development' ? 'build' : 'dist'}/js/formhandler.js`,
             format: 'umd',
             strict: true,
             sourcemap: env === 'development',
-            sourcemapFile: `./${env === 'development' ? 'build' : 'dist'}/js/FormHandler.js.map`,
+            sourcemapFile: `./${env === 'development' ? 'build' : 'dist'}/js/formhandler.js.map`,
         });
     }).then(() => {
         if (env === 'development') {
