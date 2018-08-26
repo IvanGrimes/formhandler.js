@@ -31,7 +31,7 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.notices = {};
     this.form = null;
     this.validator = new Validator(this.opts.customValidations);
-    this.callbacks = this.opts.callbacks;
+    this.callbacks = {};
 
     this.init();
   }
@@ -103,6 +103,10 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.opts.sender = this.opts.sender
       ? { ...defaultConfig.sender, ...this.opts.sender }
       : defaultConfig.sender;
+
+    this.callbacks = this.opts.callbacks
+      ? { ...defaultConfig.callbacks, ...this.opts.callbacks }
+      : defaultConfig.callbacks;
 
     return this;
   }
@@ -176,14 +180,14 @@ export default class FormHandler { // TODO: Переименовать опци�
   setFormStateFromResponse = (result) => {
     if (result === SUCCESS) {
       this.notices.form.message = this.opts.form.notice.successMessage;
-      this.form.send = true;
+      this.form.sent = true;
       if (this.opts.sender.clearFormOnSuccess) {
         this.form.clear();
       }
     }
     if (result === ERROR) {
       this.notices.form.message = this.opts.form.notice.errorMessage;
-      this.form.send = false;
+      this.form.sent = false;
     }
     this.notices.form.show();
   };
@@ -253,6 +257,7 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.callbacks.onSubmit(this.form.node, fieldNodes);
 
     this.validateForm();
+    this.notices.form.message = this.opts.form.notice.message;
 
     if (this.form.valid) {
       this.notices.form.hide();
@@ -328,7 +333,7 @@ export default class FormHandler { // TODO: Переименовать опци�
   }
 
   isFormSent() {
-    return this.form.sended;
+    return this.form.sent;
   }
 
   clearForm() {

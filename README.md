@@ -1,4 +1,4 @@
-<h1 align="center"><img height="150" src="./sandbox/logo.png" /><br>FormHandler 1.0.1</h1>
+<h1 align="center"><img height="150" src="./sandbox/logo.png" /><br>FormHandler 1.0.2</h1>
 
 <p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler.js">
@@ -27,9 +27,9 @@
 
 
 ## Getting started
-FormHandler has a few methods to connect to your project: CDN, npm or downloading latest release.
+formhandler.js has a few methods to connect to your project: CDN, npm or downloading latest release.
 ### CDN
-For using FormHandler with CDN you need to include CSS in your ``<head>`` tag.
+For using formhandler.js with CDN you need to include CSS in your ``<head>`` tag.
 ##### Instead **x.x.x** in formhandler.js@**x.x.x** put version from the top readme.
 ```html
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/formhandler.js@x.x.x/dist/css/formhandler.min.css">
@@ -41,16 +41,16 @@ Also needed inclusion Javascript before closing ``<body>`` tag.
 ```
 
 ### npm
-Firstly install FormHandler package from npm.
+Firstly install formhandler.js package from npm.
 ```
 npm i -D formhandler.js
 ```
 
 #### Include Javascript
 ##### If you're using Webpack
-In your Javascript file import formhandler.
+In your Javascript file import formhandler.js.
 ```javascript
-import FormHandler from 'formhandler';
+import FormHandler from 'formhandler.js';
 ```
 
 ##### If you're not using Javascript bundler.
@@ -94,6 +94,7 @@ Every inputs must have an attribute name.
 <form class="formhandler"
         action="#"
         method="POST">
+  <div class="formhandler__notice></div> <!-- For notice of the form -->
   <input class="formhandler__field" type="text" name="firstname" placeholder="First name">
   <input class="formhandler__field" type="text" name="lastname" placeholder="Last name">
 
@@ -126,8 +127,8 @@ Every inputs must have an attribute name.
 </form>
 ```
 
-After including FormHandler with one of methods and adding HTML markup.
-Initialize FormHandler instance in your Javascript file or inside ``<script>`` tag.
+After including formhandler.js with one of methods and adding HTML markup.
+Initialize formhandler.js instance in your Javascript file or inside ``<script>`` tag.
 
 ### Initialization
 Every property of object fields must fit to value of the name attribute input tag.
@@ -157,7 +158,7 @@ const formhandler = new FormHandler({
   },
 });
 ```
-After that FormHandler instance will be initialized with default settings.
+After that formhandler.js instance will be initialized with default settings.
 
 
 ## API

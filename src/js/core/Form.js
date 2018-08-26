@@ -11,9 +11,8 @@ export default class Form {
     this.listener = opts.listener;
     this.valid = null;
     this.submitted = false;
-    this.sended = null;
+    this.sent = null;
     this.callback = opts.callback;
-    console.log(this.classNames)
     this.submit.addEventListener(CLICK, this.listener);
   }
 
@@ -60,6 +59,7 @@ export default class Form {
 
     this.callback(this.node, this.valid, false);
     this.valid = false;
+    this.submitted = false;
     this.node.classList.remove(this.classNames.isNotValid);
     this.node.classList.remove(this.classNames.isValid);
   }

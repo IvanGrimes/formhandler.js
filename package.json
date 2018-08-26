@@ -1,6 +1,6 @@
 {
   "name": "formhandler.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Powerful pure Javascript form validator with a feature of adding your own validations",
   "author": "Ivan Grimes",
   "license": "MIT",
@@ -9,11 +9,12 @@
   "jsnext:main": "dist/js/formhandler.esm.bundle.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IvanGrimes/formhandler.js"
+    "url": "https://ivangrimes.github.io/formhandler.js/"
   },
   "keywords": [
     "form",
     "validation",
+    "form validation",
     "validator",
     "html5",
     "javascript",
