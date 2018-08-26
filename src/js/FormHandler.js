@@ -257,6 +257,7 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.callbacks.onSubmit(this.form.node, fieldNodes);
 
     this.validateForm();
+    this.notices.form.message = this.opts.form.notice.message;
 
     if (this.form.valid) {
       this.notices.form.hide();
