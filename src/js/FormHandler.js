@@ -31,7 +31,7 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.notices = {};
     this.form = null;
     this.validator = new Validator(this.opts.customValidations);
-    this.callbacks = this.opts.callbacks;
+    this.callbacks = {};
 
     this.init();
   }
@@ -103,6 +103,10 @@ export default class FormHandler { // TODO: Переименовать опци�
     this.opts.sender = this.opts.sender
       ? { ...defaultConfig.sender, ...this.opts.sender }
       : defaultConfig.sender;
+
+    this.callbacks = this.opts.callbacks
+      ? { ...defaultConfig.callbacks, ...this.opts.callbacks }
+      : defaultConfig.callbacks;
 
     return this;
   }

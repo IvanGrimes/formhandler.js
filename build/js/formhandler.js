@@ -1224,7 +1224,7 @@
       this.notices = {};
       this.form = null;
       this.validator = new Validator(this.opts.customValidations);
-      this.callbacks = this.opts.callbacks;
+      this.callbacks = {};
       this.init();
     }
 
@@ -1281,6 +1281,7 @@
           _this3.opts.fields[name].notice.classNames = Object.assign({}, _this3.opts.classNames.notices, _this3.opts.fields[name].notice.classNames);
         });
         this.opts.sender = this.opts.sender ? Object.assign({}, defaultConfig.sender, this.opts.sender) : defaultConfig.sender;
+        this.callbacks = this.opts.callbacks ? Object.assign({}, defaultConfig.callbacks, this.opts.callbacks) : defaultConfig.callbacks;
         return this;
       }
     }, {
