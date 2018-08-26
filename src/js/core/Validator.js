@@ -5,7 +5,9 @@ export default class Validator {
   constructor(custom) {
     this.custom = custom;
 
-    this.addCustomValidations();
+    if (this.custom) {
+      this.addCustomValidations();
+    }
   }
 
   addCustomValidations() {

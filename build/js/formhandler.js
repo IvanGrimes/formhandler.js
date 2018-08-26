@@ -299,7 +299,10 @@
       _classCallCheck(this, Validator);
 
       this.custom = custom;
-      this.addCustomValidations();
+
+      if (this.custom) {
+        this.addCustomValidations();
+      }
     }
 
     _createClass(Validator, [{

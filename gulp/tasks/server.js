@@ -11,8 +11,8 @@ gulp.task('server', function() {
         server: ['sandbox', 'build'],
         files: [
             'sandbox/index.html',
-            'build/css/*.css',
-            'build/js/*.js'
+            'dist/css/*.css',
+            'dist/js/*.js'
         ],
         port: util.env.port || 3000,
         logLevel: 'info', // 'debug', 'info', 'silent', 'warn'
