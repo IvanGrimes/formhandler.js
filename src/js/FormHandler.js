@@ -281,7 +281,7 @@ export default class FormHandler { // TODO: Переименовать опци�
 
         setTimeout(() => {
           this.notices.form.hide();
-        }, 2000);
+        }, delayForNotice);
       }
     } else {
       this.notices.form.show();

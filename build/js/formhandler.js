@@ -1165,7 +1165,7 @@
             sender.sendRequest(sender.makeData());
             setTimeout(function () {
               _this.notices.form.hide();
-            }, 2000);
+            }, delayForNotice);
           }
         } else {
           _this.notices.form.show();
