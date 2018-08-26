@@ -30,6 +30,8 @@ const form = new FormHandler({
     },
     phone: {
       validation: 'isPhone',
+      min: 12,
+      max: 16,
       notice: {
         message: 'phone blah-blah',
       },
