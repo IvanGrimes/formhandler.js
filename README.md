@@ -50,7 +50,7 @@ npm i -D formhandler.js
 ##### If you're using Webpack
 In your Javascript file import formhandler.js.
 ```javascript
-import FormHandler from 'formhandler';
+import FormHandler from 'formhandler.js';
 ```
 
 ##### If you're not using Javascript bundler.
