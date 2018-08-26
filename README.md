@@ -1,4 +1,4 @@
-<h1 align="center"><img height="150" src="https://github.com/IvanGrimes/formhandler.js/blob/master/sandbox/logo.png?raw=true" /><br>FormHandler 1.0.7</h1>
+<h1 align="center"><img height="150" src="https://github.com/IvanGrimes/formhandler.js/blob/master/sandbox/logo.png?raw=true" /><br>FormHandler 1.1.1</h1>
 
 <p align="center">
   <a href="https://travis-ci.org/IvanGrimes/formhandler.js">
@@ -222,7 +222,7 @@ const formhandler = new FormHandler({
 |--------|------|--------|-------------|
 | block:        | string           | '.formhandler' | Selector for element (block) in which the formhandler.js initializes. |
 | submit:       | string           | '.formhandler__submit' | Selector for the submit button. |
-| delayForNotice: | number / boolean | 3000 | Specifies delay after that 'not valid' notice disappeared |
+| delayForNotice: | number / boolean | 3000 | Specifies delay after that 'message'/'successMessage'/'errorMessage' notice disappeared |
 | notice:       | {                |  |
 | message:      | string           | 'Please, fill the form' | 
 | succesMessage:| string           | 'Form successfully sent'| 
