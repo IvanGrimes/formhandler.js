@@ -219,7 +219,7 @@ export default class FormHandler { // TODO: Переименовать опци�
       this.fields[name].setState(valid);
     }
 
-    this.notices[name].message = this.opts.fields[name].message || message;
+    this.notices[name].message = this.opts.fields[name].notice.message || message;
     if (!valid && submitted) {
       this.notices[name].show();
     } else {
