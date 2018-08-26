@@ -354,7 +354,6 @@ export default class FormHandler { // TODO: Переименовать опци�
     options.notice = options.notice ? options.notice : {};
     const name = this.getFieldNameBy(field);
 
-
     const fieldOptions = {
       validation: options.validation,
       min: options.min || defaultConfig.fields.min,
@@ -363,7 +362,6 @@ export default class FormHandler { // TODO: Переименовать опци�
       classNames: { ...this.opts.classNames.fields, ...options.classNames },
     };
 
-
     const noticeOptions = {
       appendTo: options.notice.appendTo || defaultConfig.notices.appendTo,
       nextToField: options.notice.nextToField || defaultConfig.notices.nextToField,
@@ -371,8 +369,13 @@ export default class FormHandler { // TODO: Переименовать опци�
       classNames: { ...this.opts.classNames.notices, ...options.notice.classNames },
     };
 
-    this.makeField(name, fieldOptions);
-    this.makeNotice(name, noticeOptions);
+    this.opts.fields[name] = {
+      ...fieldOptions,
+      notice: noticeOptions,
+    };
+
+    this.makeField(name, this.opts.fields[name]);
+    this.makeNotice(name, this.opts.fields[name].notice);
 
     return this.fields[name].node;
   }

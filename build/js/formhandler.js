@@ -939,7 +939,6 @@
       this.parent = parent;
       this.node = null;
       this.mount();
-      console.log(this);
     }
 
     _createClass(Notice, [{
@@ -965,7 +964,6 @@
               this.parent = this.parent[this.parent.length - 1];
             }
 
-            console.log(this.parent);
             this.parent.parentElement.insertBefore(this.node, this.parent.nextElementSibling);
           }
         }
@@ -1482,8 +1480,11 @@
           message: options.notice.message || defaultConfig.notices.message,
           classNames: Object.assign({}, this.opts.classNames.notices, options.notice.classNames)
         };
-        this.makeField(name, fieldOptions);
-        this.makeNotice(name, noticeOptions);
+        this.opts.fields[name] = Object.assign({}, fieldOptions, {
+          notice: noticeOptions
+        });
+        this.makeField(name, this.opts.fields[name]);
+        this.makeNotice(name, this.opts.fields[name].notice);
         return this.fields[name].node;
       }
     }, {

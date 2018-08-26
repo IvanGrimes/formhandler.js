@@ -933,7 +933,6 @@ function () {
     this.parent = parent;
     this.node = null;
     this.mount();
-    console.log(this);
   }
 
   _createClass(Notice, [{
@@ -959,7 +958,6 @@ function () {
             this.parent = this.parent[this.parent.length - 1];
           }
 
-          console.log(this.parent);
           this.parent.parentElement.insertBefore(this.node, this.parent.nextElementSibling);
         }
       }
