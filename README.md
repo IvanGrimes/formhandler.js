@@ -361,7 +361,6 @@ const formhandler = new FormHandler({
   fields: {
     firstname: {
       validation: 'isName',
-      },
     },
     lastname: {
       validation: 'isName',
